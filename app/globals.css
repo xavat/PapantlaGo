@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #8B2635; /* Tierra/Cultura Papanteca */
+  --primary-rgb: 139, 38, 53;
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+}
+
+[class~="dark"] {
+  --background: #000000;
+  --foreground: #ffffff;
+}
+
+@layer base {
+  html {
+    font-size: 90%; /* Global font size reduction */
+  }
+  body {
+    @apply bg-background text-foreground transition-colors duration-500 font-sans tracking-tight;
+    font-feature-settings: 'ss01', 'cv01', 'cv11';
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-foreground transition-colors duration-500 tracking-tighter;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .text-shadow-premium {
+    text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.dark .glass {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tap-highlight-none {
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Leaflet Overrides */
+.premium-popup .leaflet-popup-content-wrapper {
+  @apply bg-white/80 dark:bg-zinc-900/90 backdrop-blur-3xl rounded-[32px] border border-black/5 dark:border-white/10 shadow-2xl p-0 overflow-hidden;
+}
+
+.premium-popup .leaflet-popup-content {
+  @apply m-0 p-0 !important;
+}
+
+.premium-popup .leaflet-popup-tip {
+  @apply bg-white dark:bg-zinc-900 shadow-xl;
+}
+
+.premium-popup .leaflet-popup-close-button {
+  @apply hidden;
+}

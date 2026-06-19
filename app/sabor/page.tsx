@@ -117,10 +117,10 @@ const foodBusinesses = [
   { name: "Tacos Rojos", address: "Barrio del San Juan, 93449 Papantla de Olarte, Ver.", phone: "", mapUrl: "https://maps.app.goo.gl/UzQLrQURAViDvh1A7", categories: ["Taquería"], image: "/images/sabores/tacosrojos/1.jpg" },
   { name: "Taqueria Pozo del Zanjon", address: "C. Josefa Ortiz de Domínguez 101, Barrio del Zapote, 93400 Papantla de Olarte, Ver.", phone: "", mapUrl: "https://maps.app.goo.gl/f2HKzufattpntCSs6", categories: ["Taquería"], image: "/images/sabores/pozozanjon/1.jpg" },
   { name: "Taqueria EL TIZON", address: "Veracruz - Poza Rica 505, Barrio del San Juan, 93400 Papantla de Olarte, Ver.", phone: "", mapUrl: "https://maps.app.goo.gl/APH3EuA9Jw1vuwgv7", categories: ["Taquería"], image: "/images/sabores/eltizon/1.jpg" },
-  { name: "Super Taquería \"El Gordo\"", address: "calle Francisco I. Madero FRENTE A WALDOS, Barrio del San Juan, 93400 Papantla, Ver.", phone: "784 108 7880", mapUrl: "https://maps.app.goo.gl/2jPkouqjDNF1C6mq6", categories: ["Taquería"], image: "/images/sabores/elgordo/1.jpg" },
+  { name: "Super Taquería \"El Gordo\"", address: "93400 calle Francisco I. Madero FRENTE A WALDOS, A UN LADO DE SUBODEGA FRENTE A WALDOS EL, Barrio del San Juan, 93400 Papantla, Ver.", phone: "784 108 7880", mapUrl: "https://maps.app.goo.gl/2jPkouqjDNF1C6mq6", categories: ["Taquería"], image: "/images/sabores/elgordo/1.jpg" },
   { name: "Taquería Serpet", address: "93400, Barrio del San Juan, 93400 Papantla, Ver.", phone: "", mapUrl: "https://maps.app.goo.gl/xvArA9h59CsAor6i9", categories: ["Taquería"], image: "/images/sabores/serpet/1.jpg" },
   { name: "Antojitos Doña Carmen", address: "De La Libertad 308, Barrio del Zapote, 93440 Papantla de Olarte, Ver.", phone: "784 688 1200", mapUrl: "https://maps.app.goo.gl/TdZfzCBfTW5W344M7", categories: ["Antojitos"], image: "/images/sabores/donacarmen/1.jpg" },
-  { name: "Las tortugas", address: "C. José de J. Núñez Col, Barrio del Naranjo, 93400 Papantla de Olarte, Ver.", phone: "784 121 4753", mapUrl: "https://maps.app.goo.gl/z3rgAuksDregf8Z28", categories: ["Hamburguesas y Tortas"], image: "/images/sabores/tortugas/1.jpg" },
+  { name: "Las tortugas", address: "Centro Frente al Mural de Papantla, C. José de J. Núñez Col, Barrio del Naranjo, 93400 Papantla de Olarte, Ver.", phone: "784 121 4753", mapUrl: "https://maps.app.goo.gl/z3rgAuksDregf8Z28", categories: ["Hamburguesas y Tortas"], image: "/images/sabores/tortugas/1.jpg" },
 ];
 
 const categories = [
@@ -171,11 +171,20 @@ function SaborContent() {
   }, [searchQuery]);
 
   const filteredBusinesses = useMemo(() => {
-    return foodBusinesses.filter(biz => {
+    const filtered = foodBusinesses.filter(biz => {
       const matchesCategory = selectedCategory === "Todos" || biz.categories.includes(selectedCategory);
       const matchesSearch = fuzzyMatch(searchQuery, biz.name) || 
                            fuzzyMatch(searchQuery, biz.address);
       return matchesCategory && matchesSearch;
+    });
+
+    // Sort by category order
+    return [...filtered].sort((a, b) => {
+      const getMinIndex = (bizCategories: string[]) => {
+        const indices = bizCategories.map(cat => categories.indexOf(cat)).filter(idx => idx !== -1);
+        return indices.length > 0 ? Math.min(...indices) : categories.length;
+      };
+      return getMinIndex(a.categories) - getMinIndex(b.categories);
     });
   }, [selectedCategory, searchQuery]);
 

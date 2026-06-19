@@ -57,7 +57,15 @@ export const tourismData: TourismItem[] = [
     coords: [20.4455, -97.3215],
     phone: "7848423112",
     address: "Heroico Colegio Militar s/n-s/n, Manantiales, 93400 Papantla de Olarte, Ver.",
-    gallery: ["/images/sabores/naku/1.jpg"]
+    gallery: [
+      "/images/sabores/naku/1.jpg",
+      "/images/sabores/naku/2.jpg",
+      "/images/sabores/naku/3.webp",
+      "/images/sabores/naku/4.webp",
+      "/images/sabores/naku/5.webp",
+      "/images/sabores/naku/6.jpeg",
+      "/images/sabores/naku/7.webp"
+    ]
   },
   {
     id: "la-boca",
@@ -72,7 +80,14 @@ export const tourismData: TourismItem[] = [
     coords: [20.4465, -97.3225],
     phone: "7848425756",
     address: "Aquiles Serdán 700, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
-    gallery: ["/images/sabores/laboca/1.jpg"]
+    gallery: [
+      "/images/sabores/laboca/1.jpg",
+      "/images/sabores/laboca/2.jpg",
+      "/images/sabores/laboca/3.jpg",
+      "/images/sabores/laboca/4.jpg",
+      "/images/sabores/laboca/5.jpg",
+      "/images/sabores/laboca/6.jpg"
+    ]
   },
   {
     id: "restaurante-la-parroquia-de-papantla",
@@ -87,7 +102,24 @@ export const tourismData: TourismItem[] = [
     coords: [20.4475, -97.3235],
     phone: "7848885904",
     address: "Cjon 16 de Septiembre 114, Barrio del Naranjo, 93400 Papantla de Olarte, Ver.",
-    gallery: ["/images/sabores/parroquia/1.jpg"]
+    gallery: [
+      "/images/sabores/parroquia/1.jpg",
+      "/images/sabores/parroquia/2.webp",
+      "/images/sabores/parroquia/3.webp",
+      "/images/sabores/parroquia/4.webp",
+      "/images/sabores/parroquia/5.webp",
+      "/images/sabores/parroquia/6.jpeg",
+      "/images/sabores/parroquia/7.jpeg",
+      "/images/sabores/parroquia/8.jpeg",
+      "/images/sabores/parroquia/9.jpeg",
+      "/images/sabores/parroquia/10.jpeg",
+      "/images/sabores/parroquia/11.jpeg",
+      "/images/sabores/parroquia/12.jpeg",
+      "/images/sabores/parroquia/13.jpeg",
+      "/images/sabores/parroquia/14.jpeg",
+      "/images/sabores/parroquia/15.jpeg",
+      "/images/sabores/parroquia/16.jpg"
+    ]
   },
   {
     id: "al-son-del-chapala",
@@ -102,7 +134,14 @@ export const tourismData: TourismItem[] = [
     coords: [20.4485, -97.3245],
     phone: "7848423517",
     address: "Reforma #100 altos, Centro, 93400 Papantla, Ver.",
-    gallery: ["/images/sabores/chapala/1.jpg"]
+    gallery: [
+      "/images/sabores/chapala/1.jpg",
+      "/images/sabores/chapala/2.jpg",
+      "/images/sabores/chapala/3.jpg",
+      "/images/sabores/chapala/4.jpg",
+      "/images/sabores/chapala/5.jpg",
+      "/images/sabores/chapala/6.jpg"
+    ]
   },
   {
     id: "plaza-pardo",
@@ -117,7 +156,14 @@ export const tourismData: TourismItem[] = [
     coords: [20.4495, -97.3255],
     phone: "7848420059",
     address: "Juan Enríquez 105, Centro, 93449 Papantla de Olarte, Ver.",
-    gallery: ["/images/sabores/plazapardo/1.jpg"]
+    gallery: [
+      "/images/sabores/plazapardo/1.jpg",
+      "/images/sabores/plazapardo/2.webp",
+      "/images/sabores/plazapardo/3.webp",
+      "/images/sabores/plazapardo/4.webp",
+      "/images/sabores/plazapardo/5.jpg",
+      "/images/sabores/plazapardo/6.jpg"
+    ]
   },
   {
     id: "restaurante-humo",
@@ -157,7 +203,10 @@ export const tourismData: TourismItem[] = [
     coords: [20.4515, -97.3275],
     phone: "7841122581",
     address: "José de Jesús, Lázaro Muñoz 104, El Naranjo, 93400 Papantla de Olarte, Ver.",
-    gallery: ["/images/sabores/totonaco/1.jpg"]
+    gallery: [
+      "/images/sabores/totonaco/1.jpg",
+      "/images/sabores/totonaco/2.png"
+    ]
   },
   {
     id: "don-pope-restaurante",
@@ -172,7 +221,10 @@ export const tourismData: TourismItem[] = [
     coords: [20.4525, -97.3285],
     phone: "7842135289",
     address: "Francisco I Madero 206, Barrio del San Juan, 93449 Papantla, Ver.",
-    gallery: ["/images/sabores/donpope/1.jpg"]
+    gallery: [
+      "/images/sabores/donpope/1.jpg",
+      "/images/sabores/donpope/2.png"
+    ]
   },
   {
     id: "restaurante-papantla-kachikin",
@@ -187,7 +239,10 @@ export const tourismData: TourismItem[] = [
     coords: [20.4535, -97.3295],
     phone: "7841335190",
     address: "Chote - Papantla, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
-    gallery: ["/images/sabores/kachikin/1.jpg"]
+    gallery: [
+      "/images/sabores/kachikin/1.jpg",
+      "/images/sabores/kachikin/2.png"
+    ]
   },
   {
     id: "centro-turistico-saberes-ancestrales-de-la-vainilla",
@@ -202,7 +257,10 @@ export const tourismData: TourismItem[] = [
     coords: [20.4545, -97.3305],
     phone: "7841150077",
     address: "Revolución 116, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
-    gallery: ["/images/sabores/vainilla/1.jpg"]
+    gallery: [
+      "/images/sabores/vainilla/1.jpg",
+      "/images/sabores/vainilla/2.png"
+    ]
   },
   // HOSPEDAJE
   {

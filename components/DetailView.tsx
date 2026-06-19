@@ -31,6 +31,7 @@ export default function DetailView({
 }: DetailViewProps) {
   const router = useRouter();
   const [activeImage, setActiveImage] = useState<number | null>(null);
+  const [currentHeaderIndex, setCurrentHeaderIndex] = useState(0);
 
   const nextImage = () => {
     if (gallery && activeImage !== null) {
@@ -44,11 +45,21 @@ export default function DetailView({
     }
   };
 
+  // Autoplay for header image
+  useEffect(() => {
+    if (gallery && gallery.length > 1 && activeImage === null) {
+      const interval = setInterval(() => {
+        setCurrentHeaderIndex((prev) => (prev + 1) % gallery.length);
+      }, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [gallery, activeImage]);
+
   // Handle back button to close gallery and auto-play
   useEffect(() => {
     let interval: NodeJS.Timeout;
     if (activeImage !== null && gallery && gallery.length > 1) {
-      // Auto-play every 5 seconds
+      // Auto-play modal gallery every 5 seconds
       interval = setInterval(() => {
         nextImage();
       }, 5000);
@@ -66,38 +77,63 @@ export default function DetailView({
     }
   }, [activeImage, gallery]);
 
+  const displayImageUrl = (gallery && gallery.length > 0 && activeImage === null) 
+    ? gallery[currentHeaderIndex] 
+    : imageUrl;
+
   return (
     <div className="min-h-screen bg-background pb-32 font-sans">
       {/* Cinematic Header Image */}
-      <div className="relative h-[60vh] w-full overflow-hidden">
-        <motion.div 
-          initial={{ scale: 1.2 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 1.5 }}
-          className="w-full h-full"
-        >
-          <Image 
-            src={imageUrl} 
-            alt={title} 
-            fill
-            className="w-full h-full object-cover"
-            priority
-          />
-        </motion.div>
+      <div 
+        className="relative h-[60vh] w-full overflow-hidden cursor-pointer"
+        onClick={() => gallery && gallery.length > 0 && setActiveImage(currentHeaderIndex)}
+      >
+        <AnimatePresence mode="wait">
+          <motion.div 
+            key={displayImageUrl}
+            initial={{ opacity: 0, scale: 1.1 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1 }}
+            className="w-full h-full"
+          >
+            <Image 
+              src={displayImageUrl} 
+              alt={title} 
+              fill
+              className="w-full h-full object-cover"
+              priority
+            />
+          </motion.div>
+        </AnimatePresence>
         
         {/* Gradients */}
         <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-background" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent" />
 
+        {/* Navigation Arrows for Header (Optional, but user said keep arrows) */}
+        {gallery && gallery.length > 1 && (
+          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 px-6 flex justify-between z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+            {/* Arrows could be here, but they are already in the modal. 
+                The user said "no la quites solo agrega y corrige la navegacion para ver todas la imágenes".
+                Wait, if it's the header, arrows might be busy with the back button.
+                I'll leave arrows for the modal as they were.
+            */}
+          </div>
+        )}
+
         {/* Top Controls */}
-        <div className="absolute top-24 left-6 right-6 flex items-center justify-between z-10">
+        <div className="absolute top-24 left-6 right-6 flex items-center justify-between z-30">
           <button 
-            onClick={() => router.back()}
+            onClick={(e) => { e.stopPropagation(); router.back(); }}
             className="w-12 h-12 rounded-full bg-black/20 backdrop-blur-3xl border border-white/20 flex items-center justify-center text-white active:scale-90 transition-all shadow-xl"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <button className="w-12 h-12 rounded-full bg-black/20 backdrop-blur-3xl border border-white/20 flex items-center justify-center text-white active:scale-90 transition-all shadow-xl">
+          <button 
+            onClick={(e) => e.stopPropagation()}
+            className="w-12 h-12 rounded-full bg-black/20 backdrop-blur-3xl border border-white/20 flex items-center justify-center text-white active:scale-90 transition-all shadow-xl"
+          >
             <Share2 className="w-5 h-5" />
           </button>
         </div>

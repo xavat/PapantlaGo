@@ -204,8 +204,7 @@ export const tourismData: TourismItem[] = [
     phone: "7841122581",
     address: "José de Jesús, Lázaro Muñoz 104, El Naranjo, 93400 Papantla de Olarte, Ver.",
     gallery: [
-      "/images/sabores/totonaco/imagen1.jpg",
-      "/images/sabores/totonaco/imagen2.png"
+      "/images/sabores/totonaco/imagen1.jpg"
     ]
   },
   {
@@ -222,8 +221,7 @@ export const tourismData: TourismItem[] = [
     phone: "7842135289",
     address: "Francisco I Madero 206, Barrio del San Juan, 93449 Papantla, Ver.",
     gallery: [
-      "/images/sabores/donpope/imagen1.jpg",
-      "/images/sabores/donpope/imagen2.png"
+      "/images/sabores/donpope/imagen1.jpg"
     ]
   },
   {
@@ -240,8 +238,7 @@ export const tourismData: TourismItem[] = [
     phone: "7841335190",
     address: "Chote - Papantla, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
     gallery: [
-      "/images/sabores/kachikin/imagen1.jpg",
-      "/images/sabores/kachikin/imagen2.png"
+      "/images/sabores/kachikin/imagen1.jpg"
     ]
   },
   {
@@ -258,8 +255,7 @@ export const tourismData: TourismItem[] = [
     phone: "7841150077",
     address: "Revolución 116, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
     gallery: [
-      "/images/sabores/vainilla/imagen1.jpg",
-      "/images/sabores/vainilla/imagen2.png"
+      "/images/sabores/vainilla/imagen1.jpg"
     ]
   },
   // HOSPEDAJE

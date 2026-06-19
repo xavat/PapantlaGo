@@ -10,7 +10,12 @@ export default function SaborDetailPage() {
   const id = params.id as string;
   
   const decodedId = decodeURIComponent(id);
-  const found = tourismData.find(item => item.id === decodedId);
+  
+  // Normalization function to match IDs regardless of accents
+  const normalize = (str: string) => 
+    str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+  const found = tourismData.find(item => normalize(item.id) === normalize(decodedId));
   
   const data = found ? {
     ...found,

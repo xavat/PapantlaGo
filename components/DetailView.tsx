@@ -81,6 +81,9 @@ export default function DetailView({
     ? gallery[currentHeaderIndex] 
     : imageUrl;
 
+  const DetailIcon1 = details && details[0]?.icon;
+  const DetailIcon2 = details && details[1]?.icon;
+
   return (
     <div className="min-h-screen bg-background pb-32 font-sans">
       {/* Cinematic Header Image */}
@@ -174,23 +177,53 @@ export default function DetailView({
             </div>
           </div>
 
-          <div className="bg-white/80 dark:bg-zinc-900/80 border border-black/5 dark:border-white/10 rounded-3xl p-5 flex flex-col items-center justify-center gap-2 shadow-2xl backdrop-blur-2xl transition-all hover:scale-105 active:scale-95 group text-center">
-            <Clock className="w-6 h-6 text-primary transition-transform group-hover:-rotate-12" />
-            <div className="flex flex-col items-center">
-              <span className="text-sm font-black leading-none">Disponibles</span>
-              <span className="text-[8px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1.5 opacity-60">Habitaciones</span>
+          {details && details[0] ? (
+            <div className="bg-white/80 dark:bg-zinc-900/80 border border-black/5 dark:border-white/10 rounded-3xl p-5 flex flex-col items-center justify-center gap-2 shadow-2xl backdrop-blur-2xl transition-all hover:scale-105 active:scale-95 group text-center">
+              {DetailIcon1 ? (
+                <DetailIcon1 className="w-6 h-6 text-primary transition-transform group-hover:-rotate-12" />
+              ) : (
+                <Clock className="w-6 h-6 text-primary transition-transform group-hover:-rotate-12" />
+              )}
+              <div className="flex flex-col items-center">
+                <span className="text-sm font-black leading-none">{details[0].value}</span>
+                <span className="text-[8px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1.5 opacity-60">{details[0].label}</span>
+              </div>
             </div>
-          </div>
-
-          <div className="bg-white/80 dark:bg-zinc-900/80 border border-black/5 dark:border-white/10 rounded-3xl p-5 flex flex-col items-center justify-center gap-2 shadow-2xl backdrop-blur-2xl transition-all hover:scale-105 active:scale-95 group text-center">
-             <div className="w-6 h-6 text-primary transition-transform group-hover:scale-110">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full"><path d="M21 15V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9l3 3 3-3 3 3 3-3 3 3Z"/></svg>
+          ) : (
+             <div className="bg-white/80 dark:bg-zinc-900/80 border border-black/5 dark:border-white/10 rounded-3xl p-5 flex flex-col items-center justify-center gap-2 shadow-2xl backdrop-blur-2xl transition-all hover:scale-105 active:scale-95 group text-center">
+               <Clock className="w-6 h-6 text-primary transition-transform group-hover:-rotate-12" />
+               <div className="flex flex-col items-center">
+                 <span className="text-sm font-black leading-none">Abierto</span>
+                 <span className="text-[8px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1.5 opacity-60">Horario</span>
+               </div>
              </div>
-            <div className="flex flex-col items-center">
-              <span className="text-sm font-black leading-none">Wifi / AC</span>
-              <span className="text-[8px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1.5 opacity-60">Servicios</span>
+          )}
+
+          {details && details[1] ? (
+            <div className="bg-white/80 dark:bg-zinc-900/80 border border-black/5 dark:border-white/10 rounded-3xl p-5 flex flex-col items-center justify-center gap-2 shadow-2xl backdrop-blur-2xl transition-all hover:scale-105 active:scale-95 group text-center">
+              {DetailIcon2 ? (
+                <DetailIcon2 className="w-6 h-6 text-primary transition-transform group-hover:scale-110" />
+              ) : (
+                <div className="w-6 h-6 text-primary transition-transform group-hover:scale-110">
+                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full"><path d="M21 15V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9l3 3 3-3 3 3 3-3 3 3Z"/></svg>
+                </div>
+              )}
+              <div className="flex flex-col items-center">
+                <span className="text-sm font-black leading-none">{details[1].value}</span>
+                <span className="text-[8px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1.5 opacity-60">{details[1].label}</span>
+              </div>
             </div>
-          </div>
+          ) : (
+             <div className="bg-white/80 dark:bg-zinc-900/80 border border-black/5 dark:border-white/10 rounded-3xl p-5 flex flex-col items-center justify-center gap-2 shadow-2xl backdrop-blur-2xl transition-all hover:scale-105 active:scale-95 group text-center">
+                <div className="w-6 h-6 text-primary transition-transform group-hover:scale-110">
+                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-full h-full"><path d="M21 15V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9l3 3 3-3 3 3 3-3 3 3Z"/></svg>
+                </div>
+               <div className="flex flex-col items-center">
+                 <span className="text-sm font-black leading-none">Wifi</span>
+                 <span className="text-[8px] text-muted-foreground font-black uppercase tracking-[0.2em] mt-1.5 opacity-60">Servicios</span>
+               </div>
+             </div>
+          )}
         </div>
 
         {/* Main Text */}

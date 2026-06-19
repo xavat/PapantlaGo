@@ -204,7 +204,12 @@ export const tourismData: TourismItem[] = [
     phone: "7841122581",
     address: "José de Jesús, Lázaro Muñoz 104, El Naranjo, 93400 Papantla de Olarte, Ver.",
     gallery: [
-      "/images/sabores/totonaco/imagen1.jpg"
+      "/images/sabores/totonaco/imagen1.jpg",
+      "/images/sabores/totonaco/imagen2.jpeg",
+      "/images/sabores/totonaco/imagen3.jpeg",
+      "/images/sabores/totonaco/imagen4.jpeg",
+      "/images/sabores/totonaco/imagen5.jpeg",
+      "/images/sabores/totonaco/imagen6.jpeg"
     ]
   },
   {
@@ -221,7 +226,12 @@ export const tourismData: TourismItem[] = [
     phone: "7842135289",
     address: "Francisco I Madero 206, Barrio del San Juan, 93449 Papantla, Ver.",
     gallery: [
-      "/images/sabores/donpope/imagen1.jpg"
+      "/images/sabores/donpope/imagen1.jpg",
+      "/images/sabores/donpope/imagen2.jpg",
+      "/images/sabores/donpope/imagen3.webp",
+      "/images/sabores/donpope/imagen4.webp",
+      "/images/sabores/donpope/imagen5.webp",
+      "/images/sabores/donpope/imagen6.jpg"
     ]
   },
   {
@@ -238,7 +248,13 @@ export const tourismData: TourismItem[] = [
     phone: "7841335190",
     address: "Chote - Papantla, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
     gallery: [
-      "/images/sabores/kachikin/imagen1.jpg"
+      "/images/sabores/kachikin/imagen1.jpg",
+      "/images/sabores/kachikin/imagen2.jpg",
+      "/images/sabores/kachikin/imagen3.jpg",
+      "/images/sabores/kachikin/imagen4.jpg",
+      "/images/sabores/kachikin/imagen5.jpg",
+      "/images/sabores/kachikin/imagen6.jpg",
+      "/images/sabores/kachikin/imagen7.jpg"
     ]
   },
   {
@@ -255,7 +271,16 @@ export const tourismData: TourismItem[] = [
     phone: "7841150077",
     address: "Revolución 116, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
     gallery: [
-      "/images/sabores/vainilla/imagen1.jpg"
+      "/images/sabores/vainilla/imagen1.jpg",
+      "/images/sabores/vainilla/imagen2.jpg",
+      "/images/sabores/vainilla/imagen3.jpg",
+      "/images/sabores/vainilla/imagen4.jpg",
+      "/images/sabores/vainilla/imagen5.jpg",
+      "/images/sabores/vainilla/imagen6.jpg",
+      "/images/sabores/vainilla/imagen7.jpg",
+      "/images/sabores/vainilla/imagen8.jpg",
+      "/images/sabores/vainilla/imagen9.jpg",
+      "/images/sabores/vainilla/imagen10.jpg"
     ]
   },
   // HOSPEDAJE

@@ -103,6 +103,7 @@ export default function DetailView({
               fill
               className="w-full h-full object-cover"
               priority
+              quality={90}
             />
           </motion.div>
         </AnimatePresence>

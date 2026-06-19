@@ -322,6 +322,8 @@ function SaborContent() {
                           src={resto.image} 
                           alt={resto.name}
                           fill
+                          priority={i < 3} // Prime the first 3 for fast load
+                          loading={i < 3 ? undefined : "lazy"}
                           className="object-cover group-hover:scale-110 transition-transform duration-1000"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />

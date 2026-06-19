@@ -49,7 +49,7 @@ export const tourismData: TourismItem[] = [
     title: "Restaurante Nakú",
     subtitle: "Sabor Totonaca",
     description: "Especialistas en comida regional con un toque gourmet. Un ambiente único que combina la tradición con la elegancia contemporánea.",
-    imageUrl: "/images/sabores/naku/1.jpg",
+    imageUrl: "/images/sabores/naku/imagen1.jpg",
     rating: "4.9",
     tag: "Gourmet",
     location: "Manantiales, Papantla",
@@ -58,13 +58,13 @@ export const tourismData: TourismItem[] = [
     phone: "7848423112",
     address: "Heroico Colegio Militar s/n-s/n, Manantiales, 93400 Papantla de Olarte, Ver.",
     gallery: [
-      "/images/sabores/naku/1.jpg",
-      "/images/sabores/naku/2.jpg",
-      "/images/sabores/naku/3.webp",
-      "/images/sabores/naku/4.webp",
-      "/images/sabores/naku/5.webp",
-      "/images/sabores/naku/6.jpeg",
-      "/images/sabores/naku/7.webp"
+      "/images/sabores/naku/imagen1.jpg",
+      "/images/sabores/naku/imagen2.jpg",
+      "/images/sabores/naku/imagen3.webp",
+      "/images/sabores/naku/imagen4.webp",
+      "/images/sabores/naku/imagen5.webp",
+      "/images/sabores/naku/imagen6.jpeg",
+      "/images/sabores/naku/imagen7.webp"
     ]
   },
   {
@@ -72,7 +72,7 @@ export const tourismData: TourismItem[] = [
     title: "La Boca",
     subtitle: "Asadero & Tradición",
     description: "Cortes de carne premium y lo mejor de la cocina local en un ambiente moderno y acogedor.",
-    imageUrl: "/images/sabores/laboca/1.jpg",
+    imageUrl: "/images/sabores/laboca/imagen1.jpg",
     rating: "4.8",
     tag: "Asadero",
     location: "Barrio del Zapote",
@@ -81,12 +81,12 @@ export const tourismData: TourismItem[] = [
     phone: "7848425756",
     address: "Aquiles Serdán 700, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
     gallery: [
-      "/images/sabores/laboca/1.jpg",
-      "/images/sabores/laboca/2.jpg",
-      "/images/sabores/laboca/3.jpg",
-      "/images/sabores/laboca/4.jpg",
-      "/images/sabores/laboca/5.jpg",
-      "/images/sabores/laboca/6.jpg"
+      "/images/sabores/laboca/imagen1.jpg",
+      "/images/sabores/laboca/imagen2.jpg",
+      "/images/sabores/laboca/imagen3.jpg",
+      "/images/sabores/laboca/imagen4.jpg",
+      "/images/sabores/laboca/imagen5.jpg",
+      "/images/sabores/laboca/imagen6.jpg"
     ]
   },
   {
@@ -94,7 +94,7 @@ export const tourismData: TourismItem[] = [
     title: "Restaurante la Parroquia de Papantla",
     subtitle: "Tradición Familiar",
     description: "El punto de encuentro por excelencia en Papantla para disfrutar de un buen café y platillos típicos.",
-    imageUrl: "/images/sabores/parroquia/1.jpg",
+    imageUrl: "/images/sabores/parroquia/imagen1.jpg",
     rating: "4.7",
     tag: "Cafetería",
     location: "Barrio del Naranjo",
@@ -103,22 +103,22 @@ export const tourismData: TourismItem[] = [
     phone: "7848885904",
     address: "Cjon 16 de Septiembre 114, Barrio del Naranjo, 93400 Papantla de Olarte, Ver.",
     gallery: [
-      "/images/sabores/parroquia/1.jpg",
-      "/images/sabores/parroquia/2.webp",
-      "/images/sabores/parroquia/3.webp",
-      "/images/sabores/parroquia/4.webp",
-      "/images/sabores/parroquia/5.webp",
-      "/images/sabores/parroquia/6.jpeg",
-      "/images/sabores/parroquia/7.jpeg",
-      "/images/sabores/parroquia/8.jpeg",
-      "/images/sabores/parroquia/9.jpeg",
-      "/images/sabores/parroquia/10.jpeg",
-      "/images/sabores/parroquia/11.jpeg",
-      "/images/sabores/parroquia/12.jpeg",
-      "/images/sabores/parroquia/13.jpeg",
-      "/images/sabores/parroquia/14.jpeg",
-      "/images/sabores/parroquia/15.jpeg",
-      "/images/sabores/parroquia/16.jpg"
+      "/images/sabores/parroquia/imagen1.jpg",
+      "/images/sabores/parroquia/imagen2.webp",
+      "/images/sabores/parroquia/imagen3.webp",
+      "/images/sabores/parroquia/imagen4.webp",
+      "/images/sabores/parroquia/imagen5.webp",
+      "/images/sabores/parroquia/imagen6.jpeg",
+      "/images/sabores/parroquia/imagen7.jpeg",
+      "/images/sabores/parroquia/imagen8.jpeg",
+      "/images/sabores/parroquia/imagen9.jpeg",
+      "/images/sabores/parroquia/imagen10.jpeg",
+      "/images/sabores/parroquia/imagen11.jpeg",
+      "/images/sabores/parroquia/imagen12.jpeg",
+      "/images/sabores/parroquia/imagen13.jpeg",
+      "/images/sabores/parroquia/imagen14.jpeg",
+      "/images/sabores/parroquia/imagen15.jpeg",
+      "/images/sabores/parroquia/imagen16.jpg"
     ]
   },
   {
@@ -126,7 +126,7 @@ export const tourismData: TourismItem[] = [
     title: "Al Son del Chapala",
     subtitle: "Sabor Mexicano",
     description: "Vibrant experience with authentic Mexican dishes and a lively atmosphere.",
-    imageUrl: "/images/sabores/chapala/1.jpg",
+    imageUrl: "/images/sabores/chapala/imagen1.jpg",
     rating: "4.6",
     tag: "Mexicano",
     location: "Centro",
@@ -135,12 +135,12 @@ export const tourismData: TourismItem[] = [
     phone: "7848423517",
     address: "Reforma #100 altos, Centro, 93400 Papantla, Ver.",
     gallery: [
-      "/images/sabores/chapala/1.jpg",
-      "/images/sabores/chapala/2.jpg",
-      "/images/sabores/chapala/3.jpg",
-      "/images/sabores/chapala/4.jpg",
-      "/images/sabores/chapala/5.jpg",
-      "/images/sabores/chapala/6.jpg"
+      "/images/sabores/chapala/imagen1.jpg",
+      "/images/sabores/chapala/imagen2.jpg",
+      "/images/sabores/chapala/imagen3.jpg",
+      "/images/sabores/chapala/imagen4.jpg",
+      "/images/sabores/chapala/imagen5.jpg",
+      "/images/sabores/chapala/imagen6.jpg"
     ]
   },
   {
@@ -148,7 +148,7 @@ export const tourismData: TourismItem[] = [
     title: "Plaza Pardo",
     subtitle: "Cocina Regional",
     description: "Un espacio dedicado a la cocina tradicional con ingredientes frescos de la región.",
-    imageUrl: "/images/sabores/plazapardo/1.jpg",
+    imageUrl: "/images/sabores/plazapardo/imagen1.jpg",
     rating: "4.8",
     tag: "Regional",
     location: "Centro",
@@ -157,12 +157,12 @@ export const tourismData: TourismItem[] = [
     phone: "7848420059",
     address: "Juan Enríquez 105, Centro, 93449 Papantla de Olarte, Ver.",
     gallery: [
-      "/images/sabores/plazapardo/1.jpg",
-      "/images/sabores/plazapardo/2.webp",
-      "/images/sabores/plazapardo/3.webp",
-      "/images/sabores/plazapardo/4.webp",
-      "/images/sabores/plazapardo/5.jpg",
-      "/images/sabores/plazapardo/6.jpg"
+      "/images/sabores/plazapardo/imagen1.jpg",
+      "/images/sabores/plazapardo/imagen2.webp",
+      "/images/sabores/plazapardo/imagen3.webp",
+      "/images/sabores/plazapardo/imagen4.webp",
+      "/images/sabores/plazapardo/imagen5.jpg",
+      "/images/sabores/plazapardo/imagen6.jpg"
     ]
   },
   {
@@ -170,7 +170,7 @@ export const tourismData: TourismItem[] = [
     title: "Restaurante Humo",
     subtitle: "Gastronomía de Autor",
     description: "Experiencia culinaria innovadora centrada en técnicas de ahumado y sabores profundos.",
-    imageUrl: "/images/sabores/humo/1.jpg",
+    imageUrl: "/images/sabores/humo/imagen1.jpg",
     rating: "4.9",
     tag: "Gourmet",
     location: "Santa Cruz",
@@ -179,15 +179,15 @@ export const tourismData: TourismItem[] = [
     phone: "7848420400",
     address: "93400, Cjon 16 de Septiembre 104, Santa Cruz, 93400 Papantla, Ver.",
     gallery: [
-      "/images/sabores/humo/1.jpg",
-      "/images/sabores/humo/2.jpg",
-      "/images/sabores/humo/3.jpg",
-      "/images/sabores/humo/4.jpg",
-      "/images/sabores/humo/5.jpg",
-      "/images/sabores/humo/6.jpg",
-      "/images/sabores/humo/7.jpg",
-      "/images/sabores/humo/8.jpg",
-      "/images/sabores/humo/9.jpg"
+      "/images/sabores/humo/imagen1.jpg",
+      "/images/sabores/humo/imagen2.jpg",
+      "/images/sabores/humo/imagen3.jpg",
+      "/images/sabores/humo/imagen4.jpg",
+      "/images/sabores/humo/imagen5.jpg",
+      "/images/sabores/humo/imagen6.jpg",
+      "/images/sabores/humo/imagen7.jpg",
+      "/images/sabores/humo/imagen8.jpg",
+      "/images/sabores/humo/imagen9.jpg"
     ]
   },
   {
@@ -195,7 +195,7 @@ export const tourismData: TourismItem[] = [
     title: "Restaurante Totonaco",
     subtitle: "Herencia Ancestral",
     description: "Mantenemos vivas las recetas tradicionales Totonacas para el deleite de su paladar.",
-    imageUrl: "/images/sabores/totonaco/1.jpg",
+    imageUrl: "/images/sabores/totonaco/imagen1.jpg",
     rating: "4.7",
     tag: "Tradicional",
     location: "El Naranjo",
@@ -204,8 +204,8 @@ export const tourismData: TourismItem[] = [
     phone: "7841122581",
     address: "José de Jesús, Lázaro Muñoz 104, El Naranjo, 93400 Papantla de Olarte, Ver.",
     gallery: [
-      "/images/sabores/totonaco/1.jpg",
-      "/images/sabores/totonaco/2.png"
+      "/images/sabores/totonaco/imagen1.jpg",
+      "/images/sabores/totonaco/imagen2.png"
     ]
   },
   {
@@ -213,7 +213,7 @@ export const tourismData: TourismItem[] = [
     title: "Don Pope Restaurante",
     subtitle: "Calidad y Sabor",
     description: "Excelente servicio y variedad de platillos que te harán sentir como en casa.",
-    imageUrl: "/images/sabores/donpope/1.jpg",
+    imageUrl: "/images/sabores/donpope/imagen1.jpg",
     rating: "4.6",
     tag: "Familiar",
     location: "Barrio San Juan",
@@ -222,8 +222,8 @@ export const tourismData: TourismItem[] = [
     phone: "7842135289",
     address: "Francisco I Madero 206, Barrio del San Juan, 93449 Papantla, Ver.",
     gallery: [
-      "/images/sabores/donpope/1.jpg",
-      "/images/sabores/donpope/2.png"
+      "/images/sabores/donpope/imagen1.jpg",
+      "/images/sabores/donpope/imagen2.png"
     ]
   },
   {
@@ -231,7 +231,7 @@ export const tourismData: TourismItem[] = [
     title: "Restaurante Papantla Kachikin",
     subtitle: "Pueblo Mágico",
     description: "Sabores que capturan la esencia mágica de Papantla en cada bocado.",
-    imageUrl: "/images/sabores/kachikin/1.jpg",
+    imageUrl: "/images/sabores/kachikin/imagen1.jpg",
     rating: "4.5",
     tag: "Local",
     location: "Barrio del Zapote",
@@ -240,8 +240,8 @@ export const tourismData: TourismItem[] = [
     phone: "7841335190",
     address: "Chote - Papantla, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
     gallery: [
-      "/images/sabores/kachikin/1.jpg",
-      "/images/sabores/kachikin/2.png"
+      "/images/sabores/kachikin/imagen1.jpg",
+      "/images/sabores/kachikin/imagen2.png"
     ]
   },
   {
@@ -249,7 +249,7 @@ export const tourismData: TourismItem[] = [
     title: "Centro Turístico Saberes Ancestrales de la Vainilla",
     subtitle: "Cultura y Sabor",
     description: "Descubre la historia de la vainilla y degusta platillos infusionados con este aromático tesoro.",
-    imageUrl: "/images/sabores/vainilla/1.jpg",
+    imageUrl: "/images/sabores/vainilla/imagen1.jpg",
     rating: "4.9",
     tag: "Cultural",
     location: "Barrio del Zapote",
@@ -258,8 +258,8 @@ export const tourismData: TourismItem[] = [
     phone: "7841150077",
     address: "Revolución 116, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
     gallery: [
-      "/images/sabores/vainilla/1.jpg",
-      "/images/sabores/vainilla/2.png"
+      "/images/sabores/vainilla/imagen1.jpg",
+      "/images/sabores/vainilla/imagen2.png"
     ]
   },
   // HOSPEDAJE

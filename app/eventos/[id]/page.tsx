@@ -10,7 +10,7 @@ const eventsData = [
     title: "Cumbre Tajín",
     subtitle: "Festival de la Identidad",
     description: "Uno de los festivales culturales más importantes de México, celebrado en el corazón de la zona arqueológica de El Tajín. Incluye conciertos, talleres, ceremonias rituales y una profunda inmersión en la cultura totonaca.",
-    imageUrl: "/images/events/cumbre_tajin.png",
+    imageUrl: "/images/events/cumbre_tajin.jpeg",
     rating: "4.9",
     tag: "Festival Cultural",
     location: "Zona Arqueológica El Tajín",
@@ -19,9 +19,17 @@ const eventsData = [
       { label: "Duración", value: "4 Días", icon: Clock },
     ],
     gallery: [
-      "/images/events/cumbre_tajin/imagen1.png",
-      "/images/events/cumbre_tajin/imagen2.png",
-      "/images/events/cumbre_tajin/imagen3.png"
+      "/images/events/cumbre_tajin/imagen1.jpeg",
+      "/images/events/cumbre_tajin/imagen2.jpg",
+      "/images/events/cumbre_tajin/imagen3.jpg",
+      "/images/events/cumbre_tajin/imagen4.jpg",
+      "/images/events/cumbre_tajin/imagen5.jpg",
+      "/images/events/cumbre_tajin/imagen6.jpg",
+      "/images/events/cumbre_tajin/imagen7.jpg",
+      "/images/events/cumbre_tajin/imagen8.jpg",
+      "/images/events/cumbre_tajin/imagen9.jpg",
+      "/images/events/cumbre_tajin/imagen10.jpg",
+      "/images/events/cumbre_tajin/imagen11.webp"
     ]
   },
   {
@@ -29,7 +37,7 @@ const eventsData = [
     title: "Festival Xanath",
     subtitle: "Espectáculo Épico",
     description: "Una puesta en escena majestuosa que narra la historia del pueblo totonaca, desde sus orígenes y la conquista española hasta la preservación de su cultura y la vainilla. Incluye danzas tradicionales como Guaguas, Negritos y Voladores, con iluminación y música en vivo.",
-    imageUrl: "/images/events/festival_xanath.png",
+    imageUrl: "/images/events/festival_xanath.jpg",
     rating: "4.9",
     tag: "Teatro y Danza",
     location: "Teatro al Aire Libre, Papantla Veracruz",
@@ -38,9 +46,12 @@ const eventsData = [
       { label: "Lugar", value: "Feria de Corpus Christi", icon: MapPin },
     ],
     gallery: [
-      "/images/events/festival_xanath/imagen1.png",
-      "/images/events/festival_xanath/imagen2.png",
-      "/images/events/festival_xanath/imagen3.png"
+      "/images/events/festival_xanath/imagen1.jpg",
+      "/images/events/festival_xanath/imagen2.jpg",
+      "/images/events/festival_xanath/imagen3.jpg",
+      "/images/events/festival_xanath/imagen4.jpg",
+      "/images/events/festival_xanath/imagen5.jpg",
+      "/images/events/festival_xanath/imagen6.jpg"
     ]
   },
   {
@@ -48,7 +59,7 @@ const eventsData = [
     title: "Feria de Corpus Christi",
     subtitle: "Máxima Tradición",
     description: "La celebración más sagrada de Papantla, donde se recrea la Danza de los Voladores en su máxima expresión y se celebra la fertilidad de la tierra.",
-    imageUrl: "/images/events/corpus_christi.png",
+    imageUrl: "/images/events/corpus_christi.jpg",
     rating: "4.9",
     tag: "Religioso/Cultural",
     location: "Centro Histórico y Terrenos de la Feria",
@@ -57,9 +68,10 @@ const eventsData = [
       { label: "Tradición", value: "Ancestral", icon: MapPin },
     ],
     gallery: [
-      "/images/events/corpus_christi/imagen1.png",
-      "/images/events/corpus_christi/imagen2.png",
-      "/images/events/corpus_christi/imagen3.png"
+      "/images/events/corpus_christi/imagen1.jpg",
+      "/images/events/corpus_christi/imagen2.jpg",
+      "/images/events/corpus_christi/imagen3.jpg",
+      "/images/events/corpus_christi/imagen4.avif"
     ]
   },
   {
@@ -67,7 +79,7 @@ const eventsData = [
     title: "Carnaval de la Alegría",
     subtitle: "Magia y Color",
     description: "Un desfile vibrante por las calles de Papantla con música en vivo, comparsas y la alegría característica de la región norte de Veracruz.",
-    imageUrl: "/images/events/carnaval_alegria.png",
+    imageUrl: "/images/events/carnaval_alegria.jpg",
     rating: "4.7",
     tag: "Carnaval",
     location: "Calles del Centro, Papantla",
@@ -76,9 +88,13 @@ const eventsData = [
       { label: "Ambiente", value: "Festivo", icon: Clock },
     ],
     gallery: [
-      "/images/events/carnaval_alegria/imagen1.png",
-      "/images/events/carnaval_alegria/imagen2.png",
-      "/images/events/carnaval_alegria/imagen3.png"
+      "/images/events/carnaval_alegria/imagen1.jpg",
+      "/images/events/carnaval_alegria/imagen2.jpg",
+      "/images/events/carnaval_alegria/imagen3.jpg",
+      "/images/events/carnaval_alegria/imagen4.jpg",
+      "/images/events/carnaval_alegria/imagen5.jpg",
+      "/images/events/carnaval_alegria/imagen6.jpg",
+      "/images/events/carnaval_alegria/imagen7.jpg"
     ]
   }
 ];

@@ -18,7 +18,49 @@ const eventsData = [
       { label: "Fecha", value: "20-23 Marzo", icon: Calendar },
       { label: "Duración", value: "4 Días", icon: Clock },
     ],
-    gallery: ["/images/events/cumbre_tajin.png"]
+    gallery: [
+      "/images/events/cumbre_tajin/imagen1.png",
+      "/images/events/cumbre_tajin/imagen2.png",
+      "/images/events/cumbre_tajin/imagen3.png"
+    ]
+  },
+  {
+    id: "festival-xanath",
+    title: "Festival Xanath",
+    subtitle: "Espectáculo Épico",
+    description: "Una puesta en escena majestuosa que narra la historia del pueblo totonaca, desde sus orígenes y la conquista española hasta la preservación de su cultura y la vainilla. Incluye danzas tradicionales como Guaguas, Negritos y Voladores, con iluminación y música en vivo.",
+    imageUrl: "/images/events/festival_xanath.png",
+    rating: "4.9",
+    tag: "Teatro y Danza",
+    location: "Teatro al Aire Libre, Papantla Veracruz",
+    details: [
+      { label: "Fechas", value: "4 y 7 de Junio", icon: Calendar },
+      { label: "Lugar", value: "Feria de Corpus Christi", icon: MapPin },
+    ],
+    gallery: [
+      "/images/events/festival_xanath/imagen1.png",
+      "/images/events/festival_xanath/imagen2.png",
+      "/images/events/festival_xanath/imagen3.png"
+    ]
+  },
+  {
+    id: "corpus-christi",
+    title: "Feria de Corpus Christi",
+    subtitle: "Máxima Tradición",
+    description: "La celebración más sagrada de Papantla, donde se recrea la Danza de los Voladores en su máxima expresión y se celebra la fertilidad de la tierra.",
+    imageUrl: "/images/events/corpus_christi.png",
+    rating: "4.9",
+    tag: "Religioso/Cultural",
+    location: "Centro Histórico y Terrenos de la Feria",
+    details: [
+      { label: "Fecha", value: "30 de Mayo - 7 de Junio", icon: Calendar },
+      { label: "Tradición", value: "Ancestral", icon: MapPin },
+    ],
+    gallery: [
+      "/images/events/corpus_christi/imagen1.png",
+      "/images/events/corpus_christi/imagen2.png",
+      "/images/events/corpus_christi/imagen3.png"
+    ]
   },
   {
     id: "carnaval-alegria",
@@ -32,20 +74,11 @@ const eventsData = [
     details: [
       { label: "Fecha", value: "4 Junio", icon: Calendar },
       { label: "Ambiente", value: "Festivo", icon: Clock },
-    ]
-  },
-  {
-    id: "corpus-christi",
-    title: "Feria de Corpus Christi",
-    subtitle: "Máxima Tradición",
-    description: "La celebración más sagrada de Papantla, donde se recrea la Danza de los Voladores en su máxima expresión y se celebra la fertilidad de la tierra.",
-    imageUrl: "/images/events/corpus_christi.png",
-    rating: "4.9",
-    tag: "Religioso/Cultural",
-    location: "Centro Histórico y Terrenos de la Feria",
-    details: [
-      { label: "Fecha", value: "May-Jun", icon: Calendar },
-      { label: "Tradición", value: "Ancestral", icon: MapPin },
+    ],
+    gallery: [
+      "/images/events/carnaval_alegria/imagen1.png",
+      "/images/events/carnaval_alegria/imagen2.png",
+      "/images/events/carnaval_alegria/imagen3.png"
     ]
   }
 ];

@@ -601,8 +601,8 @@ export const tourismData: TourismItem[] = [
     id: "the-italian-coffee-company",
     title: "The Italian Coffee Company",
     subtitle: "Aroma y Calidad",
-    description: "Excelente café gourmet y una gran selección de postres, frappés y bebidas especiales en una atmósfera relajante y cómoda.",
-    imageUrl: "/images/sabores/theitaliancoffeecompany/imagen1.png",
+    description: "Excelente café gourmet y una gran selección de postres, frappés and bebidas especiales en una atmósfera relajante y cómoda.",
+    imageUrl: "/images/sabores/theitaliancoffeecompany/imagen1.jpeg",
     rating: "4.6",
     tag: "Cafetería",
     location: "Centro, Papantla",
@@ -610,7 +610,19 @@ export const tourismData: TourismItem[] = [
     coords: [20.4465, -97.3225],
     phone: "7841251585",
     address: "s/n, Curato, Centro, Barrio del Naranjo, 93400 Papantla de Olarte",
-    gallery: ["/images/sabores/theitaliancoffeecompany/imagen1.png"]
+    gallery: [
+      "/images/sabores/theitaliancoffeecompany/imagen1.jpeg",
+      "/images/sabores/theitaliancoffeecompany/imagen2.jpeg",
+      "/images/sabores/theitaliancoffeecompany/imagen3.jpeg",
+      "/images/sabores/theitaliancoffeecompany/imagen4.jpeg",
+      "/images/sabores/theitaliancoffeecompany/imagen5.jpeg",
+      "/images/sabores/theitaliancoffeecompany/imagen6.jpeg",
+      "/images/sabores/theitaliancoffeecompany/imagen7.jpeg",
+      "/images/sabores/theitaliancoffeecompany/imagen8.jpeg",
+      "/images/sabores/theitaliancoffeecompany/imagen9.jpeg",
+      "/images/sabores/theitaliancoffeecompany/imagen10.jpeg",
+      "/images/sabores/theitaliancoffeecompany/imagen11.jpg"
+    ]
   },
   {
     id: "panificadora-lemus",
@@ -625,14 +637,20 @@ export const tourismData: TourismItem[] = [
     coords: [20.4465, -97.3225],
     phone: "7848422558",
     address: "Cjon 16 de Septiembre 209, Santa Cruz, 93400 Papantla, Ver.",
-    gallery: ["/images/sabores/panificadoralemus/imagen1.png"]
+    gallery: [
+      "/images/sabores/panificadoralemus/imagen1.png",
+      "/images/sabores/panificadoralemus/imagen2.jpeg",
+      "/images/sabores/panificadoralemus/imagen3.jpeg",
+      "/images/sabores/panificadoralemus/imagen4.jpeg",
+      "/images/sabores/panificadoralemus/imagen5.jpeg"
+    ]
   },
   {
     id: 'pizzas-y-volovanes-el-uli-sucursal-"16-de-septiembre"',
     title: 'Pizzas y Volovanes El Uli Sucursal "16 de Septiembre"',
     subtitle: "Sabor de Tradición",
     description: "Sabor crujiente de las mejores pizzas hechas al momento y los clásicos volovanes hojaldrados de la región.",
-    imageUrl: "/images/sabores/pizzasuli16deseptiembre/imagen1.png",
+    imageUrl: "/images/sabores/pizzasuli16deseptiembre/imagen1.jpeg",
     rating: "4.7",
     tag: "Pizzería",
     location: "Barrio del Zapote, Papantla",
@@ -640,6 +658,20 @@ export const tourismData: TourismItem[] = [
     coords: [20.4465, -97.3225],
     phone: "7848425458",
     address: "Cjon 16 de Septiembre 800, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
-    gallery: ["/images/sabores/pizzasuli16deseptiembre/imagen1.png"]
+    gallery: [
+      "/images/sabores/pizzasuli16deseptiembre/imagen1.jpeg",
+      "/images/sabores/pizzasuli16deseptiembre/imagen2.jpeg",
+      "/images/sabores/pizzasuli16deseptiembre/imagen3.jpeg",
+      "/images/sabores/pizzasuli16deseptiembre/imagen4.jpeg",
+      "/images/sabores/pizzasuli16deseptiembre/imagen5.jpeg",
+      "/images/sabores/pizzasuli16deseptiembre/imagen6.jpeg",
+      "/images/sabores/pizzasuli16deseptiembre/imagen7.jpeg",
+      "/images/sabores/pizzasuli16deseptiembre/imagen8.jpeg",
+      "/images/sabores/pizzasuli16deseptiembre/imagen9.jpeg",
+      "/images/sabores/pizzasuli16deseptiembre/imagen10.jpeg",
+      "/images/sabores/pizzasuli16deseptiembre/imagen11.jpeg",
+      "/images/sabores/pizzasuli16deseptiembre/imagen12.jpeg",
+      "/images/sabores/pizzasuli16deseptiembre/imagen13.jpeg"
+    ]
   }
 ];

@@ -14,11 +14,11 @@ const featuredEvents = [
     color: "from-amber-600",
   },
   {
-    id: "carnaval-alegria",
-    title: "Carnaval de la Alegría",
-    date: "4 de Junio",
-    img: "/images/events/carnaval_alegria.png",
-    color: "from-pink-600",
+    id: "festival-xanath",
+    title: "Festival Xanath",
+    date: "4 y 7 de Junio",
+    img: "/images/events/festival_xanath.png",
+    color: "from-red-600",
   },
   {
     id: "corpus-christi",
@@ -26,6 +26,13 @@ const featuredEvents = [
     date: "30 de Mayo - 7 de Junio",
     img: "/images/events/corpus_christi.png",
     color: "from-blue-600",
+  },
+  {
+    id: "carnaval-alegria",
+    title: "Carnaval de la Alegría",
+    date: "4 de Junio",
+    img: "/images/events/carnaval_alegria.png",
+    color: "from-pink-600",
   },
 ];
 
@@ -37,6 +44,7 @@ const allEvents = [
   { id: "carnaval-alegria-detail", title: "Carnaval de la Alegría", date: "4 de junio", month: 5, dayRange: [4], year: 2026 },
   { id: "corpus-christi-detail", title: "Feria de Corpus Christi", date: "Del 30 de mayo al 7 de Junio", month: 4, dayRange: [30, 31], year: 2026 },
   { id: "corpus-christi-detail-2", title: "Feria de Corpus Christi", date: "Del 30 de mayo al 7 de Junio", month: 5, dayRange: [1, 2, 3, 4, 5, 6, 7], year: 2026 },
+  { id: "festival-xanath", title: "Festival Xanath", date: "Jueves 4 y Domingo 7 de Junio", month: 5, dayRange: [4, 7], year: 2026 },
   { id: "fiestas-patrias", title: "Fiestas Patrias", date: "15 de Septiembre", month: 8, dayRange: [15], year: 2026 },
   { id: "ninin", title: "Ninín", date: "2 de Noviembre", month: 10, dayRange: [2], year: 2026 },
   { id: "navidad-papantla", title: "Navidad en Papantla", date: "Del 26 al 29 de Diciembre", month: 11, dayRange: [26, 27, 28, 29], year: 2026 },

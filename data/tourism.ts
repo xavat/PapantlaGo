@@ -304,11 +304,11 @@ export const tourismData: TourismItem[] = [
       { label: "Seguridad", value: "24 Horas", icon: "shield" }
     ],
     gallery: [
-      "/images/hotels/tajin/facade.jpg",
-      "/images/hotels/tajin/pool.jpg",
-      "/images/hotels/tajin/lobby.jpg",
-      "/images/hotels/tajin/room1.jpg",
-      "/images/hotels/tajin/room2.jpg"
+      "/images/hotels/tajin/1.jpg",
+      "/images/hotels/tajin/2.jpg",
+      "/images/hotels/tajin/3.jpg",
+      "/images/hotels/tajin/4.jpg",
+      "/images/hotels/tajin/5.jpg"
     ]
   },
   {
@@ -316,7 +316,7 @@ export const tourismData: TourismItem[] = [
     title: "Hotel Vista INN",
     subtitle: "Vista Panorámica",
     description: "Ubicación privilegiada con acceso fácil a los principales atractivos turísticos y comerciales del centro de Papantla.",
-    imageUrl: "/images/hotels/vistainn/VISTA INN.jpg",
+    imageUrl: "/images/hotels/vistainn.jpg",
     rating: "4.3",
     tag: "Centro",
     location: "Centro, Papantla",
@@ -325,11 +325,11 @@ export const tourismData: TourismItem[] = [
     phone: "7848425981",
     address: "Reforma 102-local 5, Centro, 93400 Papantla de Olarte, Ver.",
     gallery: [
-      "/images/hotels/vistainn/VISTA INN.jpg",
-      "/images/hotels/vistainn/VISTA INN1.jpg",
-      "/images/hotels/vistainn/VISTA INN2.jpg",
-      "/images/hotels/vistainn/VISTA INN3.jpg",
-      "/images/hotels/vistainn/VISTA INN4.jpg"
+      "/images/hotels/vistainn/1.jpg",
+      "/images/hotels/vistainn/2.jpg",
+      "/images/hotels/vistainn/3.jpg",
+      "/images/hotels/vistainn/4.jpg",
+      "/images/hotels/vistainn/5.jpg"
     ]
   },
   {
@@ -337,7 +337,7 @@ export const tourismData: TourismItem[] = [
     title: "OYO Hotel Totonacapan",
     subtitle: "Esencia Totonaca",
     description: "Habitaciones confortables que reflejan la calidez de la cultura totonaca, ideal para viajeros que buscan una estancia auténtica.",
-    imageUrl: "/images/hotels/oyo/OYO.jpeg",
+    imageUrl: "/images/hotels/oyo.jpg",
     rating: "4.0",
     tag: "Barrio San Juan",
     location: "Papantla, Ver",
@@ -359,7 +359,7 @@ export const tourismData: TourismItem[] = [
     title: "Hostal del Centro Papantla",
     subtitle: "Ambiente Familiar",
     description: "Una opción acogedora y económica en el corazón de la ciudad, perfecta para explorar cada rincón de Papantla.",
-    imageUrl: "/images/hotels/hoteldelcentro/HOSTEL DEL CENTRO.jpg",
+    imageUrl: "/images/hotels/hoteldelcentro.jpg",
     rating: "4.2",
     tag: "Centro",
     location: "Centro, Papantla",
@@ -380,7 +380,7 @@ export const tourismData: TourismItem[] = [
     title: "Hotel Campestre La Colina Del Conejo",
     subtitle: "Naturaleza y Descanso",
     description: "Rodeado de vegetación, este hotel campestre es el refugio ideal para quienes buscan tranquilidad y contacto con la naturaleza.",
-    imageUrl: "/images/hotels/colina/COLINA.png",
+    imageUrl: "/images/hotels/colina.jpg",
     rating: "4.6",
     tag: "Campestre",
     location: "Adolfo Lopez Mateos",
@@ -401,7 +401,7 @@ export const tourismData: TourismItem[] = [
     title: "Hotel Santo Domingo",
     subtitle: "Tranquilidad y Confort",
     description: "Excelente servicio y hospitalidad en una atmósfera relajada para su estancia en la ciudad perfecta para descansar.",
-    imageUrl: "/images/hotels/santo/SANTO.jpeg",
+    imageUrl: "/images/hotels/santo.jpg",
     rating: "4.2",
     tag: "Barrio San Juan",
     location: "Papantla, Ver",
@@ -410,13 +410,13 @@ export const tourismData: TourismItem[] = [
     phone: "7848427038",
     address: "5 de Mayo 301, Barrio del San Juan, 93449 Papantla, Ver.",
     gallery: [
-      "/images/hotels/santo/SANTO.jpeg",
-      "/images/hotels/santo/SANTO1.jpeg",
-      "/images/hotels/santo/SANTO2.jpeg",
-      "/images/hotels/santo/SANTO3.jpeg",
-      "/images/hotels/santo/SANTO4.jpeg",
-      "/images/hotels/santo/SANTO5.jpeg",
-      "/images/hotels/santo/SANTO6.jpeg"
+      "/images/hotels/santo/1.jpeg",
+      "/images/hotels/santo/2.jpeg",
+      "/images/hotels/santo/3.jpeg",
+      "/images/hotels/santo/4.jpeg",
+      "/images/hotels/santo/5.jpeg",
+      "/images/hotels/santo/6.jpeg",
+      "/images/hotels/santo/7.jpeg"
     ]
   },
   {
@@ -424,7 +424,7 @@ export const tourismData: TourismItem[] = [
     title: "Hotel Vainilla y Descanso",
     subtitle: "Elegancia y Aroma",
     description: "Un hotel boutique que rinde homenaje al oro negro de Papantla. Experimente el lujo auténtico.",
-    imageUrl: "/images/hotels/vainilla/VAINILLA.jpg",
+    imageUrl: "/images/hotels/vainilla.jpg",
     rating: "4.7",
     tag: "Boutique",
     location: "Benito Juárez, Papantla",
@@ -433,14 +433,14 @@ export const tourismData: TourismItem[] = [
     phone: "7821862711",
     address: "Francisco I Madero 716, Benito Juárez, 93410 Papantla de Olarte, Ver.",
     gallery: [
-      "/images/hotels/vainilla/VAINILLA.jpg",
-      "/images/hotels/vainilla/VAINILLA1.jpg",
-      "/images/hotels/vainilla/VAINILLA2.jpg",
-      "/images/hotels/vainilla/VAINILLA3.jpg",
-      "/images/hotels/vainilla/VAINILLA4.jpg",
-      "/images/hotels/vainilla/VAINILLA5.jpg",
-      "/images/hotels/vainilla/VAINILLA6.jpg",
-      "/images/hotels/vainilla/VAINILLA7.png"
+      "/images/hotels/vainilla/1.jpg",
+      "/images/hotels/vainilla/2.jpg",
+      "/images/hotels/vainilla/3.jpg",
+      "/images/hotels/vainilla/4.jpg",
+      "/images/hotels/vainilla/5.jpg",
+      "/images/hotels/vainilla/6.jpg",
+      "/images/hotels/vainilla/7.jpg",
+      "/images/hotels/vainilla/8.png"
     ]
   },
   {
@@ -448,7 +448,7 @@ export const tourismData: TourismItem[] = [
     title: "Hotel Katlen",
     subtitle: "Hospitalidad Local",
     description: "Servicio personalizado en un entorno tradicional, ideal para disfrutar de la cultura local.",
-    imageUrl: "/images/hotels/katlen/KATLEN.jpeg",
+    imageUrl: "/images/hotels/katlen.jpg",
     rating: "3.9",
     tag: "Barrio San Juan",
     location: "Papantla, Ver",
@@ -470,7 +470,7 @@ export const tourismData: TourismItem[] = [
     title: "Hotel Familiar Arenas",
     subtitle: "Estancia Cálida",
     description: "Ambiente familiar y atención amable que le hará sentirse como en casa durante su visita.",
-    imageUrl: "/images/hotels/arenas/ARENAS.jpeg",
+    imageUrl: "/images/hotels/arenas.jpg",
     rating: "4.0",
     tag: "Naranjo",
     location: "Barrio del Naranjo",
@@ -485,7 +485,6 @@ export const tourismData: TourismItem[] = [
       "/images/hotels/arenas/ARENAS3.jpeg",
       "/images/hotels/arenas/ARENAS4.jpeg"
     ]
-
   },
   // ALIMENTOS Y BEBIDAS
   {
@@ -493,7 +492,7 @@ export const tourismData: TourismItem[] = [
     title: "Café Catedral",
     subtitle: "Aroma y Tradición",
     description: "Un espacio acogedor frente a la catedral donde el café papanteco es el protagonista.",
-    imageUrl: "/images/sabores/cafecatedral/1.jpg",
+    imageUrl: "/images/sabores/cafecatedral/imagen1.jpg",
     rating: "4.8",
     tag: "Cafetería",
     location: "Barrio del Naranjo",
@@ -501,14 +500,19 @@ export const tourismData: TourismItem[] = [
     coords: [20.4465, -97.3225],
     phone: "7848425317",
     address: "Curato s/n, Barrio del Naranjo, 93400 Poza Rica de Hidalgo, Ver.",
-    gallery: ["/images/sabores/cafecatedral/1.jpg"]
+    gallery: [
+      "/images/sabores/cafecatedral/imagen1.jpg",
+      "/images/sabores/cafecatedral/imagen2.jpg",
+      "/images/sabores/cafecatedral/imagen3.jpg",
+      "/images/sabores/cafecatedral/imagen4.jpg"
+    ]
   },
   {
     id: "la-choza-de-lucy",
     title: "La choza de Lucy",
     subtitle: "Delicias del Mar",
     description: "Mariscos frescos con el sazón auténtico de la región en un ambiente relajado.",
-    imageUrl: "/images/sabores/chozalucy/1.jpg",
+    imageUrl: "/images/sabores/chozalucy/imagen1.jpg",
     rating: "4.7",
     tag: "Mariscos",
     location: "Barrio del Zapote",
@@ -516,14 +520,23 @@ export const tourismData: TourismItem[] = [
     coords: [20.4465, -97.3225],
     phone: "7848424980",
     address: "Cjon 16 de Septiembre centro 829, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
-    gallery: ["/images/sabores/chozalucy/1.jpg"]
+    gallery: [
+      "/images/sabores/chozalucy/imagen1.jpg",
+      "/images/sabores/chozalucy/imagen2.jpg",
+      "/images/sabores/chozalucy/imagen3.jpg",
+      "/images/sabores/chozalucy/imagen4.jpg",
+      "/images/sabores/chozalucy/imagen5.jpg",
+      "/images/sabores/chozalucy/imagen6.JPG",
+      "/images/sabores/chozalucy/imagen7.JPG",
+      "/images/sabores/chozalucy/imagen8.jpg"
+    ]
   },
   {
     id: "zacahuil-perla",
     title: "Zacahuil Perla",
     subtitle: "El Gigante de la Huasteca",
     description: "Tradición pura en cada bocado de nuestro zacahuil preparado artesanalmente.",
-    imageUrl: "/images/sabores/zacahuilperla/1.jpg",
+    imageUrl: "/images/sabores/zacahuilperla/imagen1.jpg",
     rating: "4.9",
     tag: "Comida Típica",
     location: "Barrio del Zapote",
@@ -531,14 +544,14 @@ export const tourismData: TourismItem[] = [
     coords: [20.4465, -97.3225],
     phone: "7841346603",
     address: "Cjon 16 de Septiembre 907, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
-    gallery: ["/images/sabores/zacahuilperla/1.jpg"]
+    gallery: ["/images/sabores/zacahuilperla/imagen1.jpg"]
   },
   {
     id: "sushi-&-drinks-mr.-rollo",
     title: "SUSHI & DRINKS MR. ROLLO",
     subtitle: "Fusion & Mixology",
     description: "Lo mejor del sushi con un toque local y coctelería de autor.",
-    imageUrl: "/images/sabores/mrrollo/1.jpg",
+    imageUrl: "/images/sabores/mrrollo/imagen1.jpeg",
     rating: "4.6",
     tag: "Sushi",
     location: "Barrio del Naranjo",
@@ -546,14 +559,24 @@ export const tourismData: TourismItem[] = [
     coords: [20.4465, -97.3225],
     phone: "",
     address: "C. José de J. Núñez 18, Barrio del Naranjo, 93400 Papantla de Olarte, Ver.",
-    gallery: ["/images/sabores/mrrollo/1.jpg"]
+    gallery: [
+      "/images/sabores/mrrollo/imagen1.jpeg",
+      "/images/sabores/mrrollo/imagen2.jpg",
+      "/images/sabores/mrrollo/imagen3.jpeg",
+      "/images/sabores/mrrollo/imagen4.jpeg",
+      "/images/sabores/mrrollo/imagen5.jpeg",
+      "/images/sabores/mrrollo/imagen6.jpeg",
+      "/images/sabores/mrrollo/imagen7.jpeg",
+      "/images/sabores/mrrollo/imagen8.jpeg",
+      "/images/sabores/mrrollo/imagen9.jpeg"
+    ]
   },
   {
     id: "pizzas-y-volovanes-el-uli-sucursal-centro",
     title: "Pizzas y Volovanes El Uli",
     subtitle: "Sabor que Encanta",
-    description: "Pizzas artesanales y los famosos volovanes de la región.",
-    imageUrl: "/images/sabores/pizzasuli/1.jpg",
+    description: "Pizzas artesanalmente preparadas y los famosos volovanes de la región.",
+    imageUrl: "/images/sabores/pizzasuli/imagen1.jpeg",
     rating: "4.5",
     tag: "Pizzería",
     location: "Centro",
@@ -561,6 +584,62 @@ export const tourismData: TourismItem[] = [
     coords: [20.4465, -97.3225],
     phone: "7848420064",
     address: "C. José de J. Núñez s/n, Centro, 93400 Papantla, Ver.",
-    gallery: ["/images/sabores/pizzasuli/1.jpg"]
+    gallery: [
+      "/images/sabores/pizzasuli/imagen1.jpeg",
+      "/images/sabores/pizzasuli/imagen2.JPG",
+      "/images/sabores/pizzasuli/imagen3.jpg",
+      "/images/sabores/pizzasuli/imagen4.jpg",
+      "/images/sabores/pizzasuli/imagen5.JPG",
+      "/images/sabores/pizzasuli/imagen6.jpg",
+      "/images/sabores/pizzasuli/imagen7.jpeg",
+      "/images/sabores/pizzasuli/imagen8.jpeg",
+      "/images/sabores/pizzasuli/imagen9.jpeg",
+      "/images/sabores/pizzasuli/imagen10.jpeg"
+    ]
+  },
+  {
+    id: "the-italian-coffee-company",
+    title: "The Italian Coffee Company",
+    subtitle: "Aroma y Calidad",
+    description: "Excelente café gourmet y una gran selección de postres, frappés y bebidas especiales en una atmósfera relajante y cómoda.",
+    imageUrl: "/images/sabores/theitaliancoffeecompany/imagen1.png",
+    rating: "4.6",
+    tag: "Cafetería",
+    location: "Centro, Papantla",
+    category: "sabor",
+    coords: [20.4465, -97.3225],
+    phone: "7841251585",
+    address: "s/n, Curato, Centro, Barrio del Naranjo, 93400 Papantla de Olarte",
+    gallery: ["/images/sabores/theitaliancoffeecompany/imagen1.png"]
+  },
+  {
+    id: "panificadora-lemus",
+    title: "Panificadora Lemus",
+    subtitle: "Tradición y Dulzura",
+    description: "Pan de dulce y sal artesanal preparado al horno tradicional con la receta original de generación en generación.",
+    imageUrl: "/images/sabores/panificadoralemus/imagen1.png",
+    rating: "4.8",
+    tag: "Panadería",
+    location: "Santa Cruz, Papantla",
+    category: "sabor",
+    coords: [20.4465, -97.3225],
+    phone: "7848422558",
+    address: "Cjon 16 de Septiembre 209, Santa Cruz, 93400 Papantla, Ver.",
+    gallery: ["/images/sabores/panificadoralemus/imagen1.png"]
+  },
+  {
+    id: 'pizzas-y-volovanes-el-uli-sucursal-"16-de-septiembre"',
+    title: 'Pizzas y Volovanes El Uli Sucursal "16 de Septiembre"',
+    subtitle: "Sabor de Tradición",
+    description: "Sabor crujiente de las mejores pizzas hechas al momento y los clásicos volovanes hojaldrados de la región.",
+    imageUrl: "/images/sabores/pizzasuli16deseptiembre/imagen1.png",
+    rating: "4.7",
+    tag: "Pizzería",
+    location: "Barrio del Zapote, Papantla",
+    category: "sabor",
+    coords: [20.4465, -97.3225],
+    phone: "7848425458",
+    address: "Cjon 16 de Septiembre 800, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
+    gallery: ["/images/sabores/pizzasuli16deseptiembre/imagen1.png"]
   }
 ];

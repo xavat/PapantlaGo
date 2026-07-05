@@ -13,28 +13,28 @@ const homeItems = [
     title: "Zona Arqueológica del Tajín",
     subtitle: "Ciudad Trueno",
     desc: "Capital del imperio Totonaca famosa por su Pirámide de los Nichos",
-    img: "/tajin.jpg",
+    img: "/destinos/tajin.jpg",
     id: "tajin"
   },
   {
     title: "Centro Histórico de Papantla",
     subtitle: "Corazón del Pueblo",
     desc: "Arquitectura vernácula y el aroma de la vainilla en cada esquina",
-    img: "/centro.jpg",
+    img: "/destinos/centro.jpg",
     id: "centro-historico"
   },
   {
     title: "Mural de la Cultura Totonaca",
     subtitle: "Historia en Piedra",
     desc: "La cosmogonía de un pueblo grabada para la eternidad",
-    img: "/mural.jpg",
+    img: "/destinos/mural.jpg",
     id: "mural-totonaca"
   },
   {
     title: "Monumento al Volador",
     subtitle: "Símbolo de Papantla",
     desc: "Homenaje al ritual ancestral que desafía las alturas",
-    img: "/volador.jpg",
+    img: "/destinos/volador.jpg",
     id: "monumento-volador"
   },
 ];

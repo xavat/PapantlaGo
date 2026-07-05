@@ -31,7 +31,7 @@ const featuredEvents = [
     id: "carnaval-alegria",
     title: "Carnaval de la Alegría",
     date: "4 de Junio",
-    img: "/images/events/carnaval_alegria.jpg",
+    img: "/images/events/carnaval_alegria.jpeg",
     color: "from-pink-600",
   },
 ];

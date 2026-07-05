@@ -79,7 +79,7 @@ const eventsData = [
     title: "Carnaval de la Alegría",
     subtitle: "Magia y Color",
     description: "Un desfile vibrante por las calles de Papantla con música en vivo, comparsas y la alegría característica de la región norte de Veracruz.",
-    imageUrl: "/images/events/carnaval_alegria.jpg",
+    imageUrl: "/images/events/carnaval_alegria.jpeg",
     rating: "4.7",
     tag: "Carnaval",
     location: "Calles del Centro, Papantla",
@@ -88,13 +88,14 @@ const eventsData = [
       { label: "Ambiente", value: "Festivo", icon: Clock },
     ],
     gallery: [
-      "/images/events/carnaval_alegria/imagen1.jpg",
+      "/images/events/carnaval_alegria/imagen1.jpeg",
       "/images/events/carnaval_alegria/imagen2.jpg",
       "/images/events/carnaval_alegria/imagen3.jpg",
       "/images/events/carnaval_alegria/imagen4.jpg",
       "/images/events/carnaval_alegria/imagen5.jpg",
       "/images/events/carnaval_alegria/imagen6.jpg",
-      "/images/events/carnaval_alegria/imagen7.jpg"
+      "/images/events/carnaval_alegria/imagen7.jpg",
+      "/images/events/carnaval_alegria/imagen8.jpg"
     ]
   }
 ];

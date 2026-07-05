@@ -646,8 +646,8 @@ export const tourismData: TourismItem[] = [
     ]
   },
   {
-    id: 'pizzas-y-volovanes-el-uli-sucursal-"16-de-septiembre"',
-    title: 'Pizzas y Volovanes El Uli Sucursal "16 de Septiembre"',
+    id: "pizzas-y-volovanes-el-uli-sucursal-16-de-septiembre",
+    title: "Pizzas y Volovanes El Uli Sucursal 16 de Septiembre",
     subtitle: "Sabor de Tradición",
     description: "Sabor crujiente de las mejores pizzas hechas al momento y los clásicos volovanes hojaldrados de la región.",
     imageUrl: "/images/sabores/pizzasuli16deseptiembre/imagen1.jpeg",
@@ -672,6 +672,212 @@ export const tourismData: TourismItem[] = [
       "/images/sabores/pizzasuli16deseptiembre/imagen11.jpeg",
       "/images/sabores/pizzasuli16deseptiembre/imagen12.jpeg",
       "/images/sabores/pizzasuli16deseptiembre/imagen13.jpeg"
+    ]
+  },
+  {
+    id: "idea-pizza",
+    title: "Idea Pizza",
+    subtitle: "Sabor que Encanta",
+    description: "Las mejores pizzas preparadas al horno con ingredientes frescos y una masa artesanal crujiente.",
+    imageUrl: "/images/sabores/ideapizza/imagen1.jpg",
+    rating: "4.7",
+    tag: "Pizzería",
+    location: "Centro",
+    category: "sabor",
+    coords: [20.4465, -97.3225],
+    phone: "7848422083",
+    address: "Cjon 16 de Septiembre 101, Centro, 93400 Papantla de Olarte, Ver.",
+    gallery: [
+      "/images/sabores/ideapizza/imagen1.jpg",
+      "/images/sabores/ideapizza/imagen2.jpg",
+      "/images/sabores/ideapizza/imagen3.jpg",
+      "/images/sabores/ideapizza/imagen4.jpg"
+    ]
+  },
+  {
+    id: "las-canastas",
+    title: "Las Canastas",
+    subtitle: "Sabor Mexicano",
+    description: "Exquisitos tacos de canasta y una amplia variedad de guisados típicos con el sazón tradicional de la Huasteca.",
+    imageUrl: "/images/sabores/lascanastas/imagen1.jpg",
+    rating: "4.6",
+    tag: "Comida Típica",
+    location: "Barrio del San Juan",
+    category: "sabor",
+    coords: [20.4465, -97.3225],
+    phone: "7841442168",
+    address: "José Azueta 105, Barrio del San Juan, 93400 Papantla de Olarte, Ver.",
+    gallery: [
+      "/images/sabores/lascanastas/imagen1.jpg",
+      "/images/sabores/lascanastas/imagen2.jpg",
+      "/images/sabores/lascanastas/imagen3.jpg",
+      "/images/sabores/lascanastas/imagen4.jpg",
+      "/images/sabores/lascanastas/imagen5.jpg"
+    ]
+  },
+  {
+    id: "cafe-del-centro",
+    title: "Café Del Centro",
+    subtitle: "Cafetería & Snacks",
+    description: "Un espacio acogedor en el corazón de Papantla para disfrutar de un buen café local, postres y snacks.",
+    imageUrl: "/images/sabores/cafedelcentro/imagen1.jpg",
+    rating: "4.5",
+    tag: "Cafetería",
+    location: "Barrio del San Juan",
+    category: "sabor",
+    coords: [20.4465, -97.3225],
+    phone: "7848421163",
+    address: "Artes 108, Barrio del San Juan, 93400 Papantla, Ver.",
+    gallery: [
+      "/images/sabores/cafedelcentro/imagen1.jpg",
+      "/images/sabores/cafedelcentro/imagen2.jpg",
+      "/images/sabores/cafedelcentro/imagen3.jpeg",
+      "/images/sabores/cafedelcentro/imagen4.jpeg",
+      "/images/sabores/cafedelcentro/imagen5.jpg"
+    ]
+  },
+  {
+    id: "me-perdonas",
+    title: "Me Perdonas",
+    subtitle: "Cafetería & Snacks",
+    description: "Un lugar con encanto para deleitarse con ricas crepas, postres, helados y refrescantes cafés preparados al momento.",
+    imageUrl: "/images/sabores/meperdonas/imagen1.jpg",
+    rating: "4.8",
+    tag: "Cafetería",
+    location: "Santa Cruz",
+    category: "sabor",
+    coords: [20.4465, -97.3225],
+    phone: "7841218557",
+    address: "C. Rodolfo Curti 118, Santa Cruz, 93400 Papantla de Olarte, Ver.",
+    gallery: [
+      "/images/sabores/meperdonas/imagen1.jpg",
+      "/images/sabores/meperdonas/imagen2.jpg",
+      "/images/sabores/meperdonas/imagen3.jpg",
+      "/images/sabores/meperdonas/imagen4.jpg"
+    ]
+  },
+  {
+    id: "clandestino",
+    title: "Clandestino",
+    subtitle: "Hamburguesas & Snacks",
+    description: "Las mejores hamburguesas gourmet de Papantla, con ingredientes de primera calidad y papas sazonadas en un ambiente genial.",
+    imageUrl: "/images/sabores/clandestino/imagen1.jpg",
+    rating: "4.7",
+    tag: "Hamburguesas",
+    location: "Barrio del Naranjo",
+    category: "sabor",
+    coords: [20.4465, -97.3225],
+    phone: "7848499423",
+    address: "C. Andrés Q.R. 201, Barrio del Naranjo, 93400 Papantla de Olarte, Ver.",
+    gallery: [
+      "/images/sabores/clandestino/imagen1.jpg",
+      "/images/sabores/clandestino/imagen2.jpg",
+      "/images/sabores/clandestino/imagen3.jpg",
+      "/images/sabores/clandestino/imagen4.jpg",
+      "/images/sabores/clandestino/imagen5.jpg"
+    ]
+  },
+  {
+    id: "la-jarochita",
+    title: "La Jarochita",
+    subtitle: "Mariscos & Bebidas",
+    description: "El auténtico sabor del golfo en Papantla. Cocteles, platillos de mariscos frescos y bebidas preparadas con el mejor sazón.",
+    imageUrl: "/images/sabores/lajarochita/imagen1.jpg",
+    rating: "4.6",
+    tag: "Mariscos",
+    location: "Centro",
+    category: "sabor",
+    coords: [20.4465, -97.3225],
+    phone: "7841344357",
+    address: "Leandro Valle s/n, Centro, 93449 Papantla de Olarte, Ver.",
+    gallery: [
+      "/images/sabores/lajarochita/imagen1.jpg",
+      "/images/sabores/lajarochita/imagen2.jpg",
+      "/images/sabores/lajarochita/imagen3.jpg",
+      "/images/sabores/lajarochita/imagen4.jpg",
+      "/images/sabores/lajarochita/imagen5.jpg"
+    ]
+  },
+  {
+    id: "tacos-rojos",
+    title: "Tacos Rojos",
+    subtitle: "Taquería de Tradición",
+    description: "Los tradicionales tacos rojos de Papantla con su inigualable salsa y tortillas hechas a mano para chuparse los dedos.",
+    imageUrl: "/images/sabores/tacosrojos/imagen1.jpg",
+    rating: "4.7",
+    tag: "Taquería",
+    location: "Barrio el San Juan",
+    category: "sabor",
+    coords: [20.4465, -97.3225],
+    phone: "",
+    address: "Barrio del San Juan, 93449 Papantla de Olarte, Ver.",
+    gallery: [
+      "/images/sabores/tacosrojos/imagen1.jpg",
+      "/images/sabores/tacosrojos/imagen2.jpg",
+      "/images/sabores/tacosrojos/imagen3.jpg",
+      "/images/sabores/tacosrojos/imagen4.jpg",
+      "/images/sabores/tacosrojos/imagen5.jpg"
+    ]
+  },
+  {
+    id: "super-taqueria-el-gordo",
+    title: "Super Taquería El Gordo",
+    subtitle: "Sabor de Antaño",
+    description: "Servicio rápido y los mejores tacos al pastor y de plancha. Una parada obligada para los amantes de los buenos tacos.",
+    imageUrl: "/images/sabores/supertaqueriaelgordo/imagen1.jpg",
+    rating: "4.6",
+    tag: "Taquería",
+    location: "Barrio del San Juan",
+    category: "sabor",
+    coords: [20.4465, -97.3225],
+    phone: "7841087880",
+    address: "93400 calle Francisco I. Madero FRENTE A WALDOS, A UN LADO DE SUBODEGA FRENTE A WALDOS EL, Barrio del San Juan, 93400 Papantla, Ver.",
+    gallery: [
+      "/images/sabores/supertaqueriaelgordo/imagen1.jpg",
+      "/images/sabores/supertaqueriaelgordo/imagen2.jpg",
+      "/images/sabores/supertaqueriaelgordo/imagen3.jpg"
+    ]
+  },
+  {
+    id: "antojitos-dona-carmen",
+    title: "Antojitos Doña Carmen",
+    subtitle: "Antojitos Típicos",
+    description: "Los mejores antojitos huastecos hechos al instante: empanadas, duba, mole y antojitos totonacos preparados con amor de hogar.",
+    imageUrl: "/images/sabores/antojitosdonacarmen/imagen1.jpeg",
+    rating: "4.8",
+    tag: "Antojitos",
+    location: "Barrio del Zapote",
+    category: "sabor",
+    coords: [20.4465, -97.3225],
+    phone: "7846881200",
+    address: "De La Libertad 308, Barrio del Zapote, 93440 Papantla de Olarte, Ver.",
+    gallery: [
+      "/images/sabores/antojitosdonacarmen/imagen1.jpeg",
+      "/images/sabores/antojitosdonacarmen/imagen2.PNG",
+      "/images/sabores/antojitosdonacarmen/imagen3.PNG",
+      "/images/sabores/antojitosdonacarmen/imagen4.PNG",
+      "/images/sabores/antojitosdonacarmen/imagen5.PNG",
+      "/images/sabores/antojitosdonacarmen/imagen6.PNG"
+    ]
+  },
+  {
+    id: "las-tortugas",
+    title: "Las Tortugas",
+    subtitle: "Hamburguesas & Tortas",
+    description: "Las mejores tortas y hamburguesas al carbón de la zona frente al mural. Rápidas, abundantes y deliciosas.",
+    imageUrl: "/images/sabores/lastortugas/imagen1.jpg",
+    rating: "4.5",
+    tag: "Hamburguesas",
+    location: "Barrio del Naranjo",
+    category: "sabor",
+    coords: [20.4465, -97.3225],
+    phone: "7841214753",
+    address: "Centro Frente al Mural de Papantla, C. José de J. Núñez Col, Barrio del Naranjo, 93400 Papantla de Olarte, Ver.",
+    gallery: [
+      "/images/sabores/lastortugas/imagen1.jpg",
+      "/images/sabores/lastortugas/imagen2.jpg",
+      "/images/sabores/lastortugas/imagen3.jpg",
+      "/images/sabores/lastortugas/imagen4.jpg"
     ]
   }
 ];

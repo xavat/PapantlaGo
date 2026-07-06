@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Briefcase, Phone, Map, Bus, Car, Users, ChevronRight, PhoneCall, Search, Smartphone, X } from "lucide-react";
+import { Briefcase, Phone, Map, Bus, Car, Users, ChevronRight, PhoneCall, Search, Smartphone, X, MapPin, Globe } from "lucide-react";
 import { useState, useMemo } from "react";
 
 const touristGuides = [
@@ -110,6 +110,27 @@ const touristGuides = [
   }
 ];
 
+const taxiDirectoryList = [
+  {
+    name: "Taxi Voladores",
+    phone: "7841226672",
+    whatsapp: "7841226672",
+    description: "Servicio de taxi local y foráneo disponible para traslados rápidos y seguros."
+  },
+  {
+    name: "Radio Taxi Express Papantla",
+    phone: "7841046824",
+    whatsapp: "7841046824",
+    description: "Servicio de radio taxi expreso. Atención rápida en toda la cabecera municipal."
+  },
+  {
+    name: "Radio Taxi Papantla",
+    phone: "7841046824",
+    whatsapp: "7841046824",
+    description: "Servicio tradicional de radio taxi. Viajes locales y al aeropuerto."
+  }
+];
+
 const services = [
   {
     category: "Guía Turística",
@@ -126,29 +147,47 @@ const services = [
     category: "Transporte",
     items: [
       {
-        name: "Radio Taxi Papantla",
-        sub: "Servicio 24 horas",
-        description: "Transporte seguro y confiable dentro y fuera de la ciudad",
-        icon: PhoneCall,
-        type: "taxi",
-        phone: "7848420000"
+        name: "Directorio de Taxis",
+        sub: "Llamada y WhatsApp",
+        description: "Encuentra taxis oficiales disponibles las 24 horas. Comunícate mediante llamada telefónica o directamente por chat de WhatsApp.",
+        type: "taxi_directory"
       },
       {
-        name: "ADO Autobuses",
-        sub: "Viajes Foráneos",
-        description: "Conexiones principales a Poza Rica Veracruz y Ciudad de México",
-        icon: Bus,
-        type: "bus"
+        name: "Directorio de Autobuses",
+        sub: "ADO Terminal Papantla",
+        description: "Información de contacto, ubicación en mapa y reservas en línea para la Terminal de Autobuses ADO en Papantla.",
+        type: "bus_directory"
       }
     ]
   }
 ];
 
+const WhatsAppIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
+  <svg 
+    className={className} 
+    fill="currentColor" 
+    viewBox="0 0 24 24" 
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.457L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.625 1.449 5.424 0 9.838-4.417 9.84-9.84.002-2.628-1.02-5.1-2.88-6.961C16.326 1.94 13.848.916 11.23.916 5.804.916 1.392 5.332 1.39 10.755c-.001 1.547.41 3.055 1.193 4.405l-.1.364-1.25 4.57 4.675-1.226.376-.086zm10.963-3.589c-.27-.136-1.6-.79-1.848-.879-.249-.09-.43-.136-.61.136-.18.27-.7.879-.857 1.059-.158.18-.315.2-.585.065-.27-.136-1.136-.42-2.162-1.337-.798-.713-1.336-1.594-1.493-1.864-.157-.27-.017-.417.118-.552.122-.122.27-.315.405-.473.136-.157.18-.27.27-.45.09-.18.045-.337-.022-.473-.068-.136-.61-1.47-.836-2.013-.22-.529-.44-.457-.61-.466-.158-.007-.338-.009-.519-.009-.18 0-.473.067-.72.337-.248.27-.946.924-.946 2.25 0 1.328.969 2.61 1.103 2.79.136.18 1.906 2.91 4.62 4.08.647.278 1.152.445 1.547.57.65.207 1.24.177 1.706.108.519-.078 1.602-.656 1.828-1.26.226-.604.226-1.125.158-1.23-.068-.106-.248-.198-.519-.334z" />
+  </svg>
+);
+
 export default function ServiciosPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [showGuidesModal, setShowGuidesModal] = useState(false);
+  const [showTaxiModal, setShowTaxiModal] = useState(false);
+  const [showBusModal, setShowBusModal] = useState(false);
   const [searchGuideQuery, setSearchGuideQuery] = useState("");
+  const [searchTaxiQuery, setSearchTaxiQuery] = useState("");
   const [selectedLanguageFilter, setSelectedLanguageFilter] = useState("Todos");
+
+  const openWhatsApp = (phone: string, message: string) => {
+    const cleanPhone = phone.replace(/[^0-9]/g, "");
+    const formattedPhone = cleanPhone.startsWith("52") ? cleanPhone : `52${cleanPhone}`;
+    const encodedMessage = encodeURIComponent(message);
+    window.open(`https://wa.me/${formattedPhone}?text=${encodedMessage}`, "_blank");
+  };
 
   const filteredServices = useMemo(() => {
     if (!searchQuery) return services;
@@ -172,6 +211,14 @@ export default function ServiciosPage() {
       return matchesSearch && matchesLanguage;
     });
   }, [searchGuideQuery, selectedLanguageFilter]);
+
+  const filteredTaxis = useMemo(() => {
+    if (!searchTaxiQuery) return taxiDirectoryList;
+    return taxiDirectoryList.filter(taxi =>
+      taxi.name.toLowerCase().includes(searchTaxiQuery.toLowerCase()) ||
+      taxi.phone.replace(/[^0-9]/g, "").includes(searchTaxiQuery.replace(/[^0-9]/g, ""))
+    );
+  }, [searchTaxiQuery]);
 
   return (
     <div className="pb-32 flex flex-col bg-background min-h-screen font-outfit">
@@ -215,54 +262,84 @@ export default function ServiciosPage() {
               <div className="grid grid-cols-1 gap-4">
                 {section.items.map((item) => {
                   const isGuidesDirectory = item.type === "guides_directory";
+                  const isTaxiDirectory = item.type === "taxi_directory";
+                  const isBusDirectory = item.type === "bus_directory";
+                  const isDirectory = isGuidesDirectory || isTaxiDirectory || isBusDirectory;
+                  const IconComponent = 'icon' in item && item.icon ? item.icon as any : null;
                   return (
                     <motion.div
                       key={item.name}
+                      onClick={() => {
+                        if (isGuidesDirectory) setShowGuidesModal(true);
+                        else if (isTaxiDirectory) setShowTaxiModal(true);
+                        else if (isBusDirectory) setShowBusModal(true);
+                      }}
                       className={
-                        isGuidesDirectory 
-                          ? "relative overflow-hidden bg-gradient-to-br from-primary to-[#721F2C] dark:from-primary dark:to-zinc-950 p-[30px] rounded-[36px] border border-primary/20 flex flex-col gap-6 shadow-2xl text-white group" 
+                        isDirectory 
+                          ? `relative overflow-hidden cursor-pointer p-[30px] rounded-[36px] border flex flex-col gap-6 shadow-2xl text-white group ${
+                              isGuidesDirectory
+                                ? "bg-gradient-to-br from-primary to-[#721F2C] dark:from-primary/80 dark:to-zinc-950 border-primary/20"
+                                : isTaxiDirectory
+                                ? "bg-gradient-to-br from-secondary to-[#BD8C5C] dark:from-secondary/60 dark:to-zinc-950 border-secondary/20"
+                                : "bg-gradient-to-br from-zinc-700 to-zinc-900 dark:from-zinc-800 dark:to-zinc-950 border-zinc-500/20"
+                            }`
                           : "bg-white dark:bg-white/5 p-6 rounded-[32px] border border-black/5 dark:border-white/10 flex flex-col gap-6 shadow-xl"
                       }
                     >
-                      {/* Decorative pattern for the guide directory card */}
+                      {/* Decorative patterns */}
                       {isGuidesDirectory && (
                         <div className="absolute right-0 bottom-0 opacity-10 translate-y-6 translate-x-6 scale-150 rotate-[15deg] pointer-events-none group-hover:scale-[1.65] transition-transform duration-700">
                           <Users className="w-48 h-48 text-white" />
                         </div>
                       )}
+                      {isTaxiDirectory && (
+                        <div className="absolute right-0 bottom-0 opacity-10 translate-y-6 translate-x-6 scale-150 rotate-[15deg] pointer-events-none group-hover:scale-[1.65] transition-transform duration-700">
+                          <Car className="w-48 h-48 text-white" />
+                        </div>
+                      )}
+                      {isBusDirectory && (
+                        <div className="absolute right-0 bottom-0 opacity-10 translate-y-6 translate-x-6 scale-150 rotate-[15deg] pointer-events-none group-hover:scale-[1.65] transition-transform duration-700">
+                          <Bus className="w-48 h-48 text-white" />
+                        </div>
+                      )}
 
                       <div className="flex items-center gap-4">
-                        <div className={`w-16 h-16 rounded-2xl ${isGuidesDirectory ? 'bg-white/10 border border-white/20' : 'bg-gray-100 dark:bg-white/10'} overflow-hidden relative flex items-center justify-center`}>
+                        <div className={`w-16 h-16 rounded-2xl ${isDirectory ? 'bg-white/10 border border-white/20' : 'bg-gray-100 dark:bg-white/10'} overflow-hidden relative flex items-center justify-center`}>
                           {isGuidesDirectory ? (
                             <Users className="w-8 h-8 text-secondary animate-pulse" />
-                          ) : ('icon' in item && item.icon ? (
+                          ) : isTaxiDirectory ? (
+                            <Car className="w-8 h-8 text-secondary animate-pulse" />
+                          ) : isBusDirectory ? (
+                            <Bus className="w-8 h-8 text-secondary animate-pulse" />
+                          ) : (IconComponent ? (
                             <div className="w-full h-full flex items-center justify-center text-secondary">
-                              <item.icon className="w-8 h-8" />
+                              <IconComponent className="w-8 h-8" />
                             </div>
                           ) : null)}
                         </div>
                         <div className="flex flex-col">
-                          <span className={`font-black text-lg tracking-tight ${isGuidesDirectory ? 'text-white' : 'text-foreground'}`}>{item.name}</span>
-                          <span className={`text-[10px] ${isGuidesDirectory ? 'text-secondary font-black' : 'text-gray-400 font-bold'} uppercase tracking-widest`}>{item.sub}</span>
+                          <span className={`font-black text-lg tracking-tight ${isDirectory ? 'text-white' : 'text-foreground'}`}>{item.name}</span>
+                          <span className={`text-[10px] ${isDirectory ? 'text-secondary font-black' : 'text-gray-400 font-bold'} uppercase tracking-widest`}>{item.sub}</span>
                         </div>
                       </div>
-                      <p className={`text-sm ${isGuidesDirectory ? 'text-white/80' : 'text-gray-500 dark:text-gray-400'} font-semibold leading-relaxed`}>
+                      <p className={`text-sm ${isDirectory ? 'text-white/80' : 'text-gray-500 dark:text-gray-400'} font-semibold leading-relaxed`}>
                         {item.description}
                       </p>
                       
                       <motion.button 
                         whileTap={{ scale: 0.97 }}
-                        onClick={() => {
-                          if (isGuidesDirectory) {
-                            setShowGuidesModal(true);
-                          } else if ("phone" in item && item.phone) {
-                            window.location.href = `tel:${item.phone}`;
-                          }
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (isGuidesDirectory) setShowGuidesModal(true);
+                          else if (isTaxiDirectory) setShowTaxiModal(true);
+                          else if (isBusDirectory) setShowBusModal(true);
                         }}
                         className={`w-full py-4.5 rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl flex items-center justify-center gap-2 transition-all ${
                           isGuidesDirectory 
                             ? "bg-secondary text-white shadow-secondary/15 hover:bg-secondary/90 border border-secondary/10"
-                            : "bg-secondary text-white shadow-secondary/20 hover:bg-secondary/90"
+                            : isTaxiDirectory
+                            ? "bg-primary text-white shadow-primary/20 hover:bg-primary/95 border border-primary/10"
+                            : "bg-secondary text-white shadow-secondary/25 hover:bg-secondary/90 border border-secondary/10"
                         }`}
                       >
                         {isGuidesDirectory ? (
@@ -270,10 +347,15 @@ export default function ServiciosPage() {
                             <Users className="w-4 h-4" />
                             Ver Directorio de Guías
                           </>
+                        ) : isTaxiDirectory ? (
+                          <>
+                            <Car className="w-4 h-4" />
+                            Ver Directorio de Taxis
+                          </>
                         ) : (
                           <>
-                            <Smartphone className="w-4 h-4" />
-                            Llamar ahora
+                            <Bus className="w-4 h-4" />
+                            Ver Directorio de Autobuses
                           </>
                         )}
                       </motion.button>
@@ -456,6 +538,255 @@ export default function ServiciosPage() {
                     </button>
                   </div>
                 )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* TAXI DIRECTORY MODAL */}
+      <AnimatePresence>
+        {showTaxiModal && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xl flex flex-col justify-end"
+          >
+            <div className="absolute inset-0 -z-10" onClick={() => setShowTaxiModal(false)} />
+            
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="bg-white dark:bg-zinc-950 w-full max-h-[85vh] rounded-t-[40px] flex flex-col border-t border-black/5 dark:border-white/10 shadow-2xl relative overflow-hidden"
+            >
+              <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full mx-auto my-4 flex-shrink-0" />
+              
+              <div className="px-6 pb-4 flex justify-between items-start flex-shrink-0">
+                <div>
+                  <h2 className="text-2xl font-black tracking-tight text-foreground uppercase">Directorio de Taxis</h2>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Taxis seguros en Papantla - Llamada y WhatsApp</p>
+                </div>
+                <button 
+                  onClick={() => setShowTaxiModal(false)}
+                  className="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-foreground hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Sub-search */}
+              <div className="px-6 pb-4 flex flex-col gap-4 flex-shrink-0 border-b border-black/5 dark:border-white/5">
+                <div className="relative group">
+                  <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-primary transition-colors" />
+                  <input
+                    type="text"
+                    value={searchTaxiQuery}
+                    onChange={(e) => setSearchTaxiQuery(e.target.value)}
+                    placeholder="Buscar por nombre o número..."
+                    className="w-full bg-gray-50 dark:bg-white/5 border border-transparent dark:border-white/5 rounded-[24px] py-4 pl-14 pr-10 text-sm font-bold focus:ring-4 focus:ring-primary/10 outline-none transition-all shadow-inner"
+                  />
+                  {searchTaxiQuery && (
+                    <button onClick={() => setSearchTaxiQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Taxi List */}
+              <div className="flex-1 overflow-y-auto px-6 py-6 space-y-5 no-scrollbar pb-10">
+                {filteredTaxis.length > 0 ? (
+                  filteredTaxis.map((taxi, i) => {
+                    const initials = taxi.name.split(" ").filter(n => !n.includes("Radio")).slice(0, 2).map(n => n.charAt(0)).join("");
+                    const taxiGradients = [
+                      "from-amber-400 to-orange-500",
+                      "from-yellow-400 to-amber-600",
+                      "from-orange-400 to-amber-500"
+                    ];
+                    const grad = taxiGradients[i % taxiGradients.length];
+
+                    return (
+                      <motion.div
+                        key={taxi.name}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.05 }}
+                        className="bg-gray-50 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-[32px] p-5 flex flex-col gap-4 shadow-sm hover:border-[#D4A373]/25 transition-all"
+                      >
+                        <div className="flex items-start gap-4">
+                          <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${grad} flex items-center justify-center text-white font-black text-lg shadow-md flex-shrink-0`}>
+                            {initials || "TX"}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
+                              <span className="text-[7px] bg-[#D4A373]/10 text-[#D4A373] px-2 py-0.5 rounded-full font-black tracking-widest uppercase border border-[#D4A373]/20">
+                                Transito Autorizado
+                              </span>
+                              <span className="text-[7px] bg-green-500/10 text-green-600 dark:text-green-400 px-2 py-0.5 rounded-full font-black tracking-widest uppercase border border-green-500/20">
+                                Taxi Seguro
+                              </span>
+                            </div>
+                            <h3 className="font-black text-base tracking-tight text-foreground leading-tight">{taxi.name}</h3>
+                          </div>
+                        </div>
+
+                        <p className="text-xs text-gray-500 dark:text-gray-400 font-semibold leading-relaxed">
+                          {taxi.description}
+                        </p>
+
+                        {/* Action Buttons: Call & WhatsApp */}
+                        <div className="grid grid-cols-2 gap-3">
+                          <motion.a
+                            href={`tel:${taxi.phone}`}
+                            whileTap={{ scale: 0.97 }}
+                            className="py-4 bg-[#8B2635]/10 hover:bg-[#8B2635]/25 text-[#8B2635] dark:text-[#E89E9F] dark:bg-[#8B2635]/15 dark:hover:bg-[#8B2635]/30 border border-[#8B2635]/25 rounded-2xl font-black uppercase text-[9px] tracking-widest flex items-center justify-center gap-2 transition-all"
+                          >
+                            <Phone className="w-3.5 h-3.5" />
+                            Llamar taxi
+                          </motion.a>
+                          
+                          <motion.button
+                            onClick={() => openWhatsApp(taxi.whatsapp, "Hola! Me gustaría solicitar un taxi, por favor.")}
+                            whileTap={{ scale: 0.97 }}
+                            className="py-4 bg-green-500 hover:bg-green-600 text-white rounded-2xl font-black uppercase text-[9px] tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-green-500/15 transition-all border border-green-600/30"
+                          >
+                            <WhatsAppIcon className="w-3.5 h-3.5" />
+                            WhatsApp
+                          </motion.button>
+                        </div>
+                      </motion.div>
+                    );
+                  })
+                ) : (
+                  <div className="py-12 flex flex-col items-center justify-center text-center">
+                    <Car className="w-12 h-12 text-gray-300 dark:text-zinc-700 mb-3" />
+                    <p className="font-bold text-gray-400 text-sm">No se encontraron taxis con estos criterios</p>
+                    <button 
+                      onClick={() => setSearchTaxiQuery("")}
+                      className="mt-3 text-xs text-primary font-black uppercase tracking-wider underline"
+                    >
+                      Limpiar filtros
+                    </button>
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* BUS DIRECTORY MODAL */}
+      <AnimatePresence>
+        {showBusModal && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xl flex flex-col justify-end"
+          >
+            <div className="absolute inset-0 -z-10" onClick={() => setShowBusModal(false)} />
+            
+            <motion.div
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="bg-white dark:bg-zinc-950 w-full max-h-[85vh] rounded-t-[40px] flex flex-col border-t border-black/5 dark:border-white/10 shadow-2xl relative overflow-hidden"
+            >
+              <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full mx-auto my-4 flex-shrink-0" />
+              
+              <div className="px-6 pb-4 flex justify-between items-start flex-shrink-0 border-b border-black/5 dark:border-white/5">
+                <div>
+                  <h2 className="text-2xl font-black tracking-tight text-foreground uppercase">Directorio de Autobuses</h2>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Terminales y conexiones foráneas en Papantla</p>
+                </div>
+                <button 
+                  onClick={() => setShowBusModal(false)}
+                  className="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-foreground hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Bus Terminals List */}
+              <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6 no-scrollbar pb-10">
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-gray-50 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-[32px] p-6 flex flex-col gap-5 shadow-sm hover:border-zinc-500/20 transition-all"
+                >
+                  {/* Header */}
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#E30613] to-[#A30009] flex items-center justify-center text-white font-black text-sm shadow-md flex-shrink-0">
+                      ADO
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
+                        <span className="text-[7px] bg-red-500/10 text-red-650 dark:text-red-400 px-2 py-0.5 rounded-full font-black tracking-widest uppercase border border-red-500/20">
+                          Primera Clase
+                        </span>
+                        <span className="text-[7px] bg-zinc-500/10 text-zinc-650 dark:text-zinc-400 px-2 py-0.5 rounded-full font-black tracking-widest uppercase border border-zinc-500/20">
+                          Terminal Principal
+                        </span>
+                      </div>
+                      <h3 className="font-black text-lg tracking-tight text-foreground leading-tight">Terminal ADO, Papantla</h3>
+                    </div>
+                  </div>
+
+                  {/* Info lines (Address, Phone) */}
+                  <div className="space-y-3.5 my-1">
+                    <div className="flex items-start gap-3 text-xs font-semibold text-gray-600 dark:text-gray-400">
+                      <MapPin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
+                      <span>Cjon B Juárez 408, Barrio del San Juan, 93400 Papantla, Ver.</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-xs font-semibold text-gray-600 dark:text-gray-400">
+                      <Phone className="w-4 h-4 text-secondary flex-shrink-0" />
+                      <span>Teléfono: 7841013501</span>
+                    </div>
+                  </div>
+
+                  {/* Buttons group */}
+                  <div className="flex flex-col gap-3">
+                    {/* Call Button */}
+                    <motion.a
+                      href="tel:7841013501"
+                      whileTap={{ scale: 0.97 }}
+                      className="w-full py-4 bg-gray-100 hover:bg-gray-200 text-black dark:bg-white/5 dark:hover:bg-white/10 dark:text-white border border-black/5 dark:border-white/10 rounded-2xl font-black uppercase text-[9px] tracking-widest flex items-center justify-center gap-2 transition-all"
+                    >
+                      <Phone className="w-3.5 h-3.5" />
+                      Llamar a Terminal
+                    </motion.a>
+
+                    <div className="grid grid-cols-2 gap-3">
+                      {/* Address/Map Button */}
+                      <motion.a
+                        href="https://maps.app.goo.gl/2U8u4UNKvNV7MZiX7"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileTap={{ scale: 0.97 }}
+                        className="py-4 bg-[#8B2635]/10 hover:bg-[#8B2635]/25 text-[#8B2635] dark:text-[#E89E9F] dark:bg-[#8B2635]/15 dark:hover:bg-[#8B2635]/30 border border-[#8B2635]/25 rounded-2xl font-black uppercase text-[9px] tracking-widest flex items-center justify-center gap-2 transition-all"
+                      >
+                        <MapPin className="w-3.5 h-3.5" />
+                        Ver Mapa
+                      </motion.a>
+
+                      {/* Web Link Button */}
+                      <motion.a
+                        href="https://www.ado.com.mx/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileTap={{ scale: 0.97 }}
+                        className="py-4 bg-[#E30613] hover:bg-[#C90510] text-white rounded-2xl font-black uppercase text-[9px] tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-red-500/10 transition-all border border-red-650"
+                      >
+                        <Globe className="w-3.5 h-3.5" />
+                        Sitio Web ADO
+                      </motion.a>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
             </motion.div>
           </motion.div>

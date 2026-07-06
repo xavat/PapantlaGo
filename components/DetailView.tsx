@@ -55,27 +55,25 @@ export default function DetailView({
     }
   }, [gallery, activeImage]);
 
-  // Handle back button to close gallery and auto-play
+  // Handle physical back button/gesture for the gallery modal with single pushState tracking
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (activeImage !== null && gallery && gallery.length > 1) {
-      // Auto-play modal gallery every 5 seconds
-      interval = setInterval(() => {
-        nextImage();
-      }, 5000);
+    if (activeImage === null) return;
 
-      const handlePopState = () => {
-        setActiveImage(null);
-      };
-      window.history.pushState({ galleryOpen: true }, "");
-      window.addEventListener("popstate", handlePopState);
-      
-      return () => {
-        clearInterval(interval);
-        window.removeEventListener("popstate", handlePopState);
-      };
-    }
-  }, [activeImage, gallery]);
+    window.history.pushState({ galleryOpen: true }, "");
+
+    const handlePopState = () => {
+      setActiveImage(null);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+      if (window.history.state?.galleryOpen) {
+        window.history.back();
+      }
+    };
+  }, [activeImage !== null]);
 
   const displayImageUrl = (gallery && gallery.length > 0 && activeImage === null) 
     ? gallery[currentHeaderIndex] 
@@ -275,13 +273,13 @@ export default function DetailView({
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-[10000] bg-black/95 flex items-center justify-center p-4 md:p-10 backdrop-blur-xl"
+              className="fixed inset-0 z-[99999] bg-black/95 flex items-center justify-center p-4 md:p-10 backdrop-blur-xl"
             >
               <button 
                 onClick={() => setActiveImage(null)}
-                className="absolute top-8 right-8 text-white/40 hover:text-white transition-all z-[110] active:scale-90"
+                className="absolute top-16 right-6 md:top-8 md:right-8 text-white/70 hover:text-white transition-all z-[120] active:scale-95 bg-black/45 hover:bg-black/60 p-3 rounded-full border border-white/10 shadow-2xl backdrop-blur-md"
               >
-                <X className="w-10 h-10" />
+                <X className="w-6 h-6" />
               </button>
 
               <button 
@@ -303,14 +301,27 @@ export default function DetailView({
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.9, opacity: 0 }}
-                className="relative w-full h-full max-w-5xl max-h-[80vh]"
+                className="relative w-full h-full max-w-5xl max-h-[85vh] cursor-grab active:cursor-grabbing touch-pan-y"
                 onClick={(e) => e.stopPropagation()}
+                drag="x"
+                dragConstraints={{ left: 0, right: 0 }}
+                dragElastic={0.6}
+                onDragEnd={(e, { offset, velocity }) => {
+                  const swipeThreshold = 60;
+                  const swipeVelocity = 0.5;
+                  if (offset.x < -swipeThreshold || velocity.x < -swipeVelocity) {
+                    nextImage();
+                  } else if (offset.x > swipeThreshold || velocity.x > swipeVelocity) {
+                    prevImage();
+                  }
+                }}
               >
                 <Image 
                   src={gallery[activeImage]} 
                   alt="Full size" 
                   fill 
-                  className="object-contain"
+                  className="object-contain pointer-events-none"
+                  priority
                 />
               </motion.div>
 

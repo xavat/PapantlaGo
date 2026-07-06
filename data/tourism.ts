@@ -43,6 +43,71 @@ export const tourismData: TourismItem[] = [
     coords: [20.4465, -97.3225],
     gallery: ["/destinos/centro.jpg"]
   },
+  {
+    id: "mural-de-la-cultura-totonaca",
+    title: "Mural de la Cultura Totonaca",
+    subtitle: "Obra de Teodoro Cano",
+    description: "Impresionante bajorrelieve tallado en piedra de más de 80 metros que narra la historia del origen milenario y la evolución cultural del pueblo totonaco hasta la actualidad.",
+    imageUrl: "/destinos/mural.jpg",
+    rating: "4.7",
+    tag: "Arte",
+    location: "Centro de Papantla",
+    category: "destinos",
+    coords: [20.4469, -97.3226],
+    gallery: ["/destinos/mural.jpg"]
+  },
+  {
+    id: "monumento-al-volador",
+    title: "Monumento al Volador",
+    subtitle: "Vista Panorámica",
+    description: "Majestuoso monumento dedicado al icónico hombre pájaro de la Danza de los Voladores Ubicado en lo alto de un cerro ofrece una vista panorámica espectacular de 360 grados de toda la ciudad.",
+    imageUrl: "/destinos/volador.jpg",
+    rating: "4.9",
+    tag: "Mirador",
+    location: "Cerro del Volador",
+    category: "destinos",
+    coords: [20.4461, -97.3204],
+    gallery: ["/destinos/volador.jpg"]
+  },
+  {
+    id: "zona-arqueologica-coyuxquihui",
+    title: "Zona Arqueológica Coyuxquihui",
+    subtitle: "Legado Totonaca",
+    description: "Ruinas arqueológicas ubicadas en medio de la densa selva totonaca del sur de Papantla Destaca por sus murallas defensivas terrazas habitacionales y pirámides ceremoniales.",
+    imageUrl: "/destinos/coyuxquihui.jpg",
+    rating: "4.6",
+    tag: "Aventura",
+    location: "Coyuxquihui, Papantla",
+    category: "destinos",
+    coords: [20.3013, -97.2642],
+    gallery: ["/destinos/coyuxquihui.jpg"]
+  },
+  {
+    id: "la-bocana",
+    title: "La Bocana",
+    subtitle: "Unión de Río y Mar",
+    description: "Sitio natural de gran atractivo eco-turístico donde el caudaloso río Tecolutla se une directamente con el Golfo de México creando paisajes perfectos para observación de aves y kayak.",
+    imageUrl: "/destinos/bocana.jpg",
+    rating: "4.7",
+    tag: "Naturaleza",
+    location: "La Bocana, Papantla",
+    category: "destinos",
+    coords: [20.5739, -97.1278],
+    gallery: ["/destinos/bocana.jpg"]
+  },
+  {
+    id: "rancho-playa",
+    title: "Rancho Playa",
+    subtitle: "Costa Esmeralda",
+    description: "Hermosa playa casi virgen de aguas templadas y fina arena dorada. Ideal para desconectarse de la rutina acampar frente al mar y liberar tortugas marinas en temporada.",
+    imageUrl: "/destinos/rancho-playa.jpg",
+    rating: "4.8",
+    tag: "Playa",
+    location: "Costas de Papantla",
+    category: "destinos",
+    coords: [20.6189, -97.1086],
+    gallery: ["/destinos/rancho-playa.jpg"]
+  },
   // SABORES
   {
     id: "restaurante-naku",

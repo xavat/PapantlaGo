@@ -4,14 +4,154 @@ import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "leaflet/dist/leaflet.css";
-import { Navigation, Compass, MapPin, Star, Info, Crosshair, X, Gamepad2 } from "lucide-react";
-import { tourismData, TourismItem } from "@/data/tourism";
+import { Navigation, Compass, MapPin, Star, Info, Crosshair, X, Gamepad2, AlertTriangle, RefreshCw } from "lucide-react";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || "";
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
 const MAP_STYLE = "mapbox://styles/mapbox/navigation-dark-v1";
+
+// 4. Estructura de Datos Limpia (id, name, type, coords [lat, lng], description, image)
+interface TourPoint {
+  id: string;
+  name: string;
+  type: "destinos" | "sabor" | "hospedaje" | "eventos";
+  coords: [number, number]; // [lat, lng]
+  description: string;
+  image: string;
+  rating: string;
+  location: string;
+}
+
+const TOURISM_POINTS: TourPoint[] = [
+  {
+    id: "tajin",
+    name: "El Tajín",
+    type: "destinos",
+    coords: [20.4485, -97.3245],
+    description: "Zona arqueológica prehispánica de la cultura totonaca. Famosa por la Pirámide de los Nichos.",
+    image: "/destinos/tajin.jpg",
+    rating: "4.9",
+    location: "Papantla de Olarte, Ver"
+  },
+  {
+    id: "centro-historico",
+    name: "Centro Histórico",
+    type: "destinos",
+    coords: [20.4465, -97.3225],
+    description: "El corazón del Pueblo Mágico, con su plaza tradicional y la Catedral de Nuestra Señora de la Asunción.",
+    image: "/destinos/centro.jpg",
+    rating: "4.8",
+    location: "Centro Papantla"
+  },
+  {
+    id: "mural-de-la-cultura-totonaca",
+    name: "Mural de la Cultura Totonaca",
+    type: "destinos",
+    coords: [20.4469, -97.3226],
+    description: "Impresionante bajorrelieve tallado en piedra de más de 80 metros que narra la historia del origen totonaco.",
+    image: "/destinos/mural.jpg",
+    rating: "4.7",
+    location: "Centro de Papantla"
+  },
+  {
+    id: "monumento-al-volador",
+    name: "Monumento al Volador",
+    type: "destinos",
+    coords: [20.4461, -97.3204],
+    description: "Estatua en lo alto de un cerro dedicada a la Danza de los Voladores. Ofrece vistas de 360 grados.",
+    image: "/destinos/volador.jpg",
+    rating: "4.9",
+    location: "Cerro del Volador"
+  },
+  {
+    id: "restaurante-naku",
+    name: "Restaurante Nakú",
+    type: "sabor",
+    coords: [20.4455, -97.3215],
+    description: "Cocina totonaca tradicional con toques contemporáneos gourmet en un ambiente cultural acogedor.",
+    image: "/images/sabores/naku/imagen1.jpg",
+    rating: "4.9",
+    location: "Manantiales, Papantla"
+  },
+  {
+    id: "cafe-catedral",
+    name: "Café Catedral",
+    type: "sabor",
+    coords: [20.4465, -97.3225],
+    description: "Disfruta del mejor café de Papantla con deliciosos snacks frente a la Catedral histórica.",
+    image: "/images/sabores/cafecatedral/imagen1.jpg",
+    rating: "4.8",
+    location: "Barrio del Naranjo"
+  },
+  {
+    id: "hotel-tajin",
+    name: "Hotel Tajín",
+    type: "hospedaje",
+    coords: [20.4470, -97.3230],
+    description: "Confort tradicional e inmejorable ubicación céntrica con alberca y hermosas vistas.",
+    image: "/images/hotels/hoteltajin.jpg",
+    rating: "4.5",
+    location: "Papantla de Olarte, Ver"
+  },
+  {
+    id: "hotel-vista-inn",
+    name: "Hotel Vista INN",
+    type: "hospedaje",
+    coords: [20.4465, -97.3225],
+    description: "Habitaciones modernas con vistas espectaculares del centro histórico y servicios completos.",
+    image: "/images/hotels/vistainn.jpg",
+    rating: "4.3",
+    location: "Centro, Papantla"
+  },
+  {
+    id: "cumbre-tajin",
+    name: "Cumbre Tajín",
+    type: "eventos",
+    coords: [20.4502, -97.3248],
+    description: "Festival cultural anual que celebra la identidad totonaca con talleres, música, y rituales tradicionales.",
+    image: "/images/events/cumbre_tajin.jpeg",
+    rating: "4.9",
+    location: "Parque Temático Takilhsukut"
+  },
+  {
+    id: "festival-xanath",
+    name: "Festival Xanath",
+    type: "eventos",
+    coords: [20.4473, -97.3218],
+    description: "Puesta en escena que narra la rica herencia histórica del pueblo totonaca frente a la conquista.",
+    image: "/images/events/festival_xanath.jpg",
+    rating: "4.8",
+    location: "Centro Histórico"
+  },
+  {
+    id: "corpus-christi",
+    name: "Feria de Corpus Christi",
+    type: "eventos",
+    coords: [20.4460, -97.3231],
+    description: "La festividad tradicional patronal más importante del año con danzas, juegos e intercambios culturales.",
+    image: "/images/events/corpus_christi.jpg",
+    rating: "4.9",
+    location: "Centro de Papantla"
+  }
+];
+
+function lerpAngle(current: number, target: number, lerpFactor: number): number {
+  const c = ((current % 360) + 360) % 360;
+  const t = ((target % 360) + 360) % 360;
+
+  let diff = t - c;
+  if (diff < -180) {
+    diff += 360;
+  } else if (diff > 180) {
+    diff -= 360;
+  }
+
+  const result = c + diff * lerpFactor;
+  return ((result % 360) + 360) % 360;
+}
 
 interface InteractiveMapProps {
   categoryFilter: string | null;
@@ -19,35 +159,41 @@ interface InteractiveMapProps {
 
 export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
-  
-  // Refs para instancias de mapas
+
+  // Refs de mapas e instancias
   const mapboxMapRef = useRef<mapboxgl.Map | null>(null);
   const mapboxUserMarkerRef = useRef<mapboxgl.Marker | null>(null);
   const mapboxMarkersRef = useRef<mapboxgl.Marker[]>([]);
 
-  // Refs de Leaflet (cargados dinámicamente)
   const leafletMapRef = useRef<any>(null);
   const leafletUserMarkerRef = useRef<any>(null);
   const leafletMarkersRef = useRef<any[]>([]);
   const leafletRouteLineRef = useRef<any>(null);
   const LRef = useRef<any>(null);
 
+  const gpsWatcherRef = useRef<number | null>(null);
+  const isDemoActiveRef = useRef<boolean>(false);
+  const isFollowingUserRef = useRef<boolean>(true);
+  const userCoordsRef = useRef<[number, number]>([-97.3225, 20.4465]); // [lng, lat]
+  const mapHeadingRef = useRef<number>(0);
+
   // States
   const [mapType, setMapType] = useState<"mapbox" | "leaflet" | "none">("none");
-  const [selectedPlace, setSelectedPlace] = useState<TourismItem | null>(null);
-  const [activeDestination, setActiveDestination] = useState<TourismItem | null>(null);
+  const [isMapReady, setIsMapReady] = useState<boolean>(false);
+  const [isMapLoading, setIsMapLoading] = useState<boolean>(true);
+  const [selectedPlace, setSelectedPlace] = useState<TourPoint | null>(null);
+  const [activeDestination, setActiveDestination] = useState<TourPoint | null>(null);
   const [userCoords, setUserCoords] = useState<[number, number]>([-97.3225, 20.4465]); // [lng, lat]
   const [mapHeading, setMapHeading] = useState<number>(0);
+  const [isCompassAuthorized, setIsCompassAuthorized] = useState<boolean | null>(null);
   const [isFollowingUser, setIsFollowingUser] = useState<boolean>(true);
   const [gpsAccuracy, setGpsAccuracy] = useState<number | null>(null);
+  const [gpsError, setGpsError] = useState<string | null>(null);
   const [tokenError, setTokenError] = useState<boolean>(false);
   const [isDemoActive, setIsDemoActive] = useState<boolean>(false);
   const [demoIndex, setDemoIndex] = useState<number>(0);
+  const [currentZoom, setCurrentZoom] = useState<number>(17.5);
   const demoIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  const isDemoActiveRef = useRef<boolean>(false);
-  const isFollowingUserRef = useRef<boolean>(true);
-  const userCoordsRef = useRef<[number, number]>(userCoords);
 
   // Ruta del Simulador
   const demoPath: [number, number][] = [
@@ -63,20 +209,89 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
     [-97.3230, 20.4465],
   ];
 
-  // Sincronizar referencias
-  useEffect(() => {
-    isDemoActiveRef.current = isDemoActive;
-  }, [isDemoActive]);
+  // Sincronizar referencias editables
+  useEffect(() => { isDemoActiveRef.current = isDemoActive; }, [isDemoActive]);
+  useEffect(() => { isFollowingUserRef.current = isFollowingUser; }, [isFollowingUser]);
+  useEffect(() => { userCoordsRef.current = userCoords; }, [userCoords]);
+  useEffect(() => { mapHeadingRef.current = mapHeading; }, [mapHeading]);
 
+  // Verificar estado del permiso de brújula iOS al montar
   useEffect(() => {
-    isFollowingUserRef.current = isFollowingUser;
-  }, [isFollowingUser]);
+    if (
+      typeof DeviceOrientationEvent !== "undefined" &&
+      typeof (DeviceOrientationEvent as any).requestPermission === "function"
+    ) {
+      setIsCompassAuthorized(false);
+    } else {
+      setIsCompassAuthorized(true);
+    }
+  }, []);
 
-  useEffect(() => {
-    userCoordsRef.current = userCoords;
-  }, [userCoords]);
+  // Solicitar permiso de ubicación y activar Geolocation
+  const startGpsWatching = () => {
+    if (gpsWatcherRef.current) {
+      navigator.geolocation.clearWatch(gpsWatcherRef.current);
+    }
 
-  // Inicialización Unificada
+    gpsWatcherRef.current = navigator.geolocation.watchPosition(
+      (position) => {
+        if (isDemoActiveRef.current) return;
+
+        const { longitude, latitude, heading, accuracy } = position.coords;
+        const newCoords: [number, number] = [longitude, latitude];
+
+        setUserCoords(newCoords);
+        setGpsAccuracy(accuracy);
+        setGpsError(null);
+
+        // Actualizar interfaces con inclinación 60º y zoom 17.5
+        if (mapboxMapRef.current && mapboxUserMarkerRef.current) {
+          mapboxUserMarkerRef.current.setLngLat(newCoords);
+          if (isFollowingUserRef.current) {
+            mapboxMapRef.current.easeTo({
+              center: newCoords,
+              zoom: 17.5,
+              pitch: 60,
+              bearing: mapHeadingRef.current || 0,
+              duration: 1500,
+              easing: (t) => t * (2 - t),
+              padding: { top: 0, bottom: 180, left: 0, right: 0 },
+            });
+          }
+        } else if (leafletMapRef.current && leafletUserMarkerRef.current) {
+          leafletUserMarkerRef.current.setLatLng([latitude, longitude]);
+          if (isFollowingUserRef.current) {
+            leafletMapRef.current.setView([latitude, longitude], 17.5, { animate: true });
+          }
+        }
+      },
+      (error) => {
+        console.warn("Ubicación GPS error de geolocalización:", error);
+        let msg = "";
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            msg = "Permiso de ubicación rechazado. Para disfrutar la experiencia estilo Pokémon GO, activa los accesos de geolocalización.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            msg = "Señal de GPS perdida. Comprueba si estás en interiores o tu conectividad.";
+            break;
+          case error.TIMEOUT:
+            msg = "Tiempo de espera del GPS agotado. Intentando reconectar...";
+            break;
+          default:
+            msg = "Error desconocido de geolocalización.";
+        }
+        setGpsError(msg);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0,
+      }
+    );
+  };
+
+  // Inicialización de Mapas y Respaldo de Leaflet
   useEffect(() => {
     if (!mapContainerRef.current) return;
 
@@ -85,15 +300,13 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
     let L: any = null;
 
     const setupLeafletFallback = () => {
-      console.warn("Utilizando fallback de Leaflet.");
+      console.warn("Utilizando sistema alterno leaflet.");
       setTokenError(true);
       setMapType("leaflet");
 
-      // Cargar Leaflet dinámicamente en cliente
       L = require("leaflet");
       LRef.current = L;
 
-      // Fix para los iconos de Leaflet por defecto
       delete L.Icon.Default.prototype._getIconUrl;
       L.Icon.Default.mergeOptions({
         iconRetinaUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
@@ -104,23 +317,29 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
       const initialCoords = userCoordsRef.current;
       leafletInstance = L.map(mapContainerRef.current!, {
         center: [initialCoords[1], initialCoords[0]], // [lat, lng]
-        zoom: 17,
+        zoom: 17.5,
         zoomControl: false,
         attributionControl: false,
       });
 
-      // Capa de mapa oscura estilo neon
+      leafletInstance.on("dragstart", () => setIsFollowingUser(false));
+      leafletInstance.on("zoomstart", () => setIsFollowingUser(false));
+      leafletInstance.on("zoomend", () => {
+        setCurrentZoom(leafletInstance.getZoom());
+      });
+
       L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
         maxZoom: 20,
       }).addTo(leafletInstance);
 
-      // Marcador del Jugador en Leaflet
+      // Icono de Avatar estilo Pokémon GO
       const userMarkerHtml = `
-        <div class="user-pointer-container leaflet-user-pointer">
-          <div class="user-pulse-outer"></div>
-          <div class="user-pointer-arrow" style="transform: rotate(0deg);">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#22d3ee" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.95));">
-              <polygon points="12 2 2 22 12 17 22 22 12 2"/>
+        <div class="user-avatar-container leaflet-user-pointer">
+          <div class="user-avatar-pulse"></div>
+          <div class="user-avatar-glow"></div>
+          <div class="user-avatar-inner" style="transform: rotate(0deg);">
+            <svg viewBox="0 0 24 24" class="user-avatar-arrow">
+              <path d="M12 2L4 20L12 15L20 20L12 2Z" fill="#FFFFFF" />
             </svg>
           </div>
         </div>
@@ -136,6 +355,9 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
       const leafletUserMarker = L.marker([initialCoords[1], initialCoords[0]], { icon: userIcon }).addTo(leafletInstance);
       leafletUserMarkerRef.current = leafletUserMarker;
       leafletMapRef.current = leafletInstance;
+
+      setIsMapReady(true);
+      setIsMapLoading(false);
     };
 
     if (!MAPBOX_TOKEN) {
@@ -147,21 +369,29 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
           container: mapContainerRef.current,
           style: MAP_STYLE,
           center: userCoordsRef.current,
-          zoom: 16.8,
-          pitch: 55,
+          zoom: 17.5,
+          pitch: 60,
           bearing: 0,
           antialias: true,
         });
 
+        // Desnivel Pokémon GO offset
+        mapboxInstance.setPadding({ top: 0, bottom: 180, left: 0, right: 0 });
         mapboxMapRef.current = mapboxInstance;
+
+        mapboxInstance.on("dragstart", () => setIsFollowingUser(false));
+        mapboxInstance.on("pitchstart", () => setIsFollowingUser(false));
+        mapboxInstance.on("rotatestart", () => setIsFollowingUser(false));
+        mapboxInstance.on("zoomstart", () => setIsFollowingUser(false));
+        mapboxInstance.on("zoom", () => {
+          setCurrentZoom(mapboxInstance!.getZoom());
+        });
 
         mapboxInstance.on("error", (e) => {
           if (e.error && (e.error.message?.includes("Unauthorized") || e.error.message?.includes("401") || e.error.message?.includes("Token"))) {
-            console.error("Error de Token de Mapbox detectado en runtime. Destruyendo mapa Mapbox y aplicando Leaflet.");
+            console.error("Token de Mapbox inválido detectado en runtime. Activando Leaflet.");
             if (mapboxMapRef.current) {
-              try {
-                mapboxMapRef.current.remove();
-              } catch (err) {}
+              try { mapboxMapRef.current.remove(); } catch (err) {}
               mapboxMapRef.current = null;
             }
             if (mapContainerRef.current) {
@@ -171,14 +401,15 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
           }
         });
 
-        // Marcador del Usuario en Mapbox
+        // Marcador del Jugador Mapbox
         const userMarkerEl = document.createElement("div");
-        userMarkerEl.className = "user-pointer-container";
+        userMarkerEl.className = "user-avatar-container";
         userMarkerEl.innerHTML = `
-          <div class="user-pulse-outer"></div>
-          <div class="user-pointer-arrow">
-            <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#22d3ee" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.95));">
-              <polygon points="12 2 2 22 12 17 22 22 12 2"/>
+          <div class="user-avatar-pulse"></div>
+          <div class="user-avatar-glow"></div>
+          <div class="user-avatar-inner">
+            <svg viewBox="0 0 24 24" class="user-avatar-arrow">
+              <path d="M12 2L4 20L12 15L20 20L12 2Z" fill="#FFFFFF" />
             </svg>
           </div>
         `;
@@ -193,7 +424,6 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
 
         mapboxUserMarkerRef.current = mapboxUserMarker;
 
-        // Edificios 3D
         mapboxInstance.on("style.load", () => {
           if (!mapboxInstance) return;
           const layers = mapboxInstance.getStyle()?.layers;
@@ -223,49 +453,30 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
             } catch (err) {}
           }
         });
+
+        mapboxInstance.on("load", () => {
+          setIsMapReady(true);
+          setIsMapLoading(false);
+          mapboxInstance?.resize();
+        });
       } catch (err) {
-        console.error("Excepción al iniciar Mapbox GL JS:", err);
+        console.error("Excepción al iniciar Mapbox, restaurando Leaflet:", err);
         setupLeafletFallback();
       }
     }
 
-    // Geolocation Watcher
-    const geoWatcher = navigator.geolocation.watchPosition(
-      (position) => {
-        if (isDemoActiveRef.current) return;
+    startGpsWatching();
 
-        const { longitude, latitude, heading, accuracy } = position.coords;
-        const newCoords: [number, number] = [longitude, latitude];
+    // Compass Orientation (Suavizado de Filtro LERP)
+    let smoothedHeading: number | null = null;
+    let lastEventTime = 0;
 
-        setUserCoords(newCoords);
-        setGpsAccuracy(accuracy);
-
-        // actualizar marcadores e interfaces de mapa activo
-        if (mapboxMapRef.current && mapboxUserMarkerRef.current) {
-          mapboxUserMarkerRef.current.setLngLat(newCoords);
-          if (isFollowingUserRef.current) {
-            mapboxMapRef.current.easeTo({ center: newCoords, duration: 800 });
-          }
-        } else if (leafletMapRef.current && leafletUserMarkerRef.current) {
-          leafletUserMarkerRef.current.setLatLng([latitude, longitude]);
-          if (isFollowingUserRef.current) {
-            leafletMapRef.current.setView([latitude, longitude], leafletMapRef.current.getZoom(), { animate: true });
-          }
-        }
-      },
-      (error) => {
-        console.warn("Ubicación GPS denegada u ocupada:", error);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0,
-      }
-    );
-
-    // Compass Orientation
     const handleOrientation = (e: DeviceOrientationEvent) => {
       if (isDemoActiveRef.current) return;
+
+      const now = performance.now();
+      if (now - lastEventTime < 30) return;
+      lastEventTime = now;
 
       let heading = (e as any).webkitCompassHeading;
       if (heading === undefined || heading === null) {
@@ -275,8 +486,20 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
       }
 
       if (heading !== undefined && heading !== null) {
-        const roundedHeading = Math.round(heading);
-        setMapHeading(roundedHeading);
+        heading = ((heading % 360) + 360) % 360;
+
+        if (smoothedHeading === null) {
+          smoothedHeading = heading;
+        } else {
+          // Filtro LERP 0.05
+          smoothedHeading = lerpAngle(smoothedHeading, heading, 0.05);
+        }
+
+        const roundedHeading = Math.round(smoothedHeading!);
+
+        if (roundedHeading !== mapHeadingRef.current) {
+          setMapHeading(roundedHeading);
+        }
 
         if (mapboxMapRef.current && mapboxUserMarkerRef.current) {
           mapboxUserMarkerRef.current.setRotation(roundedHeading);
@@ -284,7 +507,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
             mapboxMapRef.current.setBearing(roundedHeading);
           }
         } else if (leafletMapRef.current) {
-          const arrowEl = document.querySelector(".leaflet-user-pointer .user-pointer-arrow") as HTMLElement;
+          const arrowEl = document.querySelector(".leaflet-user-pointer .user-avatar-inner") as HTMLElement;
           if (arrowEl) {
             arrowEl.style.transform = `rotate(${roundedHeading}deg)`;
           }
@@ -296,24 +519,47 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
     window.addEventListener("deviceorientation", handleOrientation, true);
 
     return () => {
-      if (geoWatcher) navigator.geolocation.clearWatch(geoWatcher);
+      if (gpsWatcherRef.current) navigator.geolocation.clearWatch(gpsWatcherRef.current);
       window.removeEventListener("deviceorientationabsolute", handleOrientation);
       window.removeEventListener("deviceorientation", handleOrientation);
-      
+
       if (mapboxInstance) {
-        try {
-          mapboxInstance.remove();
-        } catch (e) {}
+        try { mapboxInstance.remove(); } catch (e) {}
       }
       if (leafletInstance) {
-        try {
-          leafletInstance.remove();
-        } catch (e) {}
+        try { leafletInstance.remove(); } catch (e) {}
       }
     };
   }, []);
 
-  // Lógica del modo Demo: simular caminata
+  // ResizeObserver para solventar error de redimensionamiento de pantallas móviles y gris de fondo
+  useEffect(() => {
+    if (!mapContainerRef.current) return;
+
+    const handleResize = () => {
+      if (mapType === "mapbox" && mapboxMapRef.current) {
+        mapboxMapRef.current.resize();
+      } else if (mapType === "leaflet" && leafletMapRef.current) {
+        leafletMapRef.current.invalidateSize();
+      }
+    };
+
+    const resizeObserver = new ResizeObserver(() => {
+      handleResize();
+    });
+
+    resizeObserver.observe(mapContainerRef.current);
+
+    // Activación extra para asegurar renderizado correcto pos-carga
+    const t = setTimeout(handleResize, 800);
+
+    return () => {
+      resizeObserver.disconnect();
+      clearTimeout(t);
+    };
+  }, [mapType, isMapReady]);
+
+  // Lógica de simulación de caminatas (Modo Demo)
   useEffect(() => {
     if (!isDemoActive) {
       if (demoIntervalRef.current) {
@@ -331,15 +577,16 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
       mapboxUserMarkerRef.current.setRotation(0);
       mapboxMapRef.current.easeTo({
         center: startPoint,
-        zoom: 17.2,
-        pitch: 55,
+        zoom: 17.5,
+        pitch: 60,
         bearing: 0,
+        padding: { top: 0, bottom: 180, left: 0, right: 0 },
         duration: 1000,
       });
     } else if (leafletMapRef.current && leafletUserMarkerRef.current) {
       leafletUserMarkerRef.current.setLatLng([startPoint[1], startPoint[0]]);
-      leafletMapRef.current.setView([startPoint[1], startPoint[0]], 17, { animate: true });
-      const arrowEl = document.querySelector(".leaflet-user-pointer .user-pointer-arrow") as HTMLElement;
+      leafletMapRef.current.setView([startPoint[1], startPoint[0]], 17.5, { animate: true });
+      const arrowEl = document.querySelector(".leaflet-user-pointer .user-avatar-inner") as HTMLElement;
       if (arrowEl) {
         arrowEl.style.transform = `rotate(0deg)`;
       }
@@ -367,17 +614,18 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
             mapboxMapRef.current.easeTo({
               center: nextLoc,
               bearing: headingAngle,
-              pitch: 55,
-              zoom: 17.2,
+              pitch: 60,
+              zoom: 17.5,
+              padding: { top: 0, bottom: 180, left: 0, right: 0 },
               duration: 1800,
             });
           }
         } else if (leafletMapRef.current && leafletUserMarkerRef.current) {
           leafletUserMarkerRef.current.setLatLng([nextLoc[1], nextLoc[0]]);
           if (isFollowingUserRef.current) {
-            leafletMapRef.current.setView([nextLoc[1], nextLoc[0]], leafletMapRef.current.getZoom(), { animate: true });
+            leafletMapRef.current.setView([nextLoc[1], nextLoc[0]], 17.5, { animate: true });
           }
-          const arrowEl = document.querySelector(".leaflet-user-pointer .user-pointer-arrow") as HTMLElement;
+          const arrowEl = document.querySelector(".leaflet-user-pointer .user-avatar-inner") as HTMLElement;
           if (arrowEl) {
             arrowEl.style.transform = `rotate(${headingAngle}deg)`;
           }
@@ -395,11 +643,13 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
     };
   }, [isDemoActive]);
 
-  // Actualizar y filtrar Marcadores
+  // Actualizar y renderizar marcadores utilizando estructura TOURISM_POINTS limpia
   useEffect(() => {
+    if (!isMapReady) return;
+
     const filteredData = categoryFilter
-      ? tourismData.filter((place) => place.category === categoryFilter)
-      : tourismData;
+      ? TOURISM_POINTS.filter((place) => place.type === categoryFilter)
+      : TOURISM_POINTS;
 
     // Marcadores de Mapbox
     if (mapType === "mapbox" && mapboxMapRef.current) {
@@ -412,17 +662,18 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
         if (!place.coords || place.coords.length < 2) return;
         let [lat, lng] = place.coords;
 
+        // Dispersión suave por colisión de coordenadas idénticas
         const coordKey = `${lat.toFixed(5)},${lng.toFixed(5)}`;
         if (renderedCoords.has(coordKey)) {
-          lat += (Math.random() - 0.5) * 0.00065;
-          lng += (Math.random() - 0.5) * 0.00065;
+          lat += (Math.random() - 0.5) * 0.0006;
+          lng += (Math.random() - 0.5) * 0.0006;
         }
         renderedCoords.add(coordKey);
 
         let badgeColor = "#3b82f6";
-        let symbol = "📍";
+        let symbol = "🏛️";
 
-        switch (place.category) {
+        switch (place.type) {
           case "sabor":
             badgeColor = "#ec4899";
             symbol = "🍺";
@@ -436,23 +687,23 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
             symbol = "🏛️";
             break;
           case "eventos":
-            badgeColor = "#e11d48";
+            badgeColor = "#ff2a5f";
             symbol = "🎉";
             break;
-          default:
-            badgeColor = "#06b6d4";
-            symbol = "✨";
         }
 
         const el = document.createElement("div");
         el.className = "pokestop-container";
+        el.style.setProperty("--pulse-color", badgeColor);
         el.innerHTML = `
-          <div class="pokestop-pulse" style="background-color: ${badgeColor};"></div>
+          <div class="pokestop-pulse"></div>
+          <div class="pokestop-stem"></div>
           <div class="pokestop-inner" style="border-color: ${badgeColor};">
-            <div class="pokestop-photo" style="background-image: url('${place.imageUrl || ""}');">
-              ${!place.imageUrl ? `<span class="pokestop-symbol">${symbol}</span>` : ""}
+            <div class="pokestop-photo" style="background-image: url('${place.image || ""}');">
+              ${!place.image ? `<span class="pokestop-symbol">${symbol}</span>` : ""}
             </div>
           </div>
+          <div class="pokestop-label">${place.name}</div>
         `;
 
         const marker = new mapboxgl.Marker({
@@ -478,7 +729,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
       });
     }
 
-    // Marcadores de Leaflet
+    // Marcadores de Leaflet fallback
     if (mapType === "leaflet" && leafletMapRef.current && LRef.current) {
       const L = LRef.current;
       leafletMarkersRef.current.forEach((m) => m.remove());
@@ -492,15 +743,15 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
 
         const coordKey = `${lat.toFixed(5)},${lng.toFixed(5)}`;
         if (renderedCoords.has(coordKey)) {
-          lat += (Math.random() - 0.5) * 0.00065;
-          lng += (Math.random() - 0.5) * 0.00065;
+          lat += (Math.random() - 0.5) * 0.0006;
+          lng += (Math.random() - 0.5) * 0.0006;
         }
         renderedCoords.add(coordKey);
 
         let badgeColor = "#3b82f6";
-        let symbol = "📍";
+        let symbol = "🏛️";
 
-        switch (place.category) {
+        switch (place.type) {
           case "sabor":
             badgeColor = "#ec4899";
             symbol = "🍺";
@@ -514,22 +765,21 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
             symbol = "🏛️";
             break;
           case "eventos":
-            badgeColor = "#e11d48";
+            badgeColor = "#ff2a5f";
             symbol = "🎉";
             break;
-          default:
-            badgeColor = "#06b6d4";
-            symbol = "✨";
         }
 
         const iconHtml = `
           <div class="pokestop-container">
-            <div class="pokestop-pulse" style="background-color: ${badgeColor};"></div>
+            <div class="pokestop-pulse"></div>
+            <div class="pokestop-stem"></div>
             <div class="pokestop-inner" style="border-color: ${badgeColor};">
-              <div class="pokestop-photo" style="background-image: url('${place.imageUrl || ""}');">
-                ${!place.imageUrl ? `<span class="pokestop-symbol">${symbol}</span>` : ""}
+              <div class="pokestop-photo" style="background-image: url('${place.image || ""}'); font-size:12px;">
+                ${!place.image ? `<span class="pokestop-symbol">${symbol}</span>` : ""}
               </div>
             </div>
+            <div class="pokestop-label">${place.name}</div>
           </div>
         `;
 
@@ -541,8 +791,8 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
         });
 
         const marker = L.marker([lat, lng], { icon: customIcon }).addTo(leafletMapRef.current);
-        
-        marker.on("click", (e: any) => {
+
+        marker.on("click", () => {
           setSelectedPlace(place);
           leafletMapRef.current.setView([lat, lng], 17.5, { animate: true });
           setIsFollowingUser(false);
@@ -551,10 +801,12 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
         leafletMarkersRef.current.push(marker);
       });
     }
-  }, [mapType, categoryFilter]);
+  }, [mapType, isMapReady, categoryFilter]);
 
-  // Dibujar y actualizar ruta de destino fijado
+  // Dibujar trayectoria fijada
   useEffect(() => {
+    if (!isMapReady) return;
+
     // Para Mapbox
     if (mapType === "mapbox" && mapboxMapRef.current) {
       const map = mapboxMapRef.current;
@@ -648,11 +900,11 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
         leafletRouteLineRef.current = polyline;
       } catch (err) {}
     }
-  }, [activeDestination, userCoords, mapType]);
+  }, [activeDestination, userCoords, mapType, isMapReady]);
 
   // Animación del láser dinámico en Mapbox
   useEffect(() => {
-    if (mapType !== "mapbox" || !mapboxMapRef.current || !activeDestination) return;
+    if (mapType !== "mapbox" || !mapboxMapRef.current || !activeDestination || !isMapReady) return;
 
     const map = mapboxMapRef.current;
     let animationFrameId: number;
@@ -674,21 +926,45 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
     return () => {
       cancelAnimationFrame(animationFrameId);
     };
-  }, [activeDestination, mapType]);
+  }, [activeDestination, mapType, isMapReady]);
 
-  // Centrar cámara en el usuario
-  const triggerCenter = () => {
+  // Solicitar brújula e inicializar acelerómetro iOS / Android
+  const requestCompassPermission = async () => {
+    if (
+      typeof DeviceOrientationEvent !== "undefined" &&
+      typeof (DeviceOrientationEvent as any).requestPermission === "function"
+    ) {
+      try {
+        const response = await (DeviceOrientationEvent as any).requestPermission();
+        if (response === "granted") {
+          setIsCompassAuthorized(true);
+          return true;
+        } else {
+          setIsCompassAuthorized(false);
+          return false;
+        }
+      } catch (err) {
+        console.error("Error al solicitar permiso de brújula:", err);
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const triggerCenter = async () => {
     setIsFollowingUser(true);
+    await requestCompassPermission();
     if (mapType === "mapbox" && mapboxMapRef.current) {
       mapboxMapRef.current.easeTo({
         center: userCoords,
-        zoom: 17,
-        pitch: 55,
+        zoom: 17.5,
+        pitch: 60,
         bearing: mapHeading || 0,
-        duration: 1000,
+        padding: { top: 0, bottom: 180, left: 0, right: 0 },
+        duration: 1200,
       });
     } else if (mapType === "leaflet" && leafletMapRef.current) {
-      leafletMapRef.current.setView([userCoords[1], userCoords[0]], 17, { animate: true });
+      leafletMapRef.current.setView([userCoords[1], userCoords[0]], 17.5, { animate: true });
     }
   };
 
@@ -703,7 +979,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
     });
   };
 
-  const setWaypoint = (place: TourismItem) => {
+  const setWaypoint = (place: TourPoint) => {
     setActiveDestination(place);
     setSelectedPlace(null);
   };
@@ -712,26 +988,64 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
     setActiveDestination(null);
   };
 
-  return (
-    <div className="w-full h-full relative" id="mapbox-main-player">
-      <div ref={mapContainerRef} className="w-full h-full bg-[#111019]" />
+  const placeTypeName = selectedPlace ? {
+    destinos: "Atracción",
+    sabor: "Gastronomía",
+    hospedaje: "Hospedaje",
+    eventos: "Evento"
+  }[selectedPlace.type] : "";
 
+  return (
+    <div className={`w-full h-full relative ${currentZoom < 16.5 ? "map-zoom-low" : "map-zoom-high"}`} id="mapbox-main-player">
+      
+      {/* 2. Loader visual "Cargando..." */}
+      {isMapLoading && (
+        <div className="absolute inset-0 bg-[#0c0b12] z-[2000] flex flex-col items-center justify-center gap-6">
+          <div className="w-14 h-14 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+          <p className="text-[10px] font-black uppercase tracking-[0.25em] text-primary animate-pulse">
+            Sincronizando sistemas cartográficos
+          </p>
+        </div>
+      )}
+
+      {/* Contenedor del Mapa */}
+      <div ref={mapContainerRef} onClick={requestCompassPermission} className="w-full h-full bg-[#111019]" />
+
+      {/* 1. Alerta de Token de Respaldo */}
       {tokenError && (
-        <div className="absolute top-28 left-6 right-6 z-50 pointer-events-none">
+        <div className="absolute top-28 left-6 right-6 z-[1010] pointer-events-none">
           <div className="bg-rose-950/95 text-white p-4 rounded-3xl shadow-xl border border-rose-500/20 backdrop-blur-xl flex flex-col gap-1 text-[11px] font-semibold leading-relaxed">
             <div className="flex items-center gap-2 text-rose-200">
               <Info className="w-4 h-4 text-rose-400 shrink-0" />
-              <span className="font-black uppercase tracking-wider">Modo de Respaldo Exitoso (Leaflet)</span>
+              <span className="font-black uppercase tracking-wider">Modo de Respaldo Correcto (Leaflet)</span>
             </div>
             <p className="text-rose-300/80 mt-0.5 pointer-events-auto">
-              El servidor se inicializó sin la variable de entorno <code className="bg-black/30 px-1.5 py-0.5 rounded font-mono text-white">NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN</code>. Se activó automáticamente el motor alterno de mapas para prevenir caídas del sistema.
+              Lanzado exitosamente utilizando fallback Leaflet 2D para garantizar alta estabilidad móvil ante inconvenientes con Mapbox Token.
             </p>
           </div>
         </div>
       )}
 
-      {/* CONTROLES FLOTANTES */}
-      <div className="absolute top-28 right-6 z-30 flex flex-col gap-3 pointer-events-auto">
+      {/* 3. Alerta sutil GPS en pantalla */}
+      {gpsError && (
+        <div className="absolute top-28 left-6 right-6 z-[1020] pointer-events-auto">
+          <div className="bg-amber-950/90 text-amber-200 p-4 rounded-2xl shadow-xl border border-amber-500/20 backdrop-blur-xl flex items-center justify-between gap-3 text-[11px] font-semibold leading-relaxed">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+              <span>{gpsError}</span>
+            </div>
+            <button 
+              onClick={startGpsWatching} 
+              className="px-2.5 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded-lg flex items-center gap-1 transition-all active:scale-95 shrink-0"
+            >
+              <RefreshCw className="w-3 h-3" /> Reintentar
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* 2. Controles Flotantes con Alto Z-Index (z-[1010]+) */}
+      <div className="absolute top-28 right-6 z-[1010] flex flex-col gap-3 pointer-events-auto">
         <button
           onClick={toggleDemoMode}
           className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl active:scale-90 transition-all ${
@@ -767,8 +1081,8 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
         )}
       </div>
 
-      {/* BRÚJULA */}
-      <div className="absolute top-28 left-6 z-30 pointer-events-none">
+      {/* 2. Visualización de Brújula con Alto Z-Index (z-[1010]+) */}
+      <div className="absolute top-28 left-6 z-[1010] pointer-events-auto cursor-pointer" onClick={requestCompassPermission}>
         <div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-black/5 dark:border-white/10 px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5">
           <Compass
              className="w-5 h-5 text-cyan-400 transition-transform duration-200"
@@ -779,30 +1093,34 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
               Rumbo
             </span>
             <span className="text-xs font-black text-foreground mt-0.5 flex items-center justify-center">
-              {mapHeading}°{" "}
-              {mapHeading > 337 || mapHeading <= 22
-                ? "N"
-                : mapHeading > 22 && mapHeading <= 67
-                ? "NE"
-                : mapHeading > 67 && mapHeading <= 112
-                ? "E"
-                : mapHeading > 112 && mapHeading <= 157
-                ? "SE"
-                : mapHeading > 157 && mapHeading <= 202
-                ? "S"
-                : mapHeading > 202 && mapHeading <= 247
-                ? "SO"
-                : mapHeading > 247 && mapHeading <= 292
-                ? "O"
-                : "NO"}
+              {isCompassAuthorized === false ? "🔒 Activar" : `${mapHeading}°`}
+              {isCompassAuthorized !== false && (
+                <span className="ml-1 font-black">
+                  {mapHeading > 337 || mapHeading <= 22
+                    ? "N"
+                    : mapHeading > 22 && mapHeading <= 67
+                    ? "NE"
+                    : mapHeading > 67 && mapHeading <= 112
+                    ? "E"
+                    : mapHeading > 112 && mapHeading <= 157
+                    ? "SE"
+                    : mapHeading > 157 && mapHeading <= 202
+                    ? "S"
+                    : mapHeading > 202 && mapHeading <= 247
+                    ? "SO"
+                    : mapHeading > 247 && mapHeading <= 292
+                    ? "O"
+                    : "NO"}
+                </span>
+                )}
             </span>
           </div>
         </div>
       </div>
 
-      {/* HUD DESTINO */}
+      {/* HUD de Ruta de Destino activa */}
       {activeDestination && (
-        <div className="absolute top-48 left-6 right-6 z-30 pointer-events-none">
+        <div className="absolute top-48 left-6 right-6 z-[1010] pointer-events-none">
           <div className="bg-gradient-to-r from-cyan-600/95 to-blue-700/95 text-white p-4 rounded-3xl shadow-xl border border-cyan-400/20 backdrop-blur-xl flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-white/15 flex items-center justify-center shrink-0">
@@ -813,7 +1131,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
                   Ruta de Destino
                 </span>
                 <span className="text-sm font-black tracking-tight leading-tight truncate max-w-[170px]">
-                  {activeDestination.title}
+                  {activeDestination.name}
                 </span>
               </div>
             </div>
@@ -830,112 +1148,134 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
         </div>
       )}
 
-      {/* MODAL INFERIOR DETALLES */}
-      {selectedPlace && (
-        <div className="absolute bottom-28 left-6 right-6 z-40 pointer-events-auto">
-          <div className="bg-white/95 dark:bg-zinc-950/95 backdrop-blur-2xl border border-black/5 dark:border-white/10 rounded-[35px] shadow-2xl p-5 relative overflow-hidden flex flex-col gap-4">
-            <div className="flex items-start justify-between">
-              <div className="flex items-center gap-3">
-                <div className="text-2xl">
-                  {selectedPlace.category === "sabor"
-                    ? "🍺"
-                    : selectedPlace.category === "hospedaje"
-                    ? "🏨"
-                    : "🏛️"}
-                </div>
-                <div>
-                  <span className="text-[8px] bg-primary/10 text-primary dark:bg-primary/20 dark:text-cyan-400 px-2 py-0.5 rounded-full font-black tracking-widest uppercase border border-primary/20">
-                    {selectedPlace.category === "sabor"
-                      ? "Gastronomía"
-                      : selectedPlace.category === "hospedaje"
-                      ? "Hospedaje"
-                      : selectedPlace.category === "destinos"
-                      ? "Atracción"
-                      : "Evento"}
-                  </span>
-                  <h3 className="text-lg font-black text-foreground leading-tight tracking-tight mt-1">
-                    {selectedPlace.title}
-                  </h3>
-                </div>
+      {/* 2. Bottom Sheet Elegante y Adaptada a Pulgares móviles */}
+      <AnimatePresence>
+        {selectedPlace && (
+          <motion.div
+            initial={{ y: "100%" }}
+            animate={{ y: 0 }}
+            exit={{ y: "100%" }}
+            transition={{ type: "spring", damping: 24, stiffness: 220 }}
+            className="fixed bottom-0 left-0 right-0 z-[1030] bg-[#12111a]/95 backdrop-blur-2xl border-t border-white/10 rounded-t-[35px] shadow-2xl p-6 pb-9 flex flex-col gap-4 pointer-events-auto max-w-md mx-auto"
+          >
+            {/* Drag Handle superior */}
+            <div 
+              className="w-12 h-1.5 rounded-full bg-white/20 mx-auto -mt-2 mb-2 cursor-pointer" 
+              onClick={() => setSelectedPlace(null)} 
+            />
+
+            <div className="flex gap-4 items-center">
+              {selectedPlace.image && (
+                <img 
+                  src={selectedPlace.image} 
+                  alt={selectedPlace.name} 
+                  className="w-20 h-20 rounded-2xl object-cover border border-white/10 shadow-lg shrink-0" 
+                />
+              )}
+              <div className="flex-1 min-w-0">
+                <span className="text-[8px] bg-primary/15 text-primary border border-primary/20 dark:bg-cyan-500/15 dark:text-cyan-400 dark:border-cyan-500/20 px-2.5 py-1 rounded-full font-black tracking-widest uppercase">
+                  {placeTypeName}
+                </span>
+                <h3 className="text-base font-black text-white leading-tight tracking-tight mt-2 truncate">
+                  {selectedPlace.name}
+                </h3>
+                <p className="text-[11px] text-gray-400 font-semibold line-clamp-2 leading-snug mt-1">
+                  {selectedPlace.description}
+                </p>
               </div>
-              <button
-                onClick={() => setSelectedPlace(null)}
-                className="w-8 h-8 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-foreground hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
-              >
-                <X className="w-4 h-4" />
-              </button>
             </div>
 
-            <p className="text-xs text-gray-500 dark:text-gray-400 font-semibold line-clamp-2 leading-relaxed">
-              {selectedPlace.description}
-            </p>
-
-            <div className="flex items-center justify-between text-xs font-semibold text-gray-500 dark:text-zinc-400 border-t border-black/5 dark:border-white/5 pt-3">
+            <div className="flex items-center justify-between text-[11px] font-semibold text-gray-400 border-t border-white/5 pt-3">
               <div className="flex items-center gap-1">
                 <Star className="w-3.5 h-3.5 fill-yellow-500 text-yellow-500" />
-                <span>{selectedPlace.rating || "4.5"}</span>
+                <span className="text-white font-bold">{selectedPlace.rating || "4.5"}</span>
               </div>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1 min-w-0">
                 <MapPin className="w-3.5 h-3.5 text-primary" />
-                <span className="truncate max-w-[180px]">{selectedPlace.location}</span>
+                <span className="truncate max-w-[200px] text-zinc-300">{selectedPlace.location}</span>
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3 mt-1">
               <Link
                 href={`/${
-                  selectedPlace.category === "sabor"
+                  selectedPlace.type === "sabor"
                     ? "sabor"
-                    : selectedPlace.category === "hospedaje"
+                    : selectedPlace.type === "hospedaje"
                     ? "hospedaje"
+                    : selectedPlace.type === "eventos"
+                    ? "eventos"
                     : "destinos"
                 }/${selectedPlace.id}`}
-                className="py-3.5 bg-gray-100 dark:bg-white/5 dark:hover:bg-white/10 hover:bg-gray-200 text-foreground rounded-2xl font-black uppercase text-[9px] tracking-widest text-center transition-colors border border-black/5 dark:border-white/10"
+                className="py-3 bg-white/5 hover:bg-white/10 text-white rounded-2xl font-black uppercase text-[9px] tracking-widest text-center transition-colors border border-white/10"
               >
                 Ver Ficha
               </Link>
 
               <button
                 onClick={() => setWaypoint(selectedPlace)}
-                className="py-3.5 bg-primary hover:bg-[#721F2C] dark:bg-cyan-500 dark:hover:bg-cyan-600 text-white rounded-2xl font-black uppercase text-[9px] tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20 dark:shadow-cyan-500/10"
+                className="py-3 bg-primary hover:bg-[#721F2C] dark:bg-cyan-500 dark:hover:bg-cyan-600 text-white rounded-2xl font-black uppercase text-[9px] tracking-widest transition-all flex items-center justify-center gap-2 shadow-lg shadow-primary/20"
               >
                 <Navigation className="w-3.5 h-3.5" /> Fijar Destino
               </button>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* ESTILOS GLOBALES */}
       <style jsx global>{`
-        .user-pointer-container {
+        .user-avatar-container {
           position: relative;
-          width: 52px;
-          height: 52px;
+          width: 48px;
+          height: 48px;
           display: flex;
           align-items: center;
           justify-content: center;
         }
 
-        .user-pulse-outer {
+        .user-avatar-pulse {
           position: absolute;
-          width: 52px;
-          height: 52px;
-          background: rgba(34, 211, 238, 0.22);
-          border: 2px solid rgba(34, 211, 238, 0.6);
+          width: 56px;
+          height: 56px;
+          background: rgba(59, 130, 246, 0.25);
+          border: 2px solid rgba(59, 130, 246, 0.6);
           border-radius: 50%;
           animation: mapPulse 2s infinite ease-out;
           pointer-events: none;
         }
 
-        .user-pointer-arrow {
-          position: relative;
-          transform-origin: center;
-          transition: transform 0.25s ease-out;
-          filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.5));
-          z-index: 15;
+        .user-avatar-glow {
+          position: absolute;
+          width: 40px;
+          height: 40px;
+          background: radial-gradient(circle, rgba(59, 130, 246, 0.8) 0%, rgba(37, 99, 235, 0.3) 70%, transparent 100%);
+          border-radius: 50%;
+          filter: blur(4px);
+          z-index: 1;
         }
 
+        .user-avatar-inner {
+          position: relative;
+          width: 32px;
+          height: 32px;
+          background: #3b82f6;
+          border: 3px solid #ffffff;
+          border-radius: 50%;
+          box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 2;
+          transition: transform 0.1s linear;
+        }
+
+        .user-avatar-arrow {
+          width: 16px;
+          height: 16px;
+          filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Marcadores Poképarada estilo Pokémon GO */
         .pokestop-container {
           position: relative;
           width: 52px;
@@ -945,18 +1285,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
           align-items: center;
           justify-content: flex-end;
           cursor: pointer;
-        }
-
-        .pokestop-pulse {
-          position: absolute;
-          width: 44px;
-          height: 44px;
-          border-radius: 50%;
-          bottom: 10px;
-          animation: mapPulse 1.8s infinite ease-out;
-          opacity: 0;
-          pointer-events: none;
-          z-index: -1;
+          transform-origin: bottom center;
         }
 
         .pokestop-inner {
@@ -970,15 +1299,13 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
           justify-content: center;
           position: relative;
           z-index: 10;
-          bottom: 10px;
-          transform: translateY(0);
-          transition: transform 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
-          overflow: hidden;
+          bottom: 8px;
           background: #ffffff;
+          transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
         }
 
         .pokestop-container:hover .pokestop-inner {
-          transform: translateY(-8px) scale(1.22);
+          transform: translateY(-6px) scale(1.15) rotate(15deg);
           box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
         }
 
@@ -1000,7 +1327,67 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
           line-height: 1;
         }
 
-        /* Línea de ruta láser animada en Leaflet */
+        .pokestop-stem {
+          position: absolute;
+          bottom: 0px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 3px;
+          height: 10px;
+          background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0.4) 100%);
+          z-index: 5;
+        }
+
+        .pokestop-pulse {
+          position: absolute;
+          width: 40px;
+          height: 12px;
+          border-radius: 50%;
+          bottom: -2px;
+          background: radial-gradient(circle, var(--pulse-color, rgba(59, 130, 246, 0.4)) 0%, transparent 70%);
+          transform: scale(1);
+          animation: mapPulse 1.8s infinite ease-out;
+          opacity: 0;
+          pointer-events: none;
+          z-index: 1;
+        }
+
+        /* 3. Etiquetas autogestionadas y anticolisión de nombres */
+        .pokestop-label {
+          position: absolute;
+          bottom: -22px;
+          left: 50%;
+          transform: translateX(-50%);
+          background: rgba(15, 12, 22, 0.85);
+          backdrop-filter: blur(8px);
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          color: #ffffff;
+          padding: 3px 9px;
+          border-radius: 12px;
+          font-size: 9px;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          white-space: nowrap;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+          pointer-events: none;
+          transition: opacity 0.25s ease, transform 0.25s ease;
+          z-index: 100;
+        }
+
+        /* Control de visualización por zoom */
+        .map-zoom-low .pokestop-label {
+          opacity: 0;
+          pointer-events: none;
+          transform: translateX(-50%) scale(0.7) translateY(-5px);
+        }
+
+        .map-zoom-high .pokestop-label {
+          opacity: 1;
+          pointer-events: auto;
+          transform: translateX(-50%) scale(1) translateY(0);
+        }
+
         .leaflet-animated-route {
           stroke-dasharray: 6 6;
           animation: leafletDash 1s linear infinite;
@@ -1018,7 +1405,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
             opacity: 0.8;
           }
           100% {
-            transform: scale(1.4);
+            transform: scale(1.6);
             opacity: 0;
           }
         }

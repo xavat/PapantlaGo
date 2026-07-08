@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowLeft, MapPin, Share2, Star, Clock, Info, X, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowLeft, MapPin, Share2, Star, Clock, Info, X, ChevronLeft, ChevronRight, Compass } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -16,6 +16,13 @@ interface DetailViewProps {
   location?: string;
   details?: { label: string; value: string; icon: any }[];
   gallery?: string[];
+  coords?: [number, number];
+  descriptionExtra?: {
+    hours?: string;
+    cost?: string;
+    howToGet?: string;
+    tip?: string;
+  };
 }
 
 export default function DetailView({
@@ -28,6 +35,8 @@ export default function DetailView({
   location,
   details,
   gallery,
+  coords,
+  descriptionExtra,
 }: DetailViewProps) {
   const router = useRouter();
   const [activeImage, setActiveImage] = useState<number | null>(null);
@@ -230,10 +239,70 @@ export default function DetailView({
              <Info className="w-6 h-6 text-primary" />
              Información
           </h2>
-          <p className="text-muted-foreground text-base leading-relaxed font-medium">
+          <p className="text-muted-foreground text-base leading-relaxed font-medium whitespace-pre-line">
             {description}
           </p>
         </div>
+
+        {/* Practical Info (Description Extra) */}
+        {descriptionExtra && (
+          <div className="flex flex-col gap-6 mt-4">
+            <h2 className="text-2xl font-black tracking-tight flex items-center gap-3">
+               <Compass className="w-6 h-6 text-primary" />
+               Información Práctica
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {descriptionExtra.hours && (
+                <div className="bg-white/80 dark:bg-zinc-900/80 border border-black/5 dark:border-white/10 rounded-[30px] p-6 shadow-xl backdrop-blur-md flex flex-col gap-2">
+                  <div className="flex items-center gap-3 text-primary font-black text-xs uppercase tracking-wider">
+                    <Clock className="w-4 h-4" /> Horarios
+                  </div>
+                  <p className="text-muted-foreground text-sm leading-relaxed font-medium whitespace-pre-line">
+                    {descriptionExtra.hours}
+                  </p>
+                </div>
+              )}
+
+              {descriptionExtra.cost && (
+                <div className="bg-white/80 dark:bg-zinc-900/80 border border-black/5 dark:border-white/10 rounded-[30px] p-6 shadow-xl backdrop-blur-md flex flex-col gap-2">
+                  <div className="flex items-center gap-3 text-primary font-black text-xs uppercase tracking-wider">
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+                    Costos
+                  </div>
+                  <p className="text-muted-foreground text-sm leading-relaxed font-medium whitespace-pre-line">
+                    {descriptionExtra.cost}
+                  </p>
+                </div>
+              )}
+
+              {descriptionExtra.howToGet && (
+                <div className="bg-white/80 dark:bg-zinc-900/80 border border-black/5 dark:border-white/10 rounded-[30px] p-6 shadow-xl backdrop-blur-md flex flex-col gap-2 md:col-span-2">
+                  <div className="flex items-center gap-3 text-primary font-black text-xs uppercase tracking-wider">
+                    <MapPin className="w-4 h-4" /> Cómo llegar
+                  </div>
+                  <p className="text-muted-foreground text-sm leading-relaxed font-medium whitespace-pre-line">
+                    {descriptionExtra.howToGet}
+                  </p>
+                </div>
+              )}
+
+              {descriptionExtra.tip && (
+                <div className="bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/20 rounded-[30px] p-6 shadow-xl flex flex-col gap-3 md:col-span-2 relative overflow-hidden group">
+                  <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:scale-110 transition-transform">
+                    <Compass className="w-32 h-32" />
+                  </div>
+                  <div className="flex items-center gap-3 text-primary font-black text-xs uppercase tracking-wider">
+                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+                    Tip del Viajero
+                  </div>
+                  <p className="text-foreground/80 text-sm leading-relaxed font-semibold italic whitespace-pre-line">
+                    "{descriptionExtra.tip}"
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Gallery Section */}
         {gallery && gallery.length > 0 && (
@@ -363,12 +432,12 @@ export default function DetailView({
                     loading="lazy"
                     allowFullScreen
                     className="grayscale dark:invert transition-all group-hover:grayscale-0 dark:group-hover:invert-0"
-                    src={`https://www.google.com/maps?q=${encodeURIComponent(title + " " + location)}&output=embed`}
+                    src={coords ? `https://www.google.com/maps?q=${coords[0]},${coords[1]}&z=16&output=embed` : `https://www.google.com/maps?q=${encodeURIComponent(title + " " + location)}&output=embed`}
                   />
                   
                   {/* Open Maps Button Overlay */}
                   <button 
-                     onClick={() => window.open(`https://www.google.com/maps/search/${encodeURIComponent(title + " " + location)}`, "_blank")}
+                     onClick={() => window.open(coords ? `https://www.google.com/maps/search/?api=1&query=${coords[0]},${coords[1]}` : `https://www.google.com/maps/search/${encodeURIComponent(title + " " + location)}`, "_blank")}
                      className="absolute bottom-6 right-6 bg-primary text-white px-8 py-4 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-2xl flex items-center gap-3 hover:scale-105 active:scale-95 transition-all"
                   >
                      <ExternalLink className="w-4 h-4" /> Abrir en Google Maps

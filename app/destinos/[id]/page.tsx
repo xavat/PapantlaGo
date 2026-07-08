@@ -10,7 +10,17 @@ export default function DestinoDetailPage() {
   const id = params.id as string;
   
   const decodedId = decodeURIComponent(id);
-  const found = tourismData.find(item => item.id === decodedId);
+  
+  const normalize = (str: string) => 
+    str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+  const found = tourismData.find(item => {
+    const normalItemId = normalize(item.id);
+    const normalDecodedId = normalize(decodedId);
+    return normalItemId === normalDecodedId || 
+           (normalItemId !== "" && normalDecodedId.includes(normalItemId)) ||
+           (normalDecodedId !== "" && normalItemId.includes(normalDecodedId));
+  });
   
   const data = found ? {
     ...found,

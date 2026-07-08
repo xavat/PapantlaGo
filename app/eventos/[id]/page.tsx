@@ -4,7 +4,21 @@ import { useParams } from "next/navigation";
 import DetailView from "@/components/DetailView";
 import { Calendar, Clock, MapPin } from "lucide-react";
 
-const eventsData = [
+interface EventItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  imageUrl: string;
+  rating: string;
+  tag: string;
+  location: string;
+  coords: [number, number];
+  details: { label: string; value: string; icon: any }[];
+  gallery: string[];
+}
+
+const eventsData: EventItem[] = [
   {
     id: "cumbre-tajin",
     title: "Cumbre Tajín",
@@ -13,7 +27,8 @@ const eventsData = [
     imageUrl: "/images/events/cumbre_tajin.jpeg",
     rating: "4.9",
     tag: "Festival Cultural",
-    location: "Zona Arqueológica El Tajín",
+    location: "Parque Temático Takilhsukut, Papantla, Ver.",
+    coords: [20.4315683, -97.3729754],
     details: [
       { label: "Fecha", value: "20-23 Marzo", icon: Calendar },
       { label: "Duración", value: "4 Días", icon: Clock },
@@ -40,7 +55,8 @@ const eventsData = [
     imageUrl: "/images/events/festival_xanath.jpg",
     rating: "4.9",
     tag: "Teatro y Danza",
-    location: "Teatro al Aire Libre, Papantla Veracruz",
+    location: "Mural de la Cultura Totonaca, Centro, Papantla, Ver.",
+    coords: [20.4571868, -97.320831],
     details: [
       { label: "Fechas", value: "4 y 7 de Junio", icon: Calendar },
       { label: "Lugar", value: "Feria de Corpus Christi", icon: MapPin },
@@ -62,7 +78,8 @@ const eventsData = [
     imageUrl: "/images/events/corpus_christi.jpg",
     rating: "4.9",
     tag: "Religioso/Cultural",
-    location: "Centro Histórico y Terrenos de la Feria",
+    location: "Terrenos de la Feria, Papantla, Ver.",
+    coords: [20.458472, -97.323417],
     details: [
       { label: "Fecha", value: "30 de Mayo - 7 de Junio", icon: Calendar },
       { label: "Tradición", value: "Ancestral", icon: MapPin },
@@ -76,13 +93,14 @@ const eventsData = [
   },
   {
     id: "carnaval-alegria",
-    title: "Carnaval de la Alegría",
+    title: 'Carnaval de Papantla "Ilimakxtum"',
     subtitle: "Magia y Color",
     description: "Un desfile vibrante por las calles de Papantla con música en vivo, comparsas y la alegría característica de la región norte de Veracruz.",
     imageUrl: "/images/events/carnaval_alegria.jpeg",
     rating: "4.7",
     tag: "Carnaval",
-    location: "Calles del Centro, Papantla",
+    location: "Calles del Centro, Papantla, Ver.",
+    coords: [20.4498621, -97.3284981],
     details: [
       { label: "Fecha", value: "4 Junio", icon: Calendar },
       { label: "Ambiente", value: "Festivo", icon: Clock },

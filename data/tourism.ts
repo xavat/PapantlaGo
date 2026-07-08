@@ -13,6 +13,12 @@ export interface TourismItem {
   details?: { label: string; value: string; icon: string }[];
   gallery?: string[];
   address?: string;
+  descriptionExtra?: {
+    hours?: string;
+    cost?: string;
+    howToGet?: string;
+    tip?: string;
+  };
 }
 
 export const tourismData: TourismItem[] = [
@@ -21,92 +27,134 @@ export const tourismData: TourismItem[] = [
     id: "tajin",
     title: "El Tajín",
     subtitle: "Patrimonio Mundial UNESCO",
-    description: "La ciudad del trueno antigua capital de la cultura totonaca Famosa por la Pirámide de los Nichos y su impresionante arquitectura prehispánica",
+    description: `La joya prehispánica del estado de Veracruz y un sitio declarado Patrimonio de la Humanidad por la UNESCO. Esta imponente y antigua capital de la cultura totonaca deslumbra por su sofisticada arquitectura y sus numerosos juegos de pelota, siendo el epicentro del misticismo y el esplendor arqueológico de la región.\n\n* **Pirámide de los Nichos:** Maravíllate con su estructura principal, famosa por sus 365 nichos alineados astronómicamente.\n* **Museo de sitio:** Alberga una notable colección de piezas encontradas durante las excavaciones y ofrece contexto histórico.\n* **Misticismo vivo:** Un destino ideal para cargarse de energía y comprender a fondo el pasado mesoamericano.`,
     imageUrl: "/destinos/tajin.jpg",
     rating: "4.9",
     tag: "Historia",
-    location: "Papantla de Olarte Ver",
+    location: "Papantla de Olarte, Ver.",
     category: "destinos",
-    coords: [20.4485, -97.3245],
-    gallery: ["/destinos/tajin.jpg"]
+    coords: [20.4426841, -97.3779076],
+    gallery: ["/destinos/tajin.jpg"],
+    descriptionExtra: {
+      hours: "Lunes a domingo de 9:00 AM a 5:00 PM.",
+      cost: "Entrada general aproximada de $95 MXN. Los domingos el acceso es gratuito para ciudadanos mexicanos y residentes extranjeros (con identificación oficial). Estudiantes, maestros y adultos mayores entran gratis todos los días.",
+      howToGet: "Se localiza a unos 15-20 minutos del centro de Papantla. En el centro puedes tomar un autobús de ruta (autobuses \"Tajín\") o un taxi colectivo que te deja directamente en el acceso principal.",
+      tip: "Lleva calzado cómodo, protector solar, sombrero y suficiente agua, ya que el clima es muy caluroso y húmedo. No te pierdas la ceremonia de los Voladores de Papantla que suele realizarse de forma continua en la explanada de la entrada."
+    }
   },
   {
     id: "centro-historico",
     title: "Centro Histórico",
     subtitle: "Pueblo Mágico",
-    description: "El corazón de Papantla donde convergen la tradición y la modernidad Hogar de la Catedral de Nuestra Señora de la Asunción",
+    description: `El corazón palpitante del Pueblo Mágico, donde el aroma a vainilla impregna el ambiente y las tradiciones totonacas cobran vida a cada paso. Caminar por sus coloridas calles te transportará a un ambiente de provincia mexicana inigualable, enmarcado por la belleza arquitectónica de sus principales edificios históricos.\n\n* **Arquitectura icónica:** Admira la hermosa Parroquia de Nuestra Señora de la Asunción y el Palacio Municipal.\n* **Ambiente cultural:** Un espacio ideal para disfrutar del tradicional café veracruzano, comprar artesanías y presenciar la danza de los voladores en el zócalo.\n* **Corazón de la ciudad:** El punto de inicio perfecto para cualquier viajero que desee conocer la identidad papanteca.`,
     imageUrl: "/destinos/centro.jpg",
     rating: "4.8",
     tag: "Cultura",
-    location: "Centro Papantla",
+    location: "Centro Papantla, Ver.",
     category: "destinos",
-    coords: [20.4465, -97.3225],
-    gallery: ["/destinos/centro.jpg"]
+    coords: [20.4467303, -97.3220645],
+    gallery: ["/destinos/centro.jpg"],
+    descriptionExtra: {
+      hours: "Espacio público abierto las 24 horas. Los comercios abren generalmente de 9:00 AM a 8:00 PM.",
+      cost: "Acceso completamente gratuito.",
+      howToGet: "Es el punto cero de la ciudad. Cualquier transporte colectivo local o taxi te dejará directamente en el Parque Central Israel C. Téllez.",
+      tip: "Los fines de semana por la tarde se organizan los \"Viernes de Danzón\" o el \"Huapango Dominical\". Es el mejor momento para vivir el folklore local y probar los tradicionales esquites o un helado de vainilla casero."
+    }
   },
   {
     id: "mural-de-la-cultura-totonaca",
     title: "Mural de la Cultura Totonaca",
     subtitle: "Obra de Teodoro Cano",
-    description: "Impresionante bajorrelieve tallado en piedra de más de 80 metros que narra la historia del origen milenario y la evolución cultural del pueblo totonaco hasta la actualidad.",
+    description: `Una impresionante obra monumental esculpida por el maestro Teodoro Cano que narra de forma magistral la evolución del pueblo totonaca. Situado en pleno centro, este colosal relieve de piedra aprovecha el muro de contención de la iglesia para convertirse en una lección de historia visual obligada para todo visitante.\n\n* **Narración histórica:** Plasma detalladamente desde la época prehispánica hasta la era moderna de la región.\n* **Elementos sagrados:** Identifica símbolos clave como la danza del volador, el juego de pelota y el cultivo de la vainilla.\n* **Parada fotográfica:** Uno de los puntos fotográficos más emblemáticos y representativos de la ciudad.`,
     imageUrl: "/destinos/mural.jpg",
     rating: "4.7",
     tag: "Arte",
-    location: "Centro de Papantla",
+    location: "Centro de Papantla, Ver.",
     category: "destinos",
-    coords: [20.4469, -97.3226],
-    gallery: ["/destinos/mural.jpg"]
+    coords: [20.446255, -97.3220487],
+    gallery: ["/destinos/mural.jpg"],
+    descriptionExtra: {
+      hours: "Abierto al público de manera permanente (visible desde la vía pública). Se recomienda visitarlo de día para apreciar los relieves o de noche si cuenta con iluminación artística.",
+      cost: "Gratuito.",
+      howToGet: "Ubicado a un costado de la Parroquia de Nuestra Señora de la Asunción, justo frente al Parque Central. Se llega a pie desde cualquier punto del centro.",
+      tip: "Tómate unos minutos para leer la placa informativa. El mural se recorre visualmente de izquierda a derecha para comprender cronológicamente la historia, desde la mítica creación del pueblo totonaca hasta el Papantla del siglo XX."
+    }
   },
   {
     id: "monumento-al-volador",
     title: "Monumento al Volador",
     subtitle: "Vista Panorámica",
-    description: "Majestuoso monumento dedicado al icónico hombre pájaro de la Danza de los Voladores Ubicado en lo alto de un cerro ofrece una vista panorámica espectacular de 360 grados de toda la ciudad.",
+    description: `Ubicado en la cima de un cerro en el centro de la ciudad, este imponente monumento rinde homenaje a los legendarios "Hombres Pájaro". Además de admirar la colosal estatua que vigila el pueblo, el sitio ofrece una de las panorámicas más espectaculares y completas de todo Papantla.\n\n* **Mirador espectacular:** Consigue vistas completas en 360 grados de los tejados, plazas y colinas del Pueblo Mágico.\n* **Homenaje a la tradición:** Dedicado al ritual de los Voladores, considerado Patrimonio Cultural Inmaterial.\n* **Fácil acceso:** Se llega mediante una caminata que recompensa con la mejor postal fotográfica de la zona.`,
     imageUrl: "/destinos/volador.jpg",
     rating: "4.9",
     tag: "Mirador",
-    location: "Cerro del Volador",
+    location: "Cerro del Volador, Papantla, Ver.",
     category: "destinos",
-    coords: [20.4461, -97.3204],
-    gallery: ["/destinos/volador.jpg"]
+    coords: [20.4447697, -97.3216441],
+    gallery: ["/destinos/volador.jpg"],
+    descriptionExtra: {
+      hours: "Abierto todos los días de 7:00 AM a 7:00 PM (se aconseja visitarlo antes del anochecer).",
+      cost: "Gratuito.",
+      howToGet: "Se encuentra en la cima del cerro localizado detrás de la Iglesia de la Asunción. El acceso peatonal es a través de una escalinata señalizada que inicia desde la calle Aquiles Serdán o subiendo por la calle Reforma.",
+      tip: "La subida requiere algo de esfuerzo físico debido a los escalones, por lo que se recomienda subir a un ritmo moderado y llevar agua. Las mejores horas para tomar fotografías panorámicas de la ciudad son al amanecer o durante el atardecer."
+    }
   },
   {
     id: "zona-arqueologica-coyuxquihui",
     title: "Zona Arqueológica Coyuxquihui",
     subtitle: "Legado Totonaca",
-    description: "Ruinas arqueológicas ubicadas en medio de la densa selva totonaca del sur de Papantla Destaca por sus murallas defensivas terrazas habitacionales y pirámides ceremoniales.",
+    description: `Un fascinante tesoro arqueológico semioculto entre la densa vegetación y los paisajes del entorno papanteco. Fundada tras la caída de El Tajín, esta antigua fortaleza militar prehispánica ofrece una experiencia de exploración más íntima, rodeada de selva y con estructuras que denotan una gran estrategia defensiva.\n\n* **Ambiente natural:** Ideal para quienes buscan un recorrido tranquilo y una conexión directa con la naturaleza.\n* **Estructuras destacadas:** Explora el edificio de los nichos, su juego de pelota y las terrazas escalonadas.\n* **Menos concurrido:** Perfecto para tomar fotos sin aglomeraciones y respirar la tranquilidad del bosque tropical.`,
     imageUrl: "/destinos/coyuxquihui.jpg",
     rating: "4.6",
     tag: "Aventura",
-    location: "Coyuxquihui, Papantla",
+    location: "Coyuxquihui, Papantla, Ver.",
     category: "destinos",
-    coords: [20.3013, -97.2642],
-    gallery: ["/destinos/coyuxquihui.jpg"]
+    coords: [20.3125312, -97.2556878],
+    gallery: ["/destinos/coyuxquihui.jpg"],
+    descriptionExtra: {
+      hours: "Lunes a domingo de 9:00 AM a 5:00 PM.",
+      cost: "Entrada general aproximada de $75 MXN. Aplican las mismas reglas de gratuidad de las zonas INAH (domingos gratis para nacionales).",
+      howToGet: "Está ubicada a unos 35 kilómetros al sur de Papantla (aproximadamente 45 minutos en auto). Debes tomar la carretera hacia Espinal y seguir las desviaciones señalizadas hacia la comunidad de Coyuxquihui. El transporte público hacia allá es menos frecuente, por lo que se sugiere ir en automóvil propio o contratar un taxi privado.",
+      tip: "Al ser un sitio inmerso en la selva y mucho menos concurrido que El Tajín, es indispensable llevar un buen repelente de insectos y calzado con buen agarre para subir a las terrazas. ¡Disfrutarás de un sitio arqueológico casi para ti solo!"
+    }
   },
   {
     id: "la-bocana",
     title: "La Bocana",
     subtitle: "Unión de Río y Mar",
-    description: "Sitio natural de gran atractivo eco-turístico donde el caudaloso río Tecolutla se une directamente con el Golfo de México creando paisajes perfectos para observación de aves y kayak.",
+    description: `El punto mágico donde las aguas dulces de los esteros y manglares se unen de frente con la inmensidad del océano. Este rincón ecoturístico es un deleite visual y un santuario de biodiversidad marina, ideal para los amantes del turismo de naturaleza y los paisajes espectaculares de costa.\n\n* **Avistamiento de fauna:** Explora zonas cercanas de manglares que albergan diversas especies de aves locales y migratorias.\n* **Paisajes de contraste:** Admira el hermoso espectáculo visual del encuentro de las corrientes de agua dulce y salada.\n* **Actividades eco-amigables:** Un sitio ideal para la fotografía de paisaje, paseos tranquilos y desconexión absoluta.`,
     imageUrl: "/destinos/bocana.jpg",
     rating: "4.7",
     tag: "Naturaleza",
-    location: "La Bocana, Papantla",
+    location: "La Bocana, Papantla, Ver.",
     category: "destinos",
-    coords: [20.5739, -97.1278],
-    gallery: ["/destinos/bocana.jpg"]
+    coords: [20.6143783, -97.144859],
+    gallery: ["/destinos/bocana.jpg"],
+    descriptionExtra: {
+      hours: "Libre las 24 horas. Las actividades guiadas o recorridos en lancha operan bajo luz solar (8:00 AM a 5:00 PM).",
+      cost: "Acceso libre. Los paseos en lancha por el manglar o el estero se contratan directamente con los cooperativistas locales y varían según el número de personas.",
+      howToGet: "Está ubicada justo a un costado de Rancho Playa, donde el río o estero se conecta con el mar abierto. Puedes llegar caminando por la línea de la costa desde la zona principal de Rancho Playa o en auto por el camino de terracería perimetral.",
+      tip: "Este es el lugar ideal para los amantes del ecoturismo. Contrata un paseo en lancha con un guía local para adentrarte en los túneles de manglar; es una experiencia fascinante donde podrás observar aves exóticas, cangrejos y con un poco de suerte, otras especies locales en su hábitat natural."
+    }
   },
   {
     id: "rancho-playa",
     title: "Rancho Playa",
-    subtitle: "Costa Esmeralda",
-    description: "Hermosa playa casi virgen de aguas templadas y fina arena dorada. Ideal para desconectarse de la rutina acampar frente al mar y liberar tortugas marinas en temporada.",
+    subtitle: "Playa",
+    description: `El escape perfecto hacia las costas del Golfo de México, a solo unos kilómetros de la cabecera municipal de Papantla. Es una extensa playa de aguas templadas y oleaje tranquilo donde la relajación, la gastronomía marina local y la brisa del mar te harán olvidar el ajetreo diario.\n\n* **Gastronomía local:** Disfruta de pescados y mariscos frescos en las tradicionales palapas a la orilla del mar.\n* **Naturaleza costera:** Un ambiente semi-virgen que combina la frescura del mar con los verdes paisajes veracruzanos.\n* **Espacio familiar:** Excelente opción para nadar, caminar por la arena fina y descansar bajo el sol.`,
     imageUrl: "/destinos/rancho-playa.jpg",
     rating: "4.8",
     tag: "Playa",
-    location: "Costas de Papantla",
+    location: "Costas de Papantla, Ver.",
     category: "destinos",
-    coords: [20.6189, -97.1086],
-    gallery: ["/destinos/rancho-playa.jpg"]
+    coords: [20.6286735, -97.1561068],
+    gallery: ["/destinos/rancho-playa.jpg"],
+    descriptionExtra: {
+      hours: "Playa pública de acceso libre las 24 horas. Las palapas y restaurantes operan comúnmente de 9:00 AM a 6:00 PM.",
+      cost: "El acceso a la playa es libre. Renta de palapas/enramadas con mesas y sillas oscila entre los $100 y $200 MXN por todo el día.",
+      howToGet: "Se sitúa a unos 40-50 minutos en automóvil desde el centro de Papantla siguiendo la carretera hacia la costa. También existen camionetas de transporte público y taxis que salen desde la periferia del centro de la ciudad hacia la comunidad playera.",
+      tip: "Prueba el \"pescado a la veracruzana\" o los mariscos al chipotle en cualquiera de las palapas locales; los precios suelen ser muy accesibles y el producto es del día. Si viajas entre los meses de junio y noviembre, pregunta a los lugareños por los campamentos tortugueros de la zona, a veces es posible presenciar la liberación de crías."
+    }
   },
   // SABORES
   {
@@ -646,7 +694,7 @@ export const tourismData: TourismItem[] = [
     tag: "Pizzería",
     location: "Centro",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4460647, -97.3209668],
     phone: "7848420064",
     address: "C. José de J. Núñez s/n, Centro, 93400 Papantla, Ver.",
     gallery: [
@@ -749,7 +797,7 @@ export const tourismData: TourismItem[] = [
     tag: "Pizzería",
     location: "Centro",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4447167, -97.3205704],
     phone: "7848422083",
     address: "Cjon 16 de Septiembre 101, Centro, 93400 Papantla de Olarte, Ver.",
     gallery: [

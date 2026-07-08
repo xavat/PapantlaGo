@@ -29,7 +29,7 @@ const featuredEvents = [
   },
   {
     id: "carnaval-alegria",
-    title: "Carnaval de la Alegría",
+    title: 'Carnaval de Papantla "Ilimakxtum"',
     date: "4 de Junio",
     img: "/images/events/carnaval_alegria.jpeg",
     color: "from-pink-600",
@@ -41,7 +41,7 @@ const allEvents = [
   { id: "enamorate-kachikin", title: "Enamórate en Kachikín", date: "14 de febrero", month: 1, dayRange: [14], year: 2026 },
   { id: "cumbre-tajin-detail", title: "Papantla en la Cumbre", date: "Del 20 - 23 de marzo", month: 2, dayRange: [20, 21, 22, 23], year: 2026 },
   { id: "rancho-fest", title: "Rancho Fest", date: "3 y 4 de Abril", month: 3, dayRange: [3, 4], year: 2026 },
-  { id: "carnaval-alegria-detail", title: "Carnaval de la Alegría", date: "4 de junio", month: 5, dayRange: [4], year: 2026 },
+  { id: "carnaval-alegria-detail", title: 'Carnaval de Papantla "Ilimakxtum"', date: "4 de junio", month: 5, dayRange: [4], year: 2026 },
   { id: "corpus-christi-detail", title: "Feria de Corpus Christi", date: "Del 30 de mayo al 7 de Junio", month: 4, dayRange: [30, 31], year: 2026 },
   { id: "corpus-christi-detail-2", title: "Feria de Corpus Christi", date: "Del 30 de mayo al 7 de Junio", month: 5, dayRange: [1, 2, 3, 4, 5, 6, 7], year: 2026 },
   { id: "festival-xanath", title: "Festival Xanath", date: "Jueves 4 y Domingo 7 de Junio", month: 5, dayRange: [4, 7], year: 2026 },

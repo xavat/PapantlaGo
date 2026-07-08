@@ -52,7 +52,7 @@ const destinations = [
   },
   {
     title: "Rancho Playa",
-    subtitle: "Costa Esmeralda",
+    subtitle: "Playa",
     imageUrl: "/destinos/rancho-playa.jpg",
     rating: 4.8,
     tag: "Playa",

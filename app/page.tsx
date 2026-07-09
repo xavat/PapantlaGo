@@ -40,10 +40,30 @@ const homeItems = [
 ];
 
 const cultureImages = [
-  "https://images.unsplash.com/photo-1626081498877-c93d8e57eeff?auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&q=80",
-  "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80",
+  {
+    src: "/images/culture/voladores.jpg",
+    fallback: "https://images.unsplash.com/photo-1626081498877-c93d8e57eeff?auto=format&fit=crop&q=80",
+    title: "Danza de los Voladores",
+    desc: "Ceremonial sagrado del aire, patrimonio cultural inmaterial mundial."
+  },
+  {
+    src: "/images/culture/tajin_piramide.jpg",
+    fallback: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80",
+    title: "Pirámide de los Nichos",
+    desc: "Sorprendente arqueología prehispánica de 365 nichos solares."
+  },
+  {
+    src: "/images/culture/vainilla.jpg",
+    fallback: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&q=80",
+    title: "Vainilla Auténtica",
+    desc: "La flor orquídea endémica que perfuma tradicionalmente al mundo."
+  },
+  {
+    src: "/images/culture/folklor.jpg",
+    fallback: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80",
+    title: "Misticismo Tradicional",
+    desc: "Danzas tradicionales como los Guaguas y Negritos llenos de color."
+  }
 ];
 
 export default function Home() {
@@ -235,27 +255,49 @@ export default function Home() {
                 </h3>
              </div>
              
-             <div className="relative w-full overflow-hidden py-10">
+                           <div className="relative w-full overflow-hidden py-10">
                 <div className="flex gap-6 overflow-x-auto no-scrollbar snap-x px-6 -mx-6">
                   {cultureImages.map((img, i) => (
                     <motion.div
                       key={i}
-                      whileHover={{ scale: 1.02 }}
-                      className="min-w-[320px] aspect-[4/5] rounded-[40px] overflow-hidden relative shadow-2xl snap-center"
+                      whileHover={{ scale: 1.03, y: -6 }}
+                      className="min-w-[280px] md:min-w-[340px] aspect-[4/5] rounded-[36px] overflow-hidden relative shadow-2xl snap-center group select-none border border-black/5 dark:border-white/10"
                     >
-                      <Image src={img} alt="Cultura" fill className="object-cover" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                      <div className="absolute bottom-8 left-8">
-                         <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-white">
-                            <Camera className="w-5 h-5" />
+                      <Image 
+                        src={img.src} 
+                        alt={img.title} 
+                        fill 
+                        className="object-cover transition-transform duration-700 group-hover:scale-110"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          if (target.src !== img.fallback) {
+                            target.src = img.fallback;
+                          }
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent transition-opacity group-hover:opacity-90" />
+                      
+                      <div className="absolute top-6 left-6 w-10 h-10 rounded-full bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-all duration-300 transform -translate-y-2 group-hover:translate-y-0">
+                        <Camera className="w-4 h-4" />
+                      </div>
+
+                      <div className="absolute bottom-0 left-0 right-0 p-8 flex flex-col gap-2 translate-y-3 group-hover:translate-y-0 transition-transform duration-300 text-left">
+                         <div className="inline-flex max-w-fit px-3 py-1 bg-primary/20 backdrop-blur-md border border-primary/30 rounded-lg">
+                           <span className="text-[8.5px] font-black uppercase text-primary tracking-widest">Cultura Viva</span>
                          </div>
+                         <h4 className="text-xl font-black text-white uppercase tracking-tight leading-tight mt-1">
+                           {img.title}
+                         </h4>
+                         <p className="text-[11px] font-semibold text-white/70 leading-relaxed max-h-0 group-hover:max-h-20 opacity-0 group-hover:opacity-100 overflow-hidden transition-all duration-500">
+                           {img.desc}
+                         </p>
                       </div>
                     </motion.div>
                   ))}
                 </div>
-             </div>
+              </div>
 
-             <div className="max-w-2xl mx-auto flex flex-col gap-8 mt-4">
+<div className="max-w-2xl mx-auto flex flex-col gap-8 mt-4">
                 <p className="text-gray-600 dark:text-gray-400 text-lg font-medium leading-relaxed">
                    Papantla es un crisol de tradiciones milenarias Descubre el legado Totonaca y el arte que nace de la tierra
                 </p>

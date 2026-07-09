@@ -1075,7 +1075,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
       )}
 
       {/* 2. Controles Flotantes con Alto Z-Index (z-[1010]+) */}
-      <div className="absolute top-12 right-[84px] z-[1010] flex flex-row gap-3 pointer-events-auto">
+      <div className="absolute top-1/2 -translate-y-1/2 right-6 z-[1010] flex flex-col gap-3 pointer-events-auto">
         <button
           onClick={() => setIsSunlightMode((prev) => !prev)}
           className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl active:scale-95 transition-all ${

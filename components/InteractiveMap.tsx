@@ -982,6 +982,23 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
     }
   };
 
+  const centerToMainPoints = () => {
+    setIsFollowingUser(false);
+    const centerCoords: [number, number] = [-97.322, 20.4455];
+    if (mapboxMapRef.current) {
+      mapboxMapRef.current.easeTo({
+        center: centerCoords,
+        zoom: 16.8,
+        pitch: 60,
+        bearing: 0,
+        duration: 2000,
+        easing: (t) => t * (2 - t),
+      });
+    } else if (leafletMapRef.current) {
+      leafletMapRef.current.setView([centerCoords[1], centerCoords[0]], 16.8, { animate: true });
+    }
+  };
+
   const toggleDemoMode = () => {
     setIsDemoActive((prev) => {
       const newVal = !prev;
@@ -1058,7 +1075,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
       )}
 
       {/* 2. Controles Flotantes con Alto Z-Index (z-[1010]+) */}
-      <div className="absolute top-1/2 -translate-y-1/2 right-6 z-[1010] flex flex-col gap-3 pointer-events-auto">
+      <div className="absolute top-12 right-[84px] z-[1010] flex flex-row gap-3 pointer-events-auto">
         <button
           onClick={() => setIsSunlightMode((prev) => !prev)}
           className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl active:scale-95 transition-all ${
@@ -1069,6 +1086,14 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
           title={isSunlightMode ? "Desactivar Modo Sol (Contraste normal)" : "Activar Modo Sol (Alto Contraste para luz solar)"}
         >
           <Sun className="w-5.5 h-5.5" />
+        </button>
+
+        <button
+          onClick={centerToMainPoints}
+          className="w-12 h-12 rounded-2xl bg-white/95 dark:bg-zinc-900/95 border border-black/5 dark:border-white/10 text-foreground flex items-center justify-center shadow-2xl active:scale-90 transition-all"
+          title="Centrar en atracciones principales"
+        >
+          <Gamepad2 className="w-5.5 h-5.5 text-primary" />
         </button>
 
         <button
@@ -1095,7 +1120,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
       </div>
 
       {/* 2. Visualización de Brújula con Alto Z-Index (z-[1010]+) */}
-      <div className="absolute top-1/2 -translate-y-1/2 left-6 z-[1010] pointer-events-auto cursor-pointer" onClick={requestCompassPermission}>
+      <div className="absolute top-12 left-[220px] z-[1010] pointer-events-auto cursor-pointer select-none" onClick={requestCompassPermission}>
         <div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-black/5 dark:border-white/10 px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5">
           <Compass
              className="w-5 h-5 text-cyan-400 transition-transform duration-200"

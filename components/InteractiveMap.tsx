@@ -1025,29 +1025,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
       {/* Contenedor del Mapa */}
       <div ref={mapContainerRef} onClick={requestCompassPermission} className="w-full h-full bg-[#111019]" />
 
-      {/* 1. Alerta de Token de Respaldo */}
-      {tokenError && (
-        <div className="absolute top-28 left-6 right-6 z-[1010] pointer-events-auto">
-          <div className="bg-rose-950/95 text-white p-4.5 rounded-[26px] shadow-2xl border border-rose-500/20 backdrop-blur-xl flex items-center justify-between gap-4 text-[11px] font-semibold leading-relaxed">
-            <div className="flex flex-col gap-1">
-              <div className="flex items-center gap-2 text-rose-200">
-                <Info className="w-4.5 h-4.5 text-rose-400 shrink-0" />
-                <span className="font-black uppercase tracking-wider text-[10px]">Modo de Respaldo (Leaflet)</span>
-              </div>
-              <p className="text-rose-300/80 mt-0.5">
-                Carga alternativa activa para garantizar alta estabilidad móvil.
-              </p>
-            </div>
-            <button 
-              onClick={() => setTokenError(false)}
-              className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors shrink-0 pointer-events-auto"
-              title="Cerrar aviso"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-      )}
+
 
       {/* 3. Alerta sutil GPS en pantalla */}
       {gpsError && (
@@ -1080,7 +1058,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
       )}
 
       {/* 2. Controles Flotantes con Alto Z-Index (z-[1010]+) */}
-      <div className="absolute top-28 right-6 z-[1010] flex flex-col gap-3 pointer-events-auto">
+      <div className="absolute top-1/2 -translate-y-1/2 right-6 z-[1010] flex flex-col gap-3 pointer-events-auto">
         <button
           onClick={() => setIsSunlightMode((prev) => !prev)}
           className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl active:scale-95 transition-all ${
@@ -1091,17 +1069,6 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
           title={isSunlightMode ? "Desactivar Modo Sol (Contraste normal)" : "Activar Modo Sol (Alto Contraste para luz solar)"}
         >
           <Sun className="w-5.5 h-5.5" />
-        </button>
-        <button
-          onClick={toggleDemoMode}
-          className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl active:scale-90 transition-all ${
-            isDemoActive
-              ? "bg-purple-600 border-purple-500 text-white animate-pulse"
-              : "bg-white/95 dark:bg-zinc-900/95 border-black/5 dark:border-white/10 text-foreground"
-          }`}
-          title={isDemoActive ? "Desactivar caminata simulada" : "Activar caminata simulada (Modo Demo)"}
-        >
-          <Gamepad2 className="w-5 h-5" />
         </button>
 
         <button
@@ -1128,7 +1095,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
       </div>
 
       {/* 2. Visualización de Brújula con Alto Z-Index (z-[1010]+) */}
-      <div className="absolute top-28 left-6 z-[1010] pointer-events-auto cursor-pointer" onClick={requestCompassPermission}>
+      <div className="absolute top-1/2 -translate-y-1/2 left-6 z-[1010] pointer-events-auto cursor-pointer" onClick={requestCompassPermission}>
         <div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-black/5 dark:border-white/10 px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5">
           <Compass
              className="w-5 h-5 text-cyan-400 transition-transform duration-200"

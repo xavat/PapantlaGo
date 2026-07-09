@@ -43,26 +43,47 @@ const cultureImages = [
   {
     src: "/images/culture/voladores.jpg",
     fallback: "https://images.unsplash.com/photo-1626081498877-c93d8e57eeff?auto=format&fit=crop&q=80",
-    title: "Danza de los Voladores",
-    desc: "Ceremonial sagrado del aire, patrimonio cultural inmaterial mundial."
+    title: "Danza de los Voladores"
   },
   {
     src: "/images/culture/tajin_piramide.jpg",
     fallback: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80",
-    title: "Pirámide de los Nichos",
-    desc: "Sorprendente arqueología prehispánica de 365 nichos solares."
+    title: "Pirámide de los Nichos"
   },
   {
-    src: "/images/culture/vainilla.jpg",
+    src: "/images/culture/papantla.jpg",
     fallback: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&q=80",
-    title: "Vainilla Auténtica",
-    desc: "La flor orquídea endémica que perfuma tradicionalmente al mundo."
+    title: "Centro de Papantla"
   },
   {
-    src: "/images/culture/folklor.jpg",
+    src: "/images/culture/iglesia.jpg",
     fallback: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80",
-    title: "Misticismo Tradicional",
-    desc: "Danzas tradicionales como los Guaguas y Negritos llenos de color."
+    title: "Iglesia de la Asunción"
+  },
+  {
+    src: "/images/culture/cristorey.jpg",
+    fallback: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80",
+    title: "Cristo Rey"
+  },
+  {
+    src: "/images/culture/mural.jpg",
+    fallback: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80",
+    title: "Mural Totonaca"
+  },
+  {
+    src: "/images/culture/playa.jpg",
+    fallback: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80",
+    title: "Playa"
+  },
+  {
+    src: "/images/culture/rancho_playa.jpg",
+    fallback: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80",
+    title: "Rancho Playa"
+  },
+  {
+    src: "/images/culture/tajin2.jpg",
+    fallback: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80",
+    title: "El Tajín Vista Alterna"
   }
 ];
 

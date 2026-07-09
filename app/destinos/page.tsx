@@ -55,7 +55,7 @@ const destinations = [
     subtitle: "Playa",
     imageUrl: "/destinos/rancho-playa.jpg",
     rating: 4.8,
-    tag: "Playa",
+    tag: "Playa del Totonacapan",
   },
 ];
 

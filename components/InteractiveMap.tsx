@@ -4,14 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "leaflet/dist/leaflet.css";
-import { Navigation, Compass, MapPin, Star, Info, Crosshair, X, Gamepad2, AlertTriangle, RefreshCw } from "lucide-react";
+import { Navigation, Compass, MapPin, Star, Info, Crosshair, X, Gamepad2, AlertTriangle, RefreshCw, Sun } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN || "";
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
-const MAP_STYLE = "mapbox://styles/mapbox/navigation-dark-v1";
+const MAP_STYLE = "mapbox://styles/mapbox/streets-v12";
+
+import { tourismData } from "@/data/tourism";
 
 // 4. Estructura de Datos Limpia (id, name, type, coords [lat, lng], description, image)
 interface TourPoint {
@@ -25,87 +27,20 @@ interface TourPoint {
   location: string;
 }
 
-const TOURISM_POINTS: TourPoint[] = [
-  {
-    id: "tajin",
-    name: "El Tajín",
-    type: "destinos",
-    coords: [20.4485, -97.3245],
-    description: "Zona arqueológica prehispánica de la cultura totonaca. Famosa por la Pirámide de los Nichos.",
-    image: "/destinos/tajin.jpg",
-    rating: "4.9",
-    location: "Papantla de Olarte, Ver"
-  },
-  {
-    id: "centro-historico",
-    name: "Centro Histórico",
-    type: "destinos",
-    coords: [20.4465, -97.3225],
-    description: "El corazón del Pueblo Mágico, con su plaza tradicional y la Catedral de Nuestra Señora de la Asunción.",
-    image: "/destinos/centro.jpg",
-    rating: "4.8",
-    location: "Centro Papantla"
-  },
-  {
-    id: "mural-de-la-cultura-totonaca",
-    name: "Mural de la Cultura Totonaca",
-    type: "destinos",
-    coords: [20.4469, -97.3226],
-    description: "Impresionante bajorrelieve tallado en piedra de más de 80 metros que narra la historia del origen totonaco.",
-    image: "/destinos/mural.jpg",
-    rating: "4.7",
-    location: "Centro de Papantla"
-  },
-  {
-    id: "monumento-al-volador",
-    name: "Monumento al Volador",
-    type: "destinos",
-    coords: [20.4461, -97.3204],
-    description: "Estatua en lo alto de un cerro dedicada a la Danza de los Voladores. Ofrece vistas de 360 grados.",
-    image: "/destinos/volador.jpg",
-    rating: "4.9",
-    location: "Cerro del Volador"
-  },
-  {
-    id: "restaurante-naku",
-    name: "Restaurante Nakú",
-    type: "sabor",
-    coords: [20.4455, -97.3215],
-    description: "Cocina totonaca tradicional con toques contemporáneos gourmet en un ambiente cultural acogedor.",
-    image: "/images/sabores/naku/imagen1.jpg",
-    rating: "4.9",
-    location: "Manantiales, Papantla"
-  },
-  {
-    id: "cafe-catedral",
-    name: "Café Catedral",
-    type: "sabor",
-    coords: [20.4465, -97.3225],
-    description: "Disfruta del mejor café de Papantla con deliciosos snacks frente a la Catedral histórica.",
-    image: "/images/sabores/cafecatedral/imagen1.jpg",
-    rating: "4.8",
-    location: "Barrio del Naranjo"
-  },
-  {
-    id: "hotel-tajin",
-    name: "Hotel Tajín",
-    type: "hospedaje",
-    coords: [20.4470, -97.3230],
-    description: "Confort tradicional e inmejorable ubicación céntrica con alberca y hermosas vistas.",
-    image: "/images/hotels/hoteltajin.jpg",
-    rating: "4.5",
-    location: "Papantla de Olarte, Ver"
-  },
-  {
-    id: "hotel-vista-inn",
-    name: "Hotel Vista INN",
-    type: "hospedaje",
-    coords: [20.4465, -97.3225],
-    description: "Habitaciones modernas con vistas espectaculares del centro histórico y servicios completos.",
-    image: "/images/hotels/vistainn.jpg",
-    rating: "4.3",
-    location: "Centro, Papantla"
-  },
+
+function getDirectionLetter(heading: number): string {
+  const h = ((heading % 360) + 360) % 360;
+  if (h > 337.5 || h <= 22.5) return "N";
+  if (h > 22.5 && h <= 67.5) return "NE";
+  if (h > 67.5 && h <= 112.5) return "E";
+  if (h > 112.5 && h <= 157.5) return "SE";
+  if (h > 157.5 && h <= 202.5) return "S";
+  if (h > 202.5 && h <= 247.5) return "SO";
+  if (h > 247.5 && h <= 292.5) return "O";
+  return "NO";
+}
+
+const EVENTS_POINTS: TourPoint[] = [
   {
     id: "cumbre-tajin",
     name: "Cumbre Tajín",
@@ -135,7 +70,33 @@ const TOURISM_POINTS: TourPoint[] = [
     image: "/images/events/corpus_christi.jpg",
     rating: "4.9",
     location: "Centro de Papantla"
+  },
+  {
+    id: "carnaval-alegria",
+    name: 'Carnaval de Papantla "Ilimakxtum"',
+    type: "eventos",
+    coords: [20.4498621, -97.3284981],
+    description: "Un desfile vibrante por las calles de Papantla con música en vivo, comparsas y la alegría característica de la región norte de Veracruz.",
+    image: "/images/events/carnaval_alegria.jpeg",
+    rating: "4.7",
+    location: "Calles del Centro, Papantla, Ver."
   }
+];
+
+const TOURISM_POINTS: TourPoint[] = [
+  ...tourismData
+    .filter(item => ["destinos", "sabor", "hospedaje"].includes(item.category))
+    .map(item => ({
+      id: item.id,
+      name: item.title,
+      type: item.category as "destinos" | "sabor" | "hospedaje",
+      coords: item.coords,
+      description: item.description,
+      image: item.imageUrl,
+      rating: item.rating,
+      location: item.location
+    })),
+  ...EVENTS_POINTS
 ];
 
 function lerpAngle(current: number, target: number, lerpFactor: number): number {
@@ -159,6 +120,8 @@ interface InteractiveMapProps {
 
 export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
+  const compassIconRef = useRef<SVGSVGElement | null>(null);
+  const compassTextRef = useRef<HTMLSpanElement | null>(null);
 
   // Refs de mapas e instancias
   const mapboxMapRef = useRef<mapboxgl.Map | null>(null);
@@ -193,7 +156,27 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
   const [isDemoActive, setIsDemoActive] = useState<boolean>(false);
   const [demoIndex, setDemoIndex] = useState<number>(0);
   const [currentZoom, setCurrentZoom] = useState<number>(17.5);
+  const [isSunlightMode, setIsSunlightMode] = useState<boolean>(false);
   const demoIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Synchronize active classes on DOM markers for both Mapbox and Leaflet fallback
+  useEffect(() => {
+    const containers = document.querySelectorAll(".pokestop-container");
+    containers.forEach((container) => {
+      const labelEl = container.querySelector(".pokestop-label");
+      if (labelEl) {
+        const text = labelEl.textContent || "";
+        const isSelected = selectedPlace && text.toUpperCase() === selectedPlace.name.toUpperCase();
+        const isActiveDest = activeDestination && text.toUpperCase() === activeDestination.name.toUpperCase();
+        if (isSelected || isActiveDest) {
+          container.classList.add("active-pokestop");
+        } else {
+          container.classList.remove("active-pokestop");
+        }
+      }
+    });
+  }, [selectedPlace, activeDestination, mapType, isMapReady]);
+
 
   // Ruta del Simulador
   const demoPath: [number, number][] = [
@@ -328,8 +311,9 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
         setCurrentZoom(leafletInstance.getZoom());
       });
 
-      L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
-        maxZoom: 20,
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(leafletInstance);
 
       // Icono de Avatar estilo Pokémon GO
@@ -431,6 +415,22 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
             (layer) => layer.type === "symbol" && layer.layout?.["text-field"]
           )?.id;
 
+          // Hide default Mapbox POI, medical and transit labels to prevent clashing and declutter map
+          if (layers) {
+            layers.forEach((layer) => {
+              if (
+                layer.id.includes("poi-label") || 
+                layer.id.includes("landmark") || 
+                layer.id.includes("transit") ||
+                layer.id.includes("medical")
+              ) {
+                try {
+                  mapboxInstance?.setLayoutProperty(layer.id, "visibility", "none");
+                } catch (e) {}
+              }
+            });
+          } (mapboxInstance as any)._poiLabelsHidden = true;
+
           if (mapboxInstance.getSource("composite")) {
             try {
               mapboxInstance.addLayer(
@@ -442,7 +442,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
                   type: "fill-extrusion",
                   minzoom: 15,
                   paint: {
-                    "fill-extrusion-color": "#2c2a3e",
+                    "fill-extrusion-color": "#dedcdc",
                     "fill-extrusion-height": ["get", "height"],
                     "fill-extrusion-base": ["get", "min_height"],
                     "fill-extrusion-opacity": 0.55,
@@ -498,7 +498,15 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
         const roundedHeading = Math.round(smoothedHeading!);
 
         if (roundedHeading !== mapHeadingRef.current) {
-          setMapHeading(roundedHeading);
+          mapHeadingRef.current = roundedHeading;
+          
+          // Direct DOM Mutation for Compass rotation & text (Gyro smoothing bypasses React state)
+          if (compassIconRef.current) {
+            compassIconRef.current.style.transform = `rotate(${-roundedHeading}deg)`;
+          }
+          if (compassTextRef.current) {
+             compassTextRef.current.innerHTML = `${roundedHeading}° <span class="ml-1 font-black">${getDirectionLetter(roundedHeading)}</span>`;
+          }
         }
 
         if (mapboxMapRef.current && mapboxUserMarkerRef.current) {
@@ -605,7 +613,13 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
 
         const headingAngle = Math.round(angle);
         setUserCoords(nextLoc);
-        setMapHeading(headingAngle);
+        mapHeadingRef.current = headingAngle;
+        if (compassIconRef.current) {
+          compassIconRef.current.style.transform = `rotate(${-headingAngle}deg)`;
+        }
+        if (compassTextRef.current) {
+           compassTextRef.current.innerHTML = `${headingAngle}° <span class="ml-1 font-black">${getDirectionLetter(headingAngle)}</span>`;
+        }
 
         if (mapboxMapRef.current && mapboxUserMarkerRef.current) {
           mapboxUserMarkerRef.current.setLngLat(nextLoc);
@@ -675,19 +689,19 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
 
         switch (place.type) {
           case "sabor":
-            badgeColor = "#ec4899";
+            badgeColor = "#D81B60"; // Vibrant Deep Pink
             symbol = "🍺";
             break;
           case "hospedaje":
-            badgeColor = "#f59e0b";
+            badgeColor = "#E65100"; // Deep Amber Orange
             symbol = "🏨";
             break;
           case "destinos":
-            badgeColor = "#a855f7";
+            badgeColor = "#311B92"; // Deep Royal Indigo
             symbol = "🏛️";
             break;
           case "eventos":
-            badgeColor = "#ff2a5f";
+            badgeColor = "#D50000"; // Vivid Red
             symbol = "🎉";
             break;
         }
@@ -696,7 +710,6 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
         el.className = "pokestop-container";
         el.style.setProperty("--pulse-color", badgeColor);
         el.innerHTML = `
-          <div class="pokestop-pulse"></div>
           <div class="pokestop-stem"></div>
           <div class="pokestop-inner" style="border-color: ${badgeColor};">
             <div class="pokestop-photo" style="background-image: url('${place.image || ""}');">
@@ -753,33 +766,32 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
 
         switch (place.type) {
           case "sabor":
-            badgeColor = "#ec4899";
+            badgeColor = "#D81B60"; // Vibrant Deep Pink
             symbol = "🍺";
             break;
           case "hospedaje":
-            badgeColor = "#f59e0b";
+            badgeColor = "#E65100"; // Deep Amber Orange
             symbol = "🏨";
             break;
           case "destinos":
-            badgeColor = "#a855f7";
+            badgeColor = "#311B92"; // Deep Royal Indigo
             symbol = "🏛️";
             break;
           case "eventos":
-            badgeColor = "#ff2a5f";
+            badgeColor = "#D50000"; // Vivid Red
             symbol = "🎉";
             break;
         }
 
         const iconHtml = `
           <div class="pokestop-container">
-            <div class="pokestop-pulse"></div>
             <div class="pokestop-stem"></div>
             <div class="pokestop-inner" style="border-color: ${badgeColor};">
               <div class="pokestop-photo" style="background-image: url('${place.image || ""}'); font-size:12px;">
                 ${!place.image ? `<span class="pokestop-symbol">${symbol}</span>` : ""}
               </div>
             </div>
-            <div class="pokestop-label">${place.name}</div>
+            <div class="pokestop-label" style="--pulse-color: ${badgeColor};">${place.name}</div>
           </div>
         `;
 
@@ -959,7 +971,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
         center: userCoords,
         zoom: 17.5,
         pitch: 60,
-        bearing: mapHeading || 0,
+        bearing: mapHeadingRef.current || 0,
         padding: { top: 0, bottom: 180, left: 0, right: 0 },
         duration: 1200,
       });
@@ -996,7 +1008,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
   }[selectedPlace.type] : "";
 
   return (
-    <div className={`w-full h-full relative ${currentZoom < 16.5 ? "map-zoom-low" : "map-zoom-high"}`} id="mapbox-main-player">
+    <div className={`w-full h-full relative ${currentZoom < 18 ? "map-zoom-low" : "map-zoom-high"} ${isSunlightMode ? "sunlight-mode" : ""}`} id="mapbox-main-player">
       
       {/* 2. Loader visual "Cargando..." */}
       {isMapLoading && (
@@ -1046,6 +1058,17 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
 
       {/* 2. Controles Flotantes con Alto Z-Index (z-[1010]+) */}
       <div className="absolute top-28 right-6 z-[1010] flex flex-col gap-3 pointer-events-auto">
+        <button
+          onClick={() => setIsSunlightMode((prev) => !prev)}
+          className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl active:scale-95 transition-all ${
+            isSunlightMode
+              ? "bg-amber-500 border-amber-400 text-white animate-pulse"
+              : "bg-white/95 dark:bg-zinc-900/95 border-black/5 dark:border-white/10 text-foreground"
+          }`}
+          title={isSunlightMode ? "Desactivar Modo Sol (Contraste normal)" : "Activar Modo Sol (Alto Contraste para luz solar)"}
+        >
+          <Sun className="w-5.5 h-5.5" />
+        </button>
         <button
           onClick={toggleDemoMode}
           className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl active:scale-90 transition-all ${
@@ -1258,10 +1281,11 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
           position: relative;
           width: 32px;
           height: 32px;
-          background: #3b82f6;
+          background: #00e5ff;
           border: 3px solid #ffffff;
+          outline: 2.5px solid #000000;
           border-radius: 50%;
-          box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
+          box-shadow: 0 0 15px rgba(0, 229, 255, 0.9);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1292,6 +1316,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
           width: 44px;
           height: 44px;
           border: 4px solid #ffffff;
+          outline: 2.5px solid #000000;
           border-radius: 50%;
           box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
           display: flex;
@@ -1338,54 +1363,35 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
           z-index: 5;
         }
 
-        .pokestop-pulse {
-          position: absolute;
-          width: 40px;
-          height: 12px;
-          border-radius: 50%;
-          bottom: -2px;
-          background: radial-gradient(circle, var(--pulse-color, rgba(59, 130, 246, 0.4)) 0%, transparent 70%);
-          transform: scale(1);
-          animation: mapPulse 1.8s infinite ease-out;
-          opacity: 0;
-          pointer-events: none;
-          z-index: 1;
-        }
-
         /* 3. Etiquetas autogestionadas y anticolisión de nombres */
         .pokestop-label {
           position: absolute;
-          bottom: -22px;
+          bottom: -20px;
           left: 50%;
-          transform: translateX(-50%);
-          background: rgba(15, 12, 22, 0.85);
-          backdrop-filter: blur(8px);
-          border: 1px solid rgba(255, 255, 255, 0.15);
+          transform: translateX(-50%) scale(0.85);
+          background: #000000;
+          border: 2.5px solid #ffffff;
           color: #ffffff;
-          padding: 3px 9px;
-          border-radius: 12px;
-          font-size: 9px;
-          font-weight: 800;
+          padding: 4.5px 10.5px;
+          border-radius: 14px;
+          font-size: 10.5px;
+          font-weight: 900;
           text-transform: uppercase;
-          letter-spacing: 0.05em;
+          letter-spacing: 0.06em;
           white-space: nowrap;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
           pointer-events: none;
-          transition: opacity 0.25s ease, transform 0.25s ease;
+          opacity: 0;
+          transition: opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
           z-index: 100;
         }
 
-        /* Control de visualización por zoom */
-        .map-zoom-low .pokestop-label {
-          opacity: 0;
-          pointer-events: none;
-          transform: translateX(-50%) scale(0.7) translateY(-5px);
-        }
-
-        .map-zoom-high .pokestop-label {
+        /* Control de visualización por zoom o interacciones */
+        .pokestop-container:hover .pokestop-label,
+        .pokestop-container:focus .pokestop-label,
+        .active-pokestop .pokestop-label {
           opacity: 1;
-          pointer-events: auto;
-          transform: translateX(-50%) scale(1) translateY(0);
+          transform: translateX(-50%) scale(1) translateY(-3px);
         }
 
         .leaflet-animated-route {
@@ -1408,6 +1414,40 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
             transform: scale(1.6);
             opacity: 0;
           }
+        }
+
+        /* Sunlight Mode High Contrast Styles */
+        .sunlight-mode .mapboxgl-map,
+        .sunlight-mode .leaflet-container {
+          filter: contrast(1.3) brightness(1.15) saturate(1.4) !important;
+        }
+
+        .sunlight-mode .pokestop-inner {
+          border-width: 5px !important;
+          outline-width: 3.5px !important;
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.9) !important;
+        }
+
+        .sunlight-mode .pokestop-label {
+          background: #ffffff !important;
+          color: #000000 !important;
+          border-color: #000000 !important;
+          border-width: 3.5px !important;
+          font-weight: 950 !important;
+          font-size: 11.5px !important;
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.8) !important;
+        }
+
+        /* Prevent labels from clattering and overlapping when zoomed out */
+        .map-zoom-low .pokestop-label {
+          display: none !important;
+        }
+
+        /* Show labels for hovered or active items even when zoomed out */
+        .map-zoom-low .pokestop-container:hover .pokestop-label,
+        .map-zoom-low .active-pokestop .pokestop-label {
+          display: block !important;
+          opacity: 1 !important;
         }
       `}</style>
     </div>

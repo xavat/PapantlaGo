@@ -167,7 +167,7 @@ export const tourismData: TourismItem[] = [
     tag: "Gourmet",
     location: "Manantiales, Papantla",
     category: "sabor",
-    coords: [20.4455, -97.3215],
+    coords: [20.4579954, -97.3108819],
     phone: "7848423112",
     address: "Heroico Colegio Militar s/n-s/n, Manantiales, 93400 Papantla de Olarte, Ver.",
     gallery: [
@@ -190,7 +190,7 @@ export const tourismData: TourismItem[] = [
     tag: "Asadero",
     location: "Barrio del Zapote",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4464908, -97.3258797],
     phone: "7848425756",
     address: "Aquiles Serdán 700, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
     gallery: [
@@ -212,7 +212,7 @@ export const tourismData: TourismItem[] = [
     tag: "Cafetería",
     location: "Barrio del Naranjo",
     category: "sabor",
-    coords: [20.4475, -97.3235],
+    coords: [20.4456325, -97.3213761],
     phone: "7848885904",
     address: "Cjon 16 de Septiembre 114, Barrio del Naranjo, 93400 Papantla de Olarte, Ver.",
     gallery: [
@@ -244,7 +244,7 @@ export const tourismData: TourismItem[] = [
     tag: "Mexicano",
     location: "Centro",
     category: "sabor",
-    coords: [20.4485, -97.3245],
+    coords: [20.446513, -97.322703],
     phone: "7848423517",
     address: "Reforma #100 altos, Centro, 93400 Papantla, Ver.",
     gallery: [
@@ -266,7 +266,7 @@ export const tourismData: TourismItem[] = [
     tag: "Regional",
     location: "Centro",
     category: "sabor",
-    coords: [20.4495, -97.3255],
+    coords: [20.4469875, -97.3218272],
     phone: "7848420059",
     address: "Juan Enríquez 105, Centro, 93449 Papantla de Olarte, Ver.",
     gallery: [
@@ -288,7 +288,7 @@ export const tourismData: TourismItem[] = [
     tag: "Gourmet",
     location: "Santa Cruz",
     category: "sabor",
-    coords: [20.4505, -97.3265],
+    coords: [20.4450616, -97.3206326],
     phone: "7848420400",
     address: "93400, Cjon 16 de Septiembre 104, Santa Cruz, 93400 Papantla, Ver.",
     gallery: [
@@ -313,7 +313,7 @@ export const tourismData: TourismItem[] = [
     tag: "Tradicional",
     location: "El Naranjo",
     category: "sabor",
-    coords: [20.4515, -97.3275],
+    coords: [20.4459858, -97.3212509],
     phone: "7841122581",
     address: "José de Jesús, Lázaro Muñoz 104, El Naranjo, 93400 Papantla de Olarte, Ver.",
     gallery: [
@@ -335,7 +335,7 @@ export const tourismData: TourismItem[] = [
     tag: "Familiar",
     location: "Barrio San Juan",
     category: "sabor",
-    coords: [20.4525, -97.3285],
+    coords: [20.4489288, -97.3212239],
     phone: "7842135289",
     address: "Francisco I Madero 206, Barrio del San Juan, 93449 Papantla, Ver.",
     gallery: [
@@ -357,7 +357,7 @@ export const tourismData: TourismItem[] = [
     tag: "Local",
     location: "Barrio del Zapote",
     category: "sabor",
-    coords: [20.4535, -97.3295],
+    coords: [20.4436628, -97.3419736],
     phone: "7841335190",
     address: "Chote - Papantla, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
     gallery: [
@@ -380,7 +380,7 @@ export const tourismData: TourismItem[] = [
     tag: "Cultural",
     location: "Barrio del Zapote",
     category: "sabor",
-    coords: [20.4545, -97.3305],
+    coords: [20.4425017, -97.3310242],
     phone: "7841150077",
     address: "Revolución 116, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
     gallery: [
@@ -407,7 +407,7 @@ export const tourismData: TourismItem[] = [
     tag: "Centro",
     location: "Papantla de Olarte, Ver",
     category: "hospedaje",
-    coords: [20.4470, -97.3230],
+    coords: [20.4458443, -97.3211287],
     phone: "7848420121",
     address: "José de Jesús Núñez 104, El Naranjo, 93400 Papantla, Ver.",
     details: [
@@ -434,7 +434,7 @@ export const tourismData: TourismItem[] = [
     tag: "Centro",
     location: "Centro, Papantla",
     category: "hospedaje",
-    coords: [20.4465, -97.3225],
+    coords: [20.4460035, -97.3227987],
     phone: "7848425981",
     address: "Reforma 102-local 5, Centro, 93400 Papantla de Olarte, Ver.",
     gallery: [
@@ -455,7 +455,7 @@ export const tourismData: TourismItem[] = [
     tag: "Barrio San Juan",
     location: "Papantla, Ver",
     category: "hospedaje",
-    coords: [20.4450, -97.3210],
+    coords: [20.4487448, -97.3224332],
     phone: "2296903292",
     address: "s/n Olivo Centro, Barrio del San Juan, 93400 Papantla, Ver.",
     gallery: [
@@ -477,7 +477,7 @@ export const tourismData: TourismItem[] = [
     tag: "Centro",
     location: "Centro, Papantla",
     category: "hospedaje",
-    coords: [20.4460, -97.3220],
+    coords: [20.4475155, -97.3239883],
     phone: "7841023268",
     address: "Aquiles Serdán 415, Centro, 93449 Papantla, Ver.",
     gallery: [
@@ -498,7 +498,7 @@ export const tourismData: TourismItem[] = [
     tag: "Campestre",
     location: "Adolfo Lopez Mateos",
     category: "hospedaje",
-    coords: [20.4550, -97.3300],
+    coords: [20.4510893, -97.3411129],
     phone: "7848219206",
     address: "Jacarandas 35, Adolfo Lopez Mateos, 93438 Papantla de Olarte, Ver.",
     gallery: [
@@ -519,7 +519,7 @@ export const tourismData: TourismItem[] = [
     tag: "Barrio San Juan",
     location: "Papantla, Ver",
     category: "hospedaje",
-    coords: [20.4440, -97.3200],
+    coords: [20.4473219, -97.3243363],
     phone: "7848427038",
     address: "5 de Mayo 301, Barrio del San Juan, 93449 Papantla, Ver.",
     gallery: [
@@ -542,7 +542,7 @@ export const tourismData: TourismItem[] = [
     tag: "Boutique",
     location: "Benito Juárez, Papantla",
     category: "hospedaje",
-    coords: [20.4490, -97.3250],
+    coords: [20.4534986, -97.3325149],
     phone: "7821862711",
     address: "Francisco I Madero 716, Benito Juárez, 93410 Papantla de Olarte, Ver.",
     gallery: [
@@ -566,7 +566,7 @@ export const tourismData: TourismItem[] = [
     tag: "Barrio San Juan",
     location: "Papantla, Ver",
     category: "hospedaje",
-    coords: [20.4430, -97.3190],
+    coords: [20.4496813, -97.3203352],
     phone: "7848423990",
     address: "Barrio del San Juan, 93449 Papantla de Olarte, Ver.",
     gallery: [
@@ -588,7 +588,7 @@ export const tourismData: TourismItem[] = [
     tag: "Naranjo",
     location: "Barrio del Naranjo",
     category: "hospedaje",
-    coords: [20.4480, -97.3240],
+    coords: [20.4465301, -97.3185984],
     phone: "7848423366",
     address: "Juan Enríquez 307, Barrio del Naranjo, 93400 Papantla, Ver.",
     gallery: [
@@ -610,7 +610,7 @@ export const tourismData: TourismItem[] = [
     tag: "Cafetería",
     location: "Barrio del Naranjo",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4460494, -97.3215319],
     phone: "7848425317",
     address: "Curato s/n, Barrio del Naranjo, 93400 Poza Rica de Hidalgo, Ver.",
     gallery: [
@@ -630,7 +630,7 @@ export const tourismData: TourismItem[] = [
     tag: "Mariscos",
     location: "Barrio del Zapote",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4432201, -97.3337204],
     phone: "7848424980",
     address: "Cjon 16 de Septiembre centro 829, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
     gallery: [
@@ -654,7 +654,7 @@ export const tourismData: TourismItem[] = [
     tag: "Comida Típica",
     location: "Barrio del Zapote",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4421458, -97.3352901],
     phone: "7841346603",
     address: "Cjon 16 de Septiembre 907, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
     gallery: ["/images/sabores/zacahuilperla/imagen1.jpg"]
@@ -669,7 +669,7 @@ export const tourismData: TourismItem[] = [
     tag: "Sushi",
     location: "Barrio del Naranjo",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4457674, -97.3207569],
     phone: "",
     address: "C. José de J. Núñez 18, Barrio del Naranjo, 93400 Papantla de Olarte, Ver.",
     gallery: [
@@ -720,7 +720,7 @@ export const tourismData: TourismItem[] = [
     tag: "Cafetería",
     location: "Centro, Papantla",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.445911, -97.3211471],
     phone: "7841251585",
     address: "s/n, Curato, Centro, Barrio del Naranjo, 93400 Papantla de Olarte",
     gallery: [
@@ -747,7 +747,7 @@ export const tourismData: TourismItem[] = [
     tag: "Panadería",
     location: "Santa Cruz, Papantla",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4456499, -97.3233724],
     phone: "7848422558",
     address: "Cjon 16 de Septiembre 209, Santa Cruz, 93400 Papantla, Ver.",
     gallery: [
@@ -768,7 +768,7 @@ export const tourismData: TourismItem[] = [
     tag: "Pizzería",
     location: "Barrio del Zapote, Papantla",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4449662, -97.3300738],
     phone: "7848425458",
     address: "Cjon 16 de Septiembre 800, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
     gallery: [
@@ -817,7 +817,7 @@ export const tourismData: TourismItem[] = [
     tag: "Comida Típica",
     location: "Barrio del San Juan",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4473646, -97.3227022],
     phone: "7841442168",
     address: "José Azueta 105, Barrio del San Juan, 93400 Papantla de Olarte, Ver.",
     gallery: [
@@ -838,7 +838,7 @@ export const tourismData: TourismItem[] = [
     tag: "Cafetería",
     location: "Barrio del San Juan",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4469308, -97.3237343],
     phone: "7848421163",
     address: "Artes 108, Barrio del San Juan, 93400 Papantla, Ver.",
     gallery: [
@@ -859,7 +859,7 @@ export const tourismData: TourismItem[] = [
     tag: "Cafetería",
     location: "Santa Cruz",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4426645, -97.3191563],
     phone: "7841218557",
     address: "C. Rodolfo Curti 118, Santa Cruz, 93400 Papantla de Olarte, Ver.",
     gallery: [
@@ -879,7 +879,7 @@ export const tourismData: TourismItem[] = [
     tag: "Hamburguesas",
     location: "Barrio del Naranjo",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4465183, -97.3190178],
     phone: "7848499423",
     address: "C. Andrés Q.R. 201, Barrio del Naranjo, 93400 Papantla de Olarte, Ver.",
     gallery: [
@@ -900,7 +900,7 @@ export const tourismData: TourismItem[] = [
     tag: "Mariscos",
     location: "Centro",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4467149, -97.3241507],
     phone: "7841344357",
     address: "Leandro Valle s/n, Centro, 93449 Papantla de Olarte, Ver.",
     gallery: [
@@ -921,7 +921,7 @@ export const tourismData: TourismItem[] = [
     tag: "Taquería",
     location: "Barrio el San Juan",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4476833, -97.3256245],
     phone: "",
     address: "Barrio del San Juan, 93449 Papantla de Olarte, Ver.",
     gallery: [
@@ -942,7 +942,7 @@ export const tourismData: TourismItem[] = [
     tag: "Taquería",
     location: "Barrio del San Juan",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4493856, -97.3249791],
     phone: "7841087880",
     address: "93400 calle Francisco I. Madero FRENTE A WALDOS, A UN LADO DE SUBODEGA FRENTE A WALDOS EL, Barrio del San Juan, 93400 Papantla, Ver.",
     gallery: [
@@ -961,7 +961,7 @@ export const tourismData: TourismItem[] = [
     tag: "Antojitos",
     location: "Barrio del Zapote",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.4491959, -97.3279114],
     phone: "7846881200",
     address: "De La Libertad 308, Barrio del Zapote, 93440 Papantla de Olarte, Ver.",
     gallery: [
@@ -983,7 +983,7 @@ export const tourismData: TourismItem[] = [
     tag: "Hamburguesas",
     location: "Barrio del Naranjo",
     category: "sabor",
-    coords: [20.4465, -97.3225],
+    coords: [20.446251, -97.3216291],
     phone: "7841214753",
     address: "Centro Frente al Mural de Papantla, C. José de J. Núñez Col, Barrio del Naranjo, 93400 Papantla de Olarte, Ver.",
     gallery: [

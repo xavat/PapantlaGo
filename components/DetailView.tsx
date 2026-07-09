@@ -6,6 +6,81 @@ import { ArrowLeft, MapPin, Share2, Star, Clock, Info, X, ChevronLeft, ChevronRi
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
+interface InfoListItem {
+  title?: string;
+  content: string;
+}
+
+interface ParsedInfo {
+  intro: string;
+  listItems: InfoListItem[];
+}
+
+function parseDescriptionContent(text: string): ParsedInfo {
+  if (!text) return { intro: "", listItems: [] };
+
+  // normalize line endings
+  const normalized = text.replace(/\r\n/g, "\n");
+  const lines = normalized.split("\n");
+  let introLines: string[] = [];
+  const listItems: InfoListItem[] = [];
+
+  for (let line of lines) {
+    const trimmed = line.trim();
+    if (!trimmed) continue;
+
+    // Check if it's a list item (starts with *, -, •, or is numbered like "1.")
+    const isListItem = trimmed.startsWith("*") || trimmed.startsWith("-") || trimmed.startsWith("•") || /^\d+\./.test(trimmed);
+    
+    if (isListItem) {
+      // Remove starting bullet marker/number
+      let cleanLine = trimmed.replace(/^[\s*\-•\d.]+\s*/, "").trim();
+      
+      // Look for title like **Pirámide de los Nichos:** or **Pirámide de los Nichos** or simple "Title: Description"
+      const boldMatch = cleanLine.match(/^\*\*([^*]+)\*\*\s*:?\s*(.*)$/);
+      if (boldMatch) {
+        const title = boldMatch[1].replace(/[*#]/g, "").trim();
+        const content = boldMatch[2].replace(/[*#]/g, "").trim();
+        listItems.push({ title, content });
+      } else {
+        // Check simple "Title: Description" without markdown bold
+        const colonIndex = cleanLine.indexOf(":");
+        if (colonIndex > 0 && colonIndex < 35 && !cleanLine.startsWith("http")) {
+          const title = cleanLine.substring(0, colonIndex).replace(/[*#]/g, "").trim();
+          const content = cleanLine.substring(colonIndex + 1).replace(/[*#]/g, "").trim();
+          listItems.push({ title, content });
+        } else {
+          const content = cleanLine.replace(/[*#]/g, "").trim();
+          if (content) {
+            listItems.push({ content });
+          }
+        }
+      }
+    } else {
+      // Normal paragraph
+      const cleanLine = trimmed.replace(/[*#]/g, "").trim();
+      if (cleanLine) {
+        if (listItems.length === 0) {
+          introLines.push(cleanLine);
+        } else {
+          listItems.push({ content: cleanLine });
+        }
+      }
+    }
+  }
+
+  return {
+    intro: introLines.join("\n\n"),
+    listItems
+  };
+}
+
+const cleanText = (text: string): string => {
+  if (!text) return "";
+  // Strip all asterisks, hashes, and leading dashes/bullets
+  return text.replace(/[*#]/g, "").replace(/^[\s\-•]+\s*/, "").trim();
+};
+
 interface DetailViewProps {
   title: string;
   subtitle: string;
@@ -41,6 +116,8 @@ export default function DetailView({
   const router = useRouter();
   const [activeImage, setActiveImage] = useState<number | null>(null);
   const [currentHeaderIndex, setCurrentHeaderIndex] = useState(0);
+
+  const parsedDesc = parseDescriptionContent(description);
 
   const nextImage = () => {
     if (gallery && activeImage !== null) {
@@ -239,9 +316,46 @@ export default function DetailView({
              <Info className="w-6 h-6 text-primary" />
              Información
           </h2>
-          <p className="text-muted-foreground text-base leading-relaxed font-medium whitespace-pre-line">
-            {description}
-          </p>
+          <div className="flex flex-col gap-6">
+            {parsedDesc.intro && (
+              <p className="text-foreground/85 text-[15px] md:text-base leading-relaxed font-semibold bg-white/40 dark:bg-zinc-900/40 p-6 rounded-[30px] border border-black/5 dark:border-white/5 shadow-sm backdrop-blur-md">
+                {cleanText(parsedDesc.intro)}
+              </p>
+            )}
+
+            {/* Aspectos Destacados */}
+            {parsedDesc.listItems.length > 0 && (
+              <div className="flex flex-col gap-4 mt-2">
+                <h3 className="text-sm font-black text-foreground flex items-center gap-2 uppercase tracking-wider text-primary">
+                  <span className="w-1.5 h-4 bg-primary rounded-full" />
+                  Aspectos Destacados
+                </h3>
+                <div className="flex flex-col gap-4">
+                  {parsedDesc.listItems.map((item, idx) => (
+                    <motion.div
+                      key={idx}
+                      whileHover={{ x: 4 }}
+                      className="flex gap-4 p-5 rounded-[24px] bg-white/60 dark:bg-zinc-900/60 border border-black/5 dark:border-white/10 shadow-sm backdrop-blur-md transition-all hover:border-primary/20"
+                    >
+                      <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-primary/20 to-primary/10 text-primary border border-primary/20 flex items-center justify-center shrink-0 shadow-sm">
+                        <span className="text-sm font-black text-primary">{idx + 1}</span>
+                      </div>
+                      <div className="flex flex-col justify-center min-w-0">
+                        {item.title && (
+                          <h4 className="font-extrabold text-foreground text-sm tracking-tight mb-1 uppercase text-primary">
+                            {cleanText(item.title)}
+                          </h4>
+                        )}
+                        <p className="text-muted-foreground text-xs md:text-sm leading-relaxed font-semibold">
+                          {cleanText(item.content)}
+                        </p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Practical Info (Description Extra) */}
@@ -251,54 +365,76 @@ export default function DetailView({
                <Compass className="w-6 h-6 text-primary" />
                Información Práctica
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-4">
               {descriptionExtra.hours && (
-                <div className="bg-white/80 dark:bg-zinc-900/80 border border-black/5 dark:border-white/10 rounded-[30px] p-6 shadow-xl backdrop-blur-md flex flex-col gap-2">
-                  <div className="flex items-center gap-3 text-primary font-black text-xs uppercase tracking-wider">
-                    <Clock className="w-4 h-4" /> Horarios
+                <motion.div 
+                  whileHover={{ x: 4 }}
+                  className="bg-white/60 dark:bg-zinc-900/60 border border-black/5 dark:border-white/10 rounded-[30px] p-6 shadow-md backdrop-blur-md flex gap-5 items-start transition-all hover:border-primary/20"
+                >
+                  <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-500 shrink-0 shadow-sm">
+                    <Clock className="w-5 h-5" />
                   </div>
-                  <p className="text-muted-foreground text-sm leading-relaxed font-medium whitespace-pre-line">
-                    {descriptionExtra.hours}
-                  </p>
-                </div>
+                  <div className="flex flex-col gap-2 min-w-0">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-amber-500">Horarios</span>
+                    <p className="text-foreground text-sm leading-relaxed font-semibold">
+                      {cleanText(descriptionExtra.hours)}
+                    </p>
+                  </div>
+                </motion.div>
               )}
 
               {descriptionExtra.cost && (
-                <div className="bg-white/80 dark:bg-zinc-900/80 border border-black/5 dark:border-white/10 rounded-[30px] p-6 shadow-xl backdrop-blur-md flex flex-col gap-2">
-                  <div className="flex items-center gap-3 text-primary font-black text-xs uppercase tracking-wider">
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-                    Costos
+                <motion.div 
+                  whileHover={{ x: 4 }}
+                  className="bg-white/60 dark:bg-zinc-900/60 border border-black/5 dark:border-white/10 rounded-[30px] p-6 shadow-md backdrop-blur-md flex gap-5 items-start transition-all hover:border-primary/20"
+                >
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-500 shrink-0 shadow-sm">
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
                   </div>
-                  <p className="text-muted-foreground text-sm leading-relaxed font-medium whitespace-pre-line">
-                    {descriptionExtra.cost}
-                  </p>
-                </div>
+                  <div className="flex flex-col gap-2 min-w-0">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-500">Costos de Acceso</span>
+                    <p className="text-foreground text-sm leading-relaxed font-semibold">
+                      {cleanText(descriptionExtra.cost)}
+                    </p>
+                  </div>
+                </motion.div>
               )}
 
               {descriptionExtra.howToGet && (
-                <div className="bg-white/80 dark:bg-zinc-900/80 border border-black/5 dark:border-white/10 rounded-[30px] p-6 shadow-xl backdrop-blur-md flex flex-col gap-2 md:col-span-2">
-                  <div className="flex items-center gap-3 text-primary font-black text-xs uppercase tracking-wider">
-                    <MapPin className="w-4 h-4" /> Cómo llegar
+                <motion.div 
+                  whileHover={{ x: 4 }}
+                  className="bg-white/60 dark:bg-zinc-900/60 border border-black/5 dark:border-white/10 rounded-[30px] p-6 shadow-md backdrop-blur-md flex gap-5 items-start transition-all hover:border-primary/20"
+                >
+                  <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-indigo-500 shrink-0 shadow-sm">
+                    <MapPin className="w-5 h-5" />
                   </div>
-                  <p className="text-muted-foreground text-sm leading-relaxed font-medium whitespace-pre-line">
-                    {descriptionExtra.howToGet}
-                  </p>
-                </div>
+                  <div className="flex flex-col gap-2 min-w-0">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-500">Cómo llegar</span>
+                    <p className="text-foreground text-sm leading-relaxed font-semibold">
+                      {cleanText(descriptionExtra.howToGet)}
+                    </p>
+                  </div>
+                </motion.div>
               )}
 
               {descriptionExtra.tip && (
-                <div className="bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/20 rounded-[30px] p-6 shadow-xl flex flex-col gap-3 md:col-span-2 relative overflow-hidden group">
+                <motion.div 
+                  whileHover={{ scale: 1.01 }}
+                  className="bg-gradient-to-br from-primary/5 to-primary/10 border border-primary/20 rounded-[30px] p-6 shadow-lg flex gap-5 items-start relative overflow-hidden group w-full"
+                >
                   <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:scale-110 transition-transform">
-                    <Compass className="w-32 h-32" />
+                    <Compass className="w-24 h-24" />
                   </div>
-                  <div className="flex items-center gap-3 text-primary font-black text-xs uppercase tracking-wider">
-                    <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-                    Tip del Viajero
+                  <div className="w-12 h-12 rounded-2xl bg-primary/20 border border-primary/30 flex items-center justify-center text-primary shrink-0 shadow-sm">
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
                   </div>
-                  <p className="text-foreground/80 text-sm leading-relaxed font-semibold italic whitespace-pre-line">
-                    "{descriptionExtra.tip}"
-                  </p>
-                </div>
+                  <div className="flex flex-col gap-2 min-w-0 z-10">
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Tip del Viajero</span>
+                    <p className="text-foreground/90 text-sm leading-relaxed italic font-semibold">
+                      {cleanText(descriptionExtra.tip)}
+                    </p>
+                  </div>
+                </motion.div>
               )}
             </div>
           </div>

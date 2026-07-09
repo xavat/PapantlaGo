@@ -178,6 +178,36 @@ export default function ServiciosPage() {
   const [showGuidesModal, setShowGuidesModal] = useState(false);
   const [showTaxiModal, setShowTaxiModal] = useState(false);
   const [showBusModal, setShowBusModal] = useState(false);
+
+  // Sync state to prevent back navigation while directory modals are open
+  // Clicking native device back button will consume history popstate and close the directory
+  require("react").useEffect(() => {
+    const handlePopState = (e: PopStateEvent) => {
+      setShowGuidesModal(false);
+      setShowTaxiModal(false);
+      setShowBusModal(false);
+    };
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
+
+  const openModal = (type: "guides" | "taxi" | "bus") => {
+    window.history.pushState({ modalId: "servicios-modal" }, "");
+    if (type === "guides") setShowGuidesModal(true);
+    else if (type === "taxi") setShowTaxiModal(true);
+    else if (type === "bus") setShowBusModal(true);
+  };
+
+  const closeModal = () => {
+    setShowGuidesModal(false);
+    setShowTaxiModal(false);
+    setShowBusModal(false);
+    if (window.history.state?.modalId === "servicios-modal") {
+      window.history.back();
+    }
+  };
   const [searchGuideQuery, setSearchGuideQuery] = useState("");
   const [searchTaxiQuery, setSearchTaxiQuery] = useState("");
   const [selectedLanguageFilter, setSelectedLanguageFilter] = useState("Todos");
@@ -270,9 +300,9 @@ export default function ServiciosPage() {
                     <motion.div
                       key={item.name}
                       onClick={() => {
-                        if (isGuidesDirectory) setShowGuidesModal(true);
-                        else if (isTaxiDirectory) setShowTaxiModal(true);
-                        else if (isBusDirectory) setShowBusModal(true);
+                        if (isGuidesDirectory) openModal("guides");
+                        else if (isTaxiDirectory) openModal("taxi");
+                        else if (isBusDirectory) openModal("bus");
                       }}
                       className={
                         isDirectory 
@@ -330,9 +360,9 @@ export default function ServiciosPage() {
                         whileTap={{ scale: 0.97 }}
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (isGuidesDirectory) setShowGuidesModal(true);
-                          else if (isTaxiDirectory) setShowTaxiModal(true);
-                          else if (isBusDirectory) setShowBusModal(true);
+                          if (isGuidesDirectory) openModal("guides");
+                          else if (isTaxiDirectory) openModal("taxi");
+                          else if (isBusDirectory) openModal("bus");
                         }}
                         className={`w-full py-4.5 rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl flex items-center justify-center gap-2 transition-all ${
                           isGuidesDirectory 
@@ -378,7 +408,7 @@ export default function ServiciosPage() {
             className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xl flex flex-col justify-end"
           >
             {/* Backdrop Dismiss click */}
-            <div className="absolute inset-0 -z-10" onClick={() => setShowGuidesModal(false)} />
+            <div className="absolute inset-0 -z-10" onClick={closeModal} />
             
             <motion.div
               initial={{ y: "100%" }}
@@ -397,7 +427,7 @@ export default function ServiciosPage() {
                   <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Credenciales oficiales y autorizadas por SECTUR</p>
                 </div>
                 <button 
-                  onClick={() => setShowGuidesModal(false)}
+                  onClick={closeModal}
                   className="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-foreground hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
                 >
                   <X className="w-5 h-5" />
@@ -553,7 +583,7 @@ export default function ServiciosPage() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xl flex flex-col justify-end"
           >
-            <div className="absolute inset-0 -z-10" onClick={() => setShowTaxiModal(false)} />
+            <div className="absolute inset-0 -z-10" onClick={closeModal} />
             
             <motion.div
               initial={{ y: "100%" }}
@@ -570,7 +600,7 @@ export default function ServiciosPage() {
                   <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Taxis seguros en Papantla - Llamada y WhatsApp</p>
                 </div>
                 <button 
-                  onClick={() => setShowTaxiModal(false)}
+                  onClick={closeModal}
                   className="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-foreground hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
                 >
                   <X className="w-5 h-5" />
@@ -687,7 +717,7 @@ export default function ServiciosPage() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xl flex flex-col justify-end"
           >
-            <div className="absolute inset-0 -z-10" onClick={() => setShowBusModal(false)} />
+            <div className="absolute inset-0 -z-10" onClick={closeModal} />
             
             <motion.div
               initial={{ y: "100%" }}
@@ -704,7 +734,7 @@ export default function ServiciosPage() {
                   <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Terminales y conexiones foráneas en Papantla</p>
                 </div>
                 <button 
-                  onClick={() => setShowBusModal(false)}
+                  onClick={closeModal}
                   className="w-10 h-10 rounded-full bg-gray-100 dark:bg-white/5 flex items-center justify-center text-foreground hover:bg-gray-200 dark:hover:bg-white/10 transition-colors"
                 >
                   <X className="w-5 h-5" />

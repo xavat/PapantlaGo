@@ -106,7 +106,7 @@ export default function MapaPage() {
       </main>
 
       {/* Legend / Quick Links - Absolute Floating */}
-      <div className="absolute bottom-32 left-6 right-6 z-[1000] flex gap-2 overflow-x-auto no-scrollbar py-2">
+      <div className="absolute bottom-6 left-6 right-6 z-[1000] flex gap-2 overflow-x-auto no-scrollbar py-2">
         {categories.map((cat) => (
           <button
             key={cat.label}

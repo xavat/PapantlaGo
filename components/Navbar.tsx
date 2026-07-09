@@ -29,6 +29,9 @@ export default function Navbar() {
     window.scrollTo(0, 0);
   }, [pathname]);
 
+  // Hide Navbar completely on the Map page to prevent UI overlap anomalies
+  if (pathname === "/mapa" || pathname === "/map") return null;
+
   const isHome = pathname === "/";
   const useAdaptive = !isHome || scrolled;
 

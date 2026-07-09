@@ -15,6 +15,9 @@ const items = [
 export default function BottomNavbar() {
   const pathname = usePathname();
 
+  // Hide BottomNavbar completely on the Map page to prevent UI overlap anomalies
+  if (pathname === "/mapa" || pathname === "/map") return null;
+
   return (
     <div className="fixed bottom-6 left-6 right-6 z-50 md:hidden font-outfit">
       <div className="bg-white/5 dark:bg-white/5 backdrop-blur-[32px] saturate-[180%] rounded-[32px] px-6 py-4 flex items-center justify-between shadow-2xl border border-white/20 dark:border-white/10 transition-colors duration-500">

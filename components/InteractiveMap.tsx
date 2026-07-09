@@ -357,6 +357,8 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
           pitch: 60,
           bearing: 0,
           antialias: true,
+          dragRotate: true,
+          touchZoomRotate: true,
         });
 
         // Desnivel Pokémon GO offset
@@ -1025,15 +1027,24 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
 
       {/* 1. Alerta de Token de Respaldo */}
       {tokenError && (
-        <div className="absolute top-28 left-6 right-6 z-[1010] pointer-events-none">
-          <div className="bg-rose-950/95 text-white p-4 rounded-3xl shadow-xl border border-rose-500/20 backdrop-blur-xl flex flex-col gap-1 text-[11px] font-semibold leading-relaxed">
-            <div className="flex items-center gap-2 text-rose-200">
-              <Info className="w-4 h-4 text-rose-400 shrink-0" />
-              <span className="font-black uppercase tracking-wider">Modo de Respaldo Correcto (Leaflet)</span>
+        <div className="absolute top-28 left-6 right-6 z-[1010] pointer-events-auto">
+          <div className="bg-rose-950/95 text-white p-4.5 rounded-[26px] shadow-2xl border border-rose-500/20 backdrop-blur-xl flex items-center justify-between gap-4 text-[11px] font-semibold leading-relaxed">
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2 text-rose-200">
+                <Info className="w-4.5 h-4.5 text-rose-400 shrink-0" />
+                <span className="font-black uppercase tracking-wider text-[10px]">Modo de Respaldo (Leaflet)</span>
+              </div>
+              <p className="text-rose-300/80 mt-0.5">
+                Carga alternativa activa para garantizar alta estabilidad móvil.
+              </p>
             </div>
-            <p className="text-rose-300/80 mt-0.5 pointer-events-auto">
-              Lanzado exitosamente utilizando fallback Leaflet 2D para garantizar alta estabilidad móvil ante inconvenientes con Mapbox Token.
-            </p>
+            <button 
+              onClick={() => setTokenError(false)}
+              className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors shrink-0 pointer-events-auto"
+              title="Cerrar aviso"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
         </div>
       )}
@@ -1041,16 +1052,28 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
       {/* 3. Alerta sutil GPS en pantalla */}
       {gpsError && (
         <div className="absolute top-28 left-6 right-6 z-[1020] pointer-events-auto">
-          <div className="bg-amber-950/90 text-amber-200 p-4 rounded-2xl shadow-xl border border-amber-500/20 backdrop-blur-xl flex items-center justify-between gap-3 text-[11px] font-semibold leading-relaxed">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
-              <span>{gpsError}</span>
+          <div className="bg-amber-950/90 text-amber-200 p-4.5 rounded-[24px] shadow-xl border border-amber-500/20 backdrop-blur-xl flex flex-col gap-3 text-[11px] font-semibold leading-relaxed">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-2 text-amber-350">
+                <AlertTriangle className="w-4.5 h-4.5 text-amber-400 shrink-0" />
+                <span className="font-black uppercase tracking-wider text-[10px]">Alerta GPS</span>
+              </div>
+              <button 
+                onClick={() => setGpsError(null)}
+                className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-colors"
+                title="Cerrar aviso"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
             </div>
+            <p className="text-amber-300/80 leading-snug">
+              {gpsError}
+            </p>
             <button 
               onClick={startGpsWatching} 
-              className="px-2.5 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 rounded-lg flex items-center gap-1 transition-all active:scale-95 shrink-0"
+              className="w-full py-2.5 bg-amber-500 hover:bg-amber-600 text-white rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 font-bold uppercase text-[9px] tracking-widest shadow-md shadow-amber-500/10"
             >
-              <RefreshCw className="w-3 h-3" /> Reintentar
+              <RefreshCw className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '3s' }} /> Reintentar Conexión
             </button>
           </div>
         </div>

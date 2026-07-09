@@ -79,15 +79,14 @@ export default function MapaPage() {
             className="fixed top-28 left-6 right-6 z-[1002] bg-white/95 dark:bg-zinc-900/95 border border-black/5 dark:border-white/10 p-6 rounded-[30px] shadow-2xl backdrop-blur-xl flex flex-col gap-3"
           >
             <h2 className="text-md font-black uppercase text-foreground leading-tight tracking-tight">
-              Modo Aventurero Pokémon Go
+              MODO AVENTURERO
             </h2>
             <div className="text-xs text-gray-500 dark:text-zinc-400 font-semibold leading-relaxed flex flex-col gap-2">
               <p>
-                Rastrea tu ubicación en tiempo real en un mapa 2.5D. El compás y la orientación de la cámara giran 
-                de acuerdo al rumbo de tu dispositivo para brindarte una sensación inmersiva.
+                Siente la magia de Papantla con un mapa en tiempo real que se mueve contigo. Gracias al giro del compás y la orientación de la cámara alineados a tu dispositivo, vivirás una aventura inmersiva única por las calles y tradiciones de nuestra tierra. ¡Explorara!
               </p>
               <p className="font-bold text-[#F16B24]">
-                ¿Quieres probarlo ya? Activa el botón de "Caminata simulada" (<span className="inline-block text-purple-600 bg-purple-100 dark:bg-purple-950/40 p-1 rounded-md">🕹️ Modo Demo</span>) de la barra lateral derecha para simular un recorrido en vivo por el centro de Papantla.
+                ¿Quieres probarlo ya? Activa el botón de "Caminata simulada" (🕹️ Modo Demo) de la barra lateral derecha para simular un recorrido en vivo por el centro de Papantla.
               </p>
             </div>
             <button

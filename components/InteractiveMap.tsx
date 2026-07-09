@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "leaflet/dist/leaflet.css";
-import { Navigation, Compass, MapPin, Star, Info, Crosshair, X, Gamepad2, AlertTriangle, RefreshCw, Sun } from "lucide-react";
+import { Navigation, Compass, MapPin, Star, Info, Crosshair, X, Gamepad2, AlertTriangle, RefreshCw, Sun, Landmark } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -1076,6 +1076,29 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
 
       {/* 2. Controles Flotantes con Alto Z-Index (z-[1010]+) */}
       <div className="absolute top-1/2 -translate-y-1/2 right-6 z-[1010] flex flex-col gap-3 pointer-events-auto">
+        {/* 1. Botón de Caminata Simulada (Modo Demo) */}
+        <button
+          onClick={toggleDemoMode}
+          className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl active:scale-90 transition-all ${
+            isDemoActive
+              ? "bg-purple-600 border-purple-500 text-white animate-pulse"
+              : "bg-white/95 dark:bg-zinc-900/95 border-black/5 dark:border-white/10 text-foreground"
+          }`}
+          title={isDemoActive ? "Desactivar caminata simulada" : "Activar caminata simulada (Modo Demo)"}
+        >
+          <Gamepad2 className={`w-5.5 h-5.5 ${isDemoActive ? "text-white" : "text-purple-500"}`} />
+        </button>
+
+        {/* 2. Botón de Kiosco (Centrar Atracciones) */}
+        <button
+          onClick={centerToMainPoints}
+          className="w-12 h-12 rounded-2xl bg-white/95 dark:bg-zinc-900/95 border border-black/5 dark:border-white/10 text-foreground flex items-center justify-center shadow-2xl active:scale-90 transition-all"
+          title="Centrar en el kiosco / atracciones"
+        >
+          <Landmark className="w-5.5 h-5.5 text-primary" />
+        </button>
+
+        {/* 3. Botón de Modo Sol */}
         <button
           onClick={() => setIsSunlightMode((prev) => !prev)}
           className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl active:scale-95 transition-all ${
@@ -1088,14 +1111,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
           <Sun className="w-5.5 h-5.5" />
         </button>
 
-        <button
-          onClick={centerToMainPoints}
-          className="w-12 h-12 rounded-2xl bg-white/95 dark:bg-zinc-900/95 border border-black/5 dark:border-white/10 text-foreground flex items-center justify-center shadow-2xl active:scale-90 transition-all"
-          title="Centrar en atracciones principales"
-        >
-          <Gamepad2 className="w-5.5 h-5.5 text-primary" />
-        </button>
-
+        {/* 4. Botón de Mi Ubicación (GPS) */}
         <button
           onClick={triggerCenter}
           className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl active:scale-95 transition-all ${

@@ -9,6 +9,7 @@ import { fuzzyMatch } from "@/utils/search";
 
 const destinations = [
   {
+    id: "tajin",
     title: "Zona Arqueológica El Tajín",
     subtitle: "Patrimonio Mundial UNESCO",
     imageUrl: "/destinos/tajin.jpg",
@@ -16,6 +17,7 @@ const destinations = [
     tag: "Historia",
   },
   {
+    id: "centro-historico",
     title: "Centro Histórico",
     subtitle: "Pueblo Mágico de Papantla",
     imageUrl: "/destinos/centro.jpg",
@@ -23,6 +25,7 @@ const destinations = [
     tag: "Cultura",
   },
   {
+    id: "mural-de-la-cultura-totonaca",
     title: "Mural de la Cultura Totonaca",
     subtitle: "Obra de Teodoro Cano",
     imageUrl: "/destinos/mural.jpg",
@@ -30,6 +33,7 @@ const destinations = [
     tag: "Arte",
   },
   {
+    id: "monumento-al-volador",
     title: "Monumento al Volador",
     subtitle: "Vista Panorámica",
     imageUrl: "/destinos/volador.jpg",
@@ -37,6 +41,7 @@ const destinations = [
     tag: "Mirador",
   },
   {
+    id: "zona-arqueologica-coyuxquihui",
     title: "Zona Arqueológica Coyuxquihui",
     subtitle: "Legado Totonaca",
     imageUrl: "/destinos/coyuxquihui.jpg",
@@ -44,6 +49,7 @@ const destinations = [
     tag: "Aventura",
   },
   {
+    id: "la-bocana",
     title: "La Bocana",
     subtitle: "Unión de Río y Mar",
     imageUrl: "/destinos/bocana.jpg",
@@ -51,6 +57,7 @@ const destinations = [
     tag: "Naturaleza",
   },
   {
+    id: "rancho-playa",
     title: "Rancho Playa",
     subtitle: "Playa",
     imageUrl: "/destinos/rancho-playa.jpg",
@@ -102,7 +109,7 @@ export default function DestinosPage() {
           {filteredDestinations.map((dest, i) => (
             <Link
               key={dest.title}
-              href={`/destinos/${dest.title.toLowerCase().replace(/\s+/g, '-')}`}
+              href={`/destinos/${dest.id}`}
             >
               <motion.div
                 layout

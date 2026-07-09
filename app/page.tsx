@@ -28,14 +28,14 @@ const homeItems = [
     subtitle: "Historia en Piedra",
     desc: "La cosmogonía de un pueblo grabada para la eternidad",
     img: "/destinos/mural.jpg",
-    id: "mural-totonaca"
+    id: "mural-de-la-cultura-totonaca"
   },
   {
     title: "Monumento al Volador",
     subtitle: "Símbolo de Papantla",
     desc: "Homenaje al ritual ancestral que desafía las alturas",
     img: "/destinos/volador.jpg",
-    id: "monumento-volador"
+    id: "monumento-al-volador"
   },
 ];
 
@@ -259,7 +259,7 @@ export default function Home() {
                 <p className="text-gray-600 dark:text-gray-400 text-lg font-medium leading-relaxed">
                    Papantla es un crisol de tradiciones milenarias Descubre el legado Totonaca y el arte que nace de la tierra
                 </p>
-                <Link href="/destinos/mural-a-la-cultura-totonaca">
+                <Link href="/destinos/mural-de-la-cultura-totonaca">
                   <button className="px-12 py-5 bg-black dark:bg-white text-white dark:text-black rounded-3xl font-black uppercase text-[11px] tracking-widest hover:bg-primary dark:hover:bg-primary hover:text-white transition-all shadow-2xl">
                      Saber más de nuestra cultura
                   </button>

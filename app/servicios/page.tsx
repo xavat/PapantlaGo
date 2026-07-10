@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useDragControls } from "framer-motion";
 import { Briefcase, Phone, Map, Bus, Car, Users, ChevronRight, PhoneCall, Search, Smartphone, X, MapPin, Globe, AlertTriangle } from "lucide-react";
 import { useState, useMemo, useEffect, useRef, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -243,44 +243,7 @@ function ServiciosContent() {
     router.push("/servicios");
   };
 
-  // Touch Swipe Down Logic to close Directorio Bottom Sheets (Smooth translation offset)
-  const [dragStartY, setDragStartY] = useState<number | null>(null);
-  const [translateY, setTranslateY] = useState(0);
-  const [isDragging, setIsDragging] = useState(false);
-
-  const handleTouchStart = (e: React.TouchEvent) => {
-    const scrollable = e.currentTarget.querySelector(".overflow-y-auto");
-    const isAtTop = !scrollable || scrollable.scrollTop <= 0;
-    if (isAtTop) {
-      setDragStartY(e.touches[0].clientY);
-      setIsDragging(true);
-    }
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (dragStartY === null || !isDragging) return;
-    const currentY = e.touches[0].clientY;
-    const diff = currentY - dragStartY;
-    if (diff > 0) {
-      setTranslateY(diff);
-    } else {
-      setTranslateY(0);
-    }
-  };
-
-  const handleTouchEnd = (e: React.TouchEvent) => {
-    if (dragStartY === null) return;
-    const currentY = e.changedTouches[0].clientY;
-    const diff = currentY - dragStartY;
-    setIsDragging(false);
-    setDragStartY(null);
-    if (diff > 120) {
-      closeModal();
-      setTranslateY(0);
-    } else {
-      setTranslateY(0);
-    }
-  };
+  const dragControls = useDragControls();
 
   const openWhatsApp = (phone: string, message: string) => {
     const cleanPhone = phone.replace(/[^0-9]/g, "");
@@ -623,12 +586,15 @@ function ServiciosContent() {
             <div className="absolute inset-0 -z-10" onClick={closeModal} />
             
             <motion.div
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              style={{
-                transform: `translateY(${translateY}px)`,
-                transition: isDragging ? "none" : "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)"
+              drag="y"
+              dragControls={dragControls}
+              dragListener={false}
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={{ top: 0, bottom: 0.85 }}
+              onDragEnd={(e, info) => {
+                if (info.offset.y > 100 || info.velocity.y > 0.4) {
+                  closeModal();
+                }
               }}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
@@ -636,8 +602,11 @@ function ServiciosContent() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="bg-white dark:bg-zinc-950 w-full max-h-[85vh] rounded-t-[40px] flex flex-col border-t border-black/5 dark:border-white/10 shadow-2xl relative overflow-hidden"
             >
-              {/* Drag Handle superior */}
-              <div className="w-full py-4 flex items-center justify-center cursor-row-resize flex-shrink-0 select-none touch-none">
+              {/* Drag Handle superior que controla el arrastre */}
+              <div 
+                onPointerDown={(e) => dragControls.start(e)}
+                className="w-full py-4 flex items-center justify-center cursor-row-resize flex-shrink-0 select-none touch-none"
+              >
                 <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full" />
               </div>
               
@@ -799,12 +768,15 @@ function ServiciosContent() {
             <div className="absolute inset-0 -z-10" onClick={closeModal} />
             
             <motion.div
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              style={{
-                transform: `translateY(${translateY}px)`,
-                transition: isDragging ? "none" : "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)"
+              drag="y"
+              dragControls={dragControls}
+              dragListener={false}
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={{ top: 0, bottom: 0.85 }}
+              onDragEnd={(e, info) => {
+                if (info.offset.y > 100 || info.velocity.y > 0.4) {
+                  closeModal();
+                }
               }}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
@@ -813,7 +785,10 @@ function ServiciosContent() {
               className="bg-white dark:bg-zinc-950 w-full max-h-[85vh] rounded-t-[40px] flex flex-col border-t border-black/5 dark:border-white/10 shadow-2xl relative overflow-hidden"
             >
               {/* Drag Handle superior */}
-              <div className="w-full py-4 flex items-center justify-center cursor-row-resize flex-shrink-0 select-none touch-none">
+              <div 
+                onPointerDown={(e) => dragControls.start(e)}
+                className="w-full py-4 flex items-center justify-center cursor-row-resize flex-shrink-0 select-none touch-none"
+              >
                 <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full" />
               </div>
               
@@ -940,12 +915,15 @@ function ServiciosContent() {
             <div className="absolute inset-0 -z-10" onClick={closeModal} />
             
             <motion.div
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              style={{
-                transform: `translateY(${translateY}px)`,
-                transition: isDragging ? "none" : "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)"
+              drag="y"
+              dragControls={dragControls}
+              dragListener={false}
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={{ top: 0, bottom: 0.85 }}
+              onDragEnd={(e, info) => {
+                if (info.offset.y > 100 || info.velocity.y > 0.4) {
+                  closeModal();
+                }
               }}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
@@ -953,8 +931,11 @@ function ServiciosContent() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="bg-white dark:bg-zinc-950 w-full max-h-[85vh] rounded-t-[40px] flex flex-col border-t border-black/5 dark:border-white/10 shadow-2xl relative overflow-hidden"
             >
-              {/* Drag Handle superior */}
-              <div className="w-full py-4 flex items-center justify-center cursor-row-resize flex-shrink-0 select-none touch-none">
+              {/* Drag Handle superior que controla el arrastre */}
+              <div 
+                onPointerDown={(e) => dragControls.start(e)}
+                className="w-full py-4 flex items-center justify-center cursor-row-resize flex-shrink-0 select-none touch-none"
+              >
                 <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full" />
               </div>
               
@@ -1058,12 +1039,15 @@ function ServiciosContent() {
             <div className="absolute inset-0 -z-10" onClick={closeModal} />
             
             <motion.div
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-              style={{
-                transform: `translateY(${translateY}px)`,
-                transition: isDragging ? "none" : "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)"
+              drag="y"
+              dragControls={dragControls}
+              dragListener={false}
+              dragConstraints={{ top: 0, bottom: 0 }}
+              dragElastic={{ top: 0, bottom: 0.85 }}
+              onDragEnd={(e, info) => {
+                if (info.offset.y > 100 || info.velocity.y > 0.4) {
+                  closeModal();
+                }
               }}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
@@ -1071,8 +1055,11 @@ function ServiciosContent() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="bg-white dark:bg-zinc-950 w-full max-h-[85vh] rounded-t-[40px] flex flex-col border-t border-red-550/20 dark:border-red-550/30 shadow-2xl relative overflow-hidden"
             >
-              {/* Drag Handle superior */}
-              <div className="w-full py-4 flex items-center justify-center cursor-row-resize flex-shrink-0 select-none touch-none">
+              {/* Drag Handle superior que controla el arrastre */}
+              <div 
+                onPointerDown={(e) => dragControls.start(e)}
+                className="w-full py-4 flex items-center justify-center cursor-row-resize flex-shrink-0 select-none touch-none"
+              >
                 <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full" />
               </div>
               

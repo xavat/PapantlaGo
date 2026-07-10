@@ -107,15 +107,136 @@ export default function Home() {
     }
   };
 
+  const searchableDataset = useMemo(() => {
+    // 1. Core tourism items (destinos, sabor, hospedaje)
+    const baseItems = tourismData.map(item => ({
+      id: item.id,
+      title: item.title,
+      subtitle: item.subtitle,
+      description: item.description,
+      imageUrl: item.imageUrl,
+      category: item.category,
+      link: `/${item.category}/${item.id}`
+    }));
+
+    // 2. Events items
+    const eventItems = [
+      {
+        id: "cumbre-tajin",
+        title: "Cumbre Tajín",
+        subtitle: "Festival de la Identidad",
+        description: "Festival cultural internacional de la cultura totonaca en el Parque Temático Takilhsukut.",
+        imageUrl: "/images/events/cumbre_tajin.jpeg",
+        category: "eventos",
+        link: "/eventos/cumbre-tajin"
+      },
+      {
+        id: "festival-xanath",
+        title: "Festival Xanath",
+        subtitle: "Espectáculo Épico",
+        description: "Obra teatral y dancística folklórica del pueblo totonaca y la vainilla.",
+        imageUrl: "/images/events/festival_xanath.jpg",
+        category: "eventos",
+        link: "/eventos/festival-xanath"
+      },
+      {
+        id: "corpus-christi",
+        title: "Feria de Corpus Christi",
+        subtitle: "Máxima Tradición",
+        description: "Danzas tradicionales de voladores, celebraciones de fe y cultura.",
+        imageUrl: "/images/events/corpus_christi.jpg",
+        category: "eventos",
+        link: "/eventos/corpus-christi"
+      },
+      {
+        id: "carnaval-alegria",
+        title: 'Carnaval de Papantla "Ilimakxtum"',
+        subtitle: "Magia y Color",
+        description: "Carnaval regional con folklore, comparsas y colorido.",
+        imageUrl: "/images/events/carnaval_alegria.jpeg",
+        category: "eventos",
+        link: "/eventos/carnaval-alegria"
+      }
+    ];
+
+    // 3. Services (Directories and emergency direct matches)
+    const serviceItems = [
+      {
+        id: "guides-dir",
+        title: "Directorio de Guías Acreditados",
+        subtitle: "Servicios Turísticos",
+        description: "Guías oficiales de turismo certificados por SECTUR: Fernando Cruz, Diego Castaño, Juan Ángel García, Eusebio Castaño, Antonio Hernández.",
+        imageUrl: "https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&q=80",
+        category: "servicios",
+        link: "/servicios?modal=guides"
+      },
+      {
+        id: "taxis-dir",
+        title: "Directorio de Taxis y Transporte",
+        subtitle: "Servicios Públicos",
+        description: "Taxis locales y foráneos las 24 horas: Taxi Voladores, Taxi Express Papantla, Radio Taxi.",
+        imageUrl: "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&q=80",
+        category: "servicios",
+        link: "/servicios?modal=taxi"
+      },
+      {
+        id: "buses-dir",
+        title: "Directorio de Autobuses (ADO)",
+        subtitle: "Servicios de Transporte",
+        description: "Líneas de viaje y horarios en la Terminal de Autobuses ADO de Papantla.",
+        imageUrl: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&q=80",
+        category: "servicios",
+        link: "/servicios?modal=bus"
+      },
+      {
+        id: "emergency-dir",
+        title: "Líneas y Números de Emergencia",
+        subtitle: "Seguridad y Auxilio 24h",
+        description: "Contactos urgentes: Protección Civil de Papantla (7848420175, Whatsapp 7841368797), Policía Municipal (7848420075) y Tránsito (7848420039).",
+        imageUrl: "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?auto=format&fit=crop&q=80",
+        category: "servicios",
+        link: "/servicios?modal=emergency"
+      },
+      {
+        id: "pc-papantla",
+        title: "Protección Civil Papantla",
+        subtitle: "Servicios de Emergencia",
+        description: "Teléfono de auxilio: 7848420175, WhatsApp: 7841368797. Atención del orden civil en emergencias.",
+        imageUrl: "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?auto=format&fit=crop&q=80",
+        category: "servicios",
+        link: "/servicios?modal=emergency"
+      },
+      {
+        id: "policia-municipal",
+        title: "Policía Municipal Papantla",
+        subtitle: "Servicios de Emergencia",
+        description: "Teléfono de auxilio de policía: 7848420075. Seguridad ciudadana y orden público.",
+        imageUrl: "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?auto=format&fit=crop&q=80",
+        category: "servicios",
+        link: "/servicios?modal=emergency"
+      },
+      {
+        id: "transito-municipal",
+        title: "Tránsito Municipal Papantla",
+        subtitle: "Servicios de Emergencia",
+        description: "Teléfono de auxilio vial de tránsito: 7848420039. Asistencia vial vialidades e incidencias de tráfico.",
+        imageUrl: "https://images.unsplash.com/photo-1581579438747-1dc8d17bbce4?auto=format&fit=crop&q=80",
+        category: "servicios",
+        link: "/servicios?modal=emergency"
+      }
+    ];
+
+    return [...baseItems, ...eventItems, ...serviceItems];
+  }, []);
+
   const searchResults = useMemo(() => {
     if (!searchQuery) return [];
-    return tourismData.filter(item => 
+    return searchableDataset.filter(item => 
       fuzzyMatch(searchQuery, item.title) ||
       fuzzyMatch(searchQuery, item.subtitle) ||
-      fuzzyMatch(searchQuery, item.tag) ||
       fuzzyMatch(searchQuery, item.description)
     ).slice(0, 5);
-  }, [searchQuery]);
+  }, [searchQuery, searchableDataset]);
 
   return (
     <div className="flex flex-col bg-white dark:bg-black transition-colors duration-500 overflow-x-hidden">
@@ -159,7 +280,7 @@ export default function Home() {
                   <div className="w-2 h-2 bg-primary rotate-45" />
                </div>
 
-               <Link href="#explore" scroll={true}>
+               <Link href="#culture-carousel" scroll={true}>
                     <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -214,7 +335,7 @@ export default function Home() {
                           {searchResults.map((item) => (
                             <Link 
                               key={item.id} 
-                              href={`/${item.category}/${item.id}`}
+                              href={item.link}
                               className="flex items-center gap-4 p-4 hover:bg-primary/10 rounded-[24px] transition-colors group"
                             >
                               <div className="w-12 h-12 rounded-xl overflow-hidden relative flex-shrink-0">
@@ -282,7 +403,7 @@ export default function Home() {
       </section>
 
       {/* SECTION 3: HISTORIA Y CULTURA (Collage carousel at the bottom) */}
-      <section className="py-24 px-6 bg-white dark:bg-black">
+      <section id="culture-carousel" className="py-24 px-6 bg-white dark:bg-black">
           <div className="max-w-[1400px] mx-auto flex flex-col gap-12 text-center">
              <div className="flex flex-col items-center gap-4">
                 <Landmark className="text-primary w-10 h-10" />

@@ -58,6 +58,8 @@ const months = [
 export default function EventosPage() {
   const [currentDate, setCurrentDate] = useState(new Date(2026, 5, 1)); // Start at June 2026
   const [selectedEventId, setSelectedEventId] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
 
   const viewMonth = currentDate.getMonth();
   const viewYear = currentDate.getFullYear();
@@ -70,9 +72,30 @@ export default function EventosPage() {
     return new Date(viewYear, viewMonth, 1).getDay();
   }, [viewMonth, viewYear]);
 
+  const filteredFeaturedEvents = useMemo(() => {
+    if (!searchQuery) return featuredEvents;
+    const query = searchQuery.toLowerCase();
+    return featuredEvents.filter(e => 
+      e.title.toLowerCase().includes(query) || 
+      e.date.toLowerCase().includes(query)
+    );
+  }, [searchQuery]);
+
+  const filteredAllEvents = useMemo(() => {
+    if (!searchQuery) return allEvents;
+    const query = searchQuery.toLowerCase();
+    return allEvents.filter(e => 
+      e.title.toLowerCase().includes(query) ||
+      e.date.toLowerCase().includes(query)
+    );
+  }, [searchQuery]);
+
   const eventsInMonth = useMemo(() => {
-    return allEvents.filter(e => e.month === viewMonth && e.year === viewYear);
-  }, [viewMonth, viewYear]);
+    const list = allEvents.filter(e => e.month === viewMonth && e.year === viewYear);
+    if (!searchQuery) return list;
+    const query = searchQuery.toLowerCase();
+    return list.filter(e => e.title.toLowerCase().includes(query));
+  }, [viewMonth, viewYear, searchQuery]);
 
   const prevMonth = () => {
     setCurrentDate(new Date(viewYear, viewMonth - 1, 1));
@@ -102,7 +125,17 @@ export default function EventosPage() {
             <h1 className="text-4xl font-black tracking-tighter text-foreground">Eventos</h1>
           </motion.div>
           <div className="flex gap-2">
-            <button className="p-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full text-foreground/70">
+            <button 
+              onClick={() => {
+                setShowSearch(!showSearch);
+                if (showSearch) setSearchQuery("");
+              }}
+              className={`p-3 rounded-full border transition-all ${
+                showSearch 
+                  ? "bg-primary text-white border-primary shadow-lg shadow-primary/20 scale-105" 
+                  : "bg-white/5 border-white/10 text-foreground/70 hover:bg-white/10"
+              }`}
+            >
               <Search className="w-5 h-5" />
             </button>
             <button className="p-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full text-foreground/70">
@@ -113,6 +146,33 @@ export default function EventosPage() {
         <p className="text-[11px] uppercase tracking-widest text-muted-foreground font-black opacity-70 leading-tight max-w-xs">
           Descubre la magia, cultura y tradición de Papantla a través de sus festividades.
         </p>
+
+        {showSearch && (
+          <motion.div 
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="relative group mt-2"
+          >
+            <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-450 transition-colors" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Buscar eventos o festividades..."
+              className="w-full bg-gray-100 dark:bg-white/5 border border-transparent dark:border-white/5 rounded-[30px] py-5 pl-16 pr-12 text-sm font-bold focus:ring-4 focus:ring-primary/10 outline-none transition-all shadow-inner text-foreground"
+              autoFocus
+            />
+            {searchQuery && (
+              <button 
+                onClick={() => setSearchQuery("")} 
+                className="absolute right-5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary font-black text-xs uppercase"
+              >
+                Limpiar
+              </button>
+            )}
+          </motion.div>
+        )}
       </header>
 
       {/* FEATURED CAROUSEL */}
@@ -122,29 +182,36 @@ export default function EventosPage() {
         </div>
         
         <div className="flex gap-5 overflow-x-auto pb-8 -mx-6 px-6 no-scrollbar snap-x">
-          {featuredEvents.map((event, i) => (
-            <motion.div
-              key={i}
-              whileTap={{ scale: 0.96 }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.1 }}
-              className="min-w-[300px] h-[420px] relative rounded-[48px] overflow-hidden snap-start shadow-2xl group cursor-pointer"
-            >
-              <Link href={`/eventos/${event.id}`}>
-                <img 
-                  src={event.img} 
-                  alt={event.title} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className={`absolute inset-0 bg-gradient-to-t ${event.color}/80 via-transparent to-transparent`} />
-                <div className="absolute bottom-10 left-8 right-8">
-                  <span className="text-[12px] font-bold uppercase text-white/90 tracking-widest mb-2 block">{event.date}</span>
-                  <h3 className="text-3xl font-black text-white leading-tight tracking-tight drop-shadow-md">{event.title}</h3>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
+          {filteredFeaturedEvents.length > 0 ? (
+            filteredFeaturedEvents.map((event, i) => (
+              <motion.div
+                key={i}
+                whileTap={{ scale: 0.96 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.1 }}
+                className="min-w-[300px] h-[420px] relative rounded-[48px] overflow-hidden snap-start shadow-2xl group cursor-pointer"
+              >
+                <Link href={`/eventos/${event.id}`}>
+                  <img 
+                    src={event.img} 
+                    alt={event.title} 
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className={`absolute inset-0 bg-gradient-to-t ${event.color}/80 via-transparent to-transparent`} />
+                  <div className="absolute bottom-10 left-8 right-8">
+                    <span className="text-[12px] font-bold uppercase text-white/90 tracking-widest mb-2 block">{event.date}</span>
+                    <h3 className="text-3xl font-black text-white leading-tight tracking-tight drop-shadow-md">{event.title}</h3>
+                  </div>
+                </Link>
+              </motion.div>
+            ))
+          ) : (
+            <div className="py-20 flex flex-col items-center justify-center text-center w-full bg-white/5 rounded-[36px] border border-white/5 p-8 gap-3">
+              <Search className="w-8 h-8 text-gray-400" />
+              <p className="font-bold text-gray-400 text-sm">No se encontraron eventos destacados</p>
+            </div>
+          )}
         </div>
       </section>
 
@@ -254,7 +321,7 @@ export default function EventosPage() {
                    className="flex flex-col gap-4"
                 >
                   <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground opacity-40 mb-2">Próximos Eventos</h3>
-                  {allEvents.filter(e => e.month >= viewMonth || e.year > viewYear).slice(0, 5).map((ev) => (
+                  {(searchQuery ? filteredAllEvents : allEvents.filter(e => e.month >= viewMonth || e.year > viewYear)).slice(0, 5).map((ev) => (
                     <motion.div
                       key={ev.id}
                       initial={{ opacity: 0, x: 20 }}

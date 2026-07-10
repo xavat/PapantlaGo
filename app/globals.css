@@ -90,3 +90,12 @@ html {
 .premium-popup .leaflet-popup-close-button {
   @apply hidden;
 }
+
+/* Gallery/Modal Open Stacking context corrections to prevent layout element overlap leakage */
+body.gallery-open nav,
+body.gallery-open .fixed.bottom-6 {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}

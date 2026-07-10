@@ -222,6 +222,19 @@ function ServiciosContent() {
   const showBusModal = modalParam === "bus";
   const showEmergencyModal = modalParam === "emergency";
 
+  const isAnyModalOpen = showGuidesModal || showTaxiModal || showBusModal || showEmergencyModal;
+
+  useEffect(() => {
+    if (isAnyModalOpen) {
+      document.body.classList.add("gallery-open");
+    } else {
+      document.body.classList.remove("gallery-open");
+    }
+    return () => {
+      document.body.classList.remove("gallery-open");
+    };
+  }, [isAnyModalOpen]);
+
   const openModal = (type: "guides" | "taxi" | "bus" | "emergency") => {
     router.push(`/servicios?modal=${type}`);
   };
@@ -288,6 +301,37 @@ function ServiciosContent() {
     })).filter(section => section.items.length > 0);
   }, [searchQuery]);
 
+  const directSearchResults = useMemo(() => {
+    if (!searchQuery) return null;
+    const query = searchQuery.toLowerCase();
+    
+    const matchedGuides = touristGuides.filter(g => 
+      g.name.toLowerCase().includes(query) ||
+      g.credential.toLowerCase().includes(query) ||
+      g.services.some(s => s.toLowerCase().includes(query)) ||
+      g.languages.some(l => l.toLowerCase().includes(query))
+    );
+
+    const matchedTaxis = taxiDirectoryList.filter(t => 
+      t.name.toLowerCase().includes(query) ||
+      t.phone.includes(query) ||
+      (t.description && t.description.toLowerCase().includes(query))
+    );
+
+    const matchedEmergencies = emergencyList.filter(e => 
+      e.name.toLowerCase().includes(query) ||
+      e.phone.includes(query) ||
+      (e.description && e.description.toLowerCase().includes(query))
+    );
+
+    return {
+      guides: matchedGuides,
+      taxis: matchedTaxis,
+      emergencies: matchedEmergencies,
+      hasResults: matchedGuides.length > 0 || matchedTaxis.length > 0 || matchedEmergencies.length > 0
+    };
+  }, [searchQuery]);
+
   const filteredGuides = useMemo(() => {
     return touristGuides.filter(guide => {
       const matchesSearch = guide.name.toLowerCase().includes(searchGuideQuery.toLowerCase()) ||
@@ -332,6 +376,103 @@ function ServiciosContent() {
       </header>
 
       <div className="px-6 flex flex-col gap-10">
+        {/* Direct Search Results for Servicios */}
+        {searchQuery && directSearchResults && (
+          <div className="flex flex-col gap-6 animate-fade-in relative z-20">
+            <div className="flex items-center justify-between">
+              <h2 className="text-xl font-black tracking-tight uppercase text-secondary">Resultados de Búsqueda ({directSearchResults.guides.length + directSearchResults.taxis.length + directSearchResults.emergencies.length})</h2>
+              <button 
+                onClick={() => setSearchQuery("")}
+                className="text-xs font-black uppercase text-gray-400 tracking-wider hover:text-foreground"
+              >
+                Limpiar
+              </button>
+            </div>
+
+            {directSearchResults.hasResults ? (
+              <div className="flex flex-col gap-4">
+                {/* Matched Emergencies */}
+                {directSearchResults.emergencies.map(e => (
+                  <div key={e.name} className="bg-gradient-to-br from-rose-800 to-red-950 p-6 rounded-[32px] border border-red-500/20 text-white flex flex-col gap-4 shadow-xl">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <h4 className="font-extrabold text-white text-md uppercase">{e.name}</h4>
+                        <p className="text-[10px] text-red-200 mt-1">{e.description}</p>
+                      </div>
+                      <div className="text-red-300 font-extrabold text-sm">{e.phone}</div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-3">
+                      <a 
+                        href={`tel:${e.phone}`}
+                        className="py-3 bg-red-650 hover:bg-red-700 text-white text-[10px] font-black text-center uppercase tracking-wider rounded-xl transition-all"
+                      >
+                        Llamar
+                      </a>
+                      {e.whatsapp ? (
+                        <button 
+                          onClick={() => openWhatsApp(e.whatsapp, "Necesito asistencia de emergencia")}
+                          className="py-3 bg-green-500 hover:bg-green-600 text-white text-[10px] font-black text-center uppercase tracking-wider rounded-xl transition-all"
+                        >
+                          WhatsApp
+                        </button>
+                      ) : (
+                        <div className="bg-white/5 rounded-xl border border-white/10 flex items-center justify-center text-white/40 text-[9px] uppercase font-black">
+                          No WhatsApp
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+
+                {/* Matched Guides */}
+                {directSearchResults.guides.map(g => (
+                  <div 
+                    key={g.name} 
+                    onClick={() => {
+                      setSearchGuideQuery(g.name);
+                      openModal("guides");
+                    }}
+                    className="bg-white dark:bg-white/5 p-6 rounded-[32px] border border-black/5 dark:border-white/10 flex items-center justify-between hover:border-primary/30 transition-all cursor-pointer shadow-lg group"
+                  >
+                    <div className="flex-1 min-w-0 pr-4">
+                      <span className="text-[8px] bg-primary/10 text-primary px-2.5 py-0.5 rounded-full font-black tracking-widest uppercase mb-1.5 inline-block">Guía Turístico</span>
+                      <h4 className="font-extrabold text-foreground group-hover:text-primary transition-colors text-sm uppercase truncate">{g.name}</h4>
+                      <p className="text-[10px] text-gray-400 truncate mt-0.5">{g.services[0]} - Idioma: {g.languages.join(", ")}</p>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-gray-400 group-hover:translate-x-1 transition-transform shrink-0" />
+                  </div>
+                ))}
+
+                {/* Matched Taxis */}
+                {directSearchResults.taxis.map(t => (
+                  <div 
+                    key={t.name}
+                    onClick={() => {
+                      setSearchTaxiQuery(t.name);
+                      openModal("taxi");
+                    }}
+                    className="bg-white dark:bg-white/5 p-6 rounded-[32px] border border-black/5 dark:border-white/10 flex items-center justify-between hover:border-secondary/30 transition-all cursor-pointer shadow-lg group"
+                  >
+                    <div className="flex-1 min-w-0 pr-4">
+                      <span className="text-[8px] bg-secondary/10 text-secondary px-2.5 py-0.5 rounded-full font-black tracking-widest uppercase mb-1.5 inline-block font-outfit">Transporte</span>
+                      <h4 className="font-extrabold text-foreground group-hover:text-secondary transition-colors text-sm uppercase truncate">{t.name}</h4>
+                      <p className="text-[10px] text-gray-400 truncate mt-0.5">{t.description || t.phone}</p>
+                    </div>
+                    <ChevronRight className="w-5 h-5 text-gray-400 group-hover:translate-x-1 transition-transform shrink-0" />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="py-12 bg-white dark:bg-white/5 rounded-[32px] border border-black/5 dark:border-white/10 text-center flex flex-col items-center justify-center gap-3">
+                <Search className="w-8 h-8 text-gray-300 dark:text-zinc-700" />
+                <p className="font-bold text-gray-400 text-sm">No encontramos ningún servicio asociado a "{searchQuery}"</p>
+              </div>
+            )}
+
+            <div className="h-[1px] bg-black/5 dark:bg-white/5 my-4" />
+          </div>
+        )}
+
         <AnimatePresence>
           {filteredServices.map((section) => (
             <motion.section 
@@ -495,7 +636,10 @@ function ServiciosContent() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="bg-white dark:bg-zinc-950 w-full max-h-[85vh] rounded-t-[40px] flex flex-col border-t border-black/5 dark:border-white/10 shadow-2xl relative overflow-hidden"
             >
-              <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full mx-auto my-4 flex-shrink-0" />
+              {/* Drag Handle superior */}
+              <div className="w-full py-4 flex items-center justify-center cursor-row-resize flex-shrink-0 select-none touch-none">
+                <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full" />
+              </div>
               
               <div className="px-6 pb-4 flex justify-between items-start flex-shrink-0">
                 <div>
@@ -668,7 +812,10 @@ function ServiciosContent() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="bg-white dark:bg-zinc-950 w-full max-h-[85vh] rounded-t-[40px] flex flex-col border-t border-black/5 dark:border-white/10 shadow-2xl relative overflow-hidden"
             >
-              <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full mx-auto my-4 flex-shrink-0" />
+              {/* Drag Handle superior */}
+              <div className="w-full py-4 flex items-center justify-center cursor-row-resize flex-shrink-0 select-none touch-none">
+                <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full" />
+              </div>
               
               <div className="px-6 pb-4 flex justify-between items-start flex-shrink-0">
                 <div>
@@ -806,7 +953,10 @@ function ServiciosContent() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="bg-white dark:bg-zinc-950 w-full max-h-[85vh] rounded-t-[40px] flex flex-col border-t border-black/5 dark:border-white/10 shadow-2xl relative overflow-hidden"
             >
-              <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full mx-auto my-4 flex-shrink-0" />
+              {/* Drag Handle superior */}
+              <div className="w-full py-4 flex items-center justify-center cursor-row-resize flex-shrink-0 select-none touch-none">
+                <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full" />
+              </div>
               
               <div className="px-6 pb-4 flex justify-between items-start flex-shrink-0 border-b border-black/5 dark:border-white/5">
                 <div>
@@ -921,7 +1071,10 @@ function ServiciosContent() {
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="bg-white dark:bg-zinc-950 w-full max-h-[85vh] rounded-t-[40px] flex flex-col border-t border-red-550/20 dark:border-red-550/30 shadow-2xl relative overflow-hidden"
             >
-              <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full mx-auto my-4 flex-shrink-0" />
+              {/* Drag Handle superior */}
+              <div className="w-full py-4 flex items-center justify-center cursor-row-resize flex-shrink-0 select-none touch-none">
+                <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full" />
+              </div>
               
               <div className="px-6 pb-4 flex justify-between items-start flex-shrink-0">
                 <div>

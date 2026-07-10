@@ -165,6 +165,7 @@ export default function DetailView({
   useEffect(() => {
     if (activeImage === null) return;
 
+    document.body.classList.add("gallery-open");
     window.history.pushState({ galleryOpen: true }, "");
 
     const handlePopState = () => {
@@ -174,6 +175,7 @@ export default function DetailView({
     window.addEventListener("popstate", handlePopState);
 
     return () => {
+      document.body.classList.remove("gallery-open");
       window.removeEventListener("popstate", handlePopState);
       if (window.history.state?.galleryOpen) {
         window.history.back();

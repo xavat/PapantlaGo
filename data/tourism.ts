@@ -657,7 +657,11 @@ export const tourismData: TourismItem[] = [
     coords: [20.4421458, -97.3352901],
     phone: "7841346603",
     address: "Cjon 16 de Septiembre 907, Barrio del Zapote, 93400 Papantla de Olarte, Ver.",
-    gallery: ["/images/sabores/zacahuilperla/imagen1.jpg"]
+    gallery: [
+      "/images/sabores/zacahuilperla/imagen1.jpg",
+      "/images/sabores/zacahuilperla/imagen2.jpg",
+      "/images/sabores/zacahuilperla/imagen3.jpg"
+    ]
   },
   {
     id: "sushi-&-drinks-mr.-rollo",

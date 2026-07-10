@@ -157,6 +157,7 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
   const [demoIndex, setDemoIndex] = useState<number>(0);
   const [currentZoom, setCurrentZoom] = useState<number>(17.5);
   const [isSunlightMode, setIsSunlightMode] = useState<boolean>(false);
+  const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
   const demoIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Synchronize active classes on DOM markers for both Mapbox and Leaflet fallback
@@ -363,6 +364,9 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
 
         // Desnivel Pokémon GO offset
         mapboxInstance.setPadding({ top: 0, bottom: 180, left: 0, right: 0 });
+        mapboxInstance.dragRotate.enable();
+        mapboxInstance.touchZoomRotate.enableRotation();
+        mapboxInstance.touchPitch.enable();
         mapboxMapRef.current = mapboxInstance;
 
         mapboxInstance.on("dragstart", () => setIsFollowingUser(false));
@@ -1074,70 +1078,104 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
         </div>
       )}
 
-      {/* 2. Controles Flotantes con Alto Z-Index (z-[1010]+) */}
+      {/* 2. Controles Flotantes Stack Derecho (Kiosco, Sunlight, GPS, Cancel) */}
       <div className="absolute top-1/2 -translate-y-1/2 right-6 z-[1010] flex flex-col gap-3 pointer-events-auto">
-        {/* 1. Botón de Caminata Simulada (Modo Demo) */}
-        <button
-          onClick={toggleDemoMode}
-          className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl active:scale-90 transition-all ${
-            isDemoActive
-              ? "bg-purple-600 border-purple-500 text-white animate-pulse"
-              : "bg-white/95 dark:bg-zinc-900/95 border-black/5 dark:border-white/10 text-foreground"
-          }`}
-          title={isDemoActive ? "Desactivar caminata simulada" : "Activar caminata simulada (Modo Demo)"}
-        >
-          <Gamepad2 className={`w-5.5 h-5.5 ${isDemoActive ? "text-white" : "text-purple-500"}`} />
-        </button>
+        {/* 1. Botón de Kiosco (Centrar Atracciones) */}
+        <div className="relative flex items-center justify-end">
+          {activeTooltip === "kiosco" && (
+            <div className="absolute right-14 bg-black/90 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-xl border border-white/10 shadow-xl whitespace-nowrap z-[1020] animate-in fade-in slide-in-from-right-2 duration-200">
+              Centrar: Ir al Kiosco de Papantla
+            </div>
+          )}
+          <button
+            onClick={centerToMainPoints}
+            onMouseEnter={() => setActiveTooltip("kiosco")}
+            onMouseLeave={() => setActiveTooltip(null)}
+            onTouchStart={() => setActiveTooltip("kiosco")}
+            onTouchEnd={() => setTimeout(() => setActiveTooltip(null), 1500)}
+            className="w-12 h-12 rounded-2xl bg-white/95 dark:bg-zinc-900/95 border border-black/5 dark:border-white/10 text-foreground flex items-center justify-center shadow-2xl active:scale-95 transition-all"
+          >
+            <Landmark className="w-5.5 h-5.5 text-primary" />
+          </button>
+        </div>
 
-        {/* 2. Botón de Kiosco (Centrar Atracciones) */}
-        <button
-          onClick={centerToMainPoints}
-          className="w-12 h-12 rounded-2xl bg-white/95 dark:bg-zinc-900/95 border border-black/5 dark:border-white/10 text-foreground flex items-center justify-center shadow-2xl active:scale-90 transition-all"
-          title="Centrar en el kiosco / atracciones"
-        >
-          <Landmark className="w-5.5 h-5.5 text-primary" />
-        </button>
+        {/* 2. Botón de Modo Sol */}
+        <div className="relative flex items-center justify-end">
+          {activeTooltip === "sunlight" && (
+            <div className="absolute right-14 bg-black/90 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-xl border border-white/10 shadow-xl whitespace-nowrap z-[1020] animate-in fade-in slide-in-from-right-2 duration-200">
+              Modo Sol: Contraste para luz solar
+            </div>
+          )}
+          <button
+            onClick={() => setIsSunlightMode((prev) => !prev)}
+            onMouseEnter={() => setActiveTooltip("sunlight")}
+            onMouseLeave={() => setActiveTooltip(null)}
+            onTouchStart={() => setActiveTooltip("sunlight")}
+            onTouchEnd={() => setTimeout(() => setActiveTooltip(null), 1500)}
+            className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl active:scale-95 transition-all ${
+              isSunlightMode
+                ? "bg-amber-500 border-amber-400 text-white animate-pulse"
+                : "bg-white/95 dark:bg-zinc-900/95 border-black/5 dark:border-white/10 text-foreground"
+            }`}
+          >
+            <Sun className="w-5.5 h-5.5" />
+          </button>
+        </div>
 
-        {/* 3. Botón de Modo Sol */}
-        <button
-          onClick={() => setIsSunlightMode((prev) => !prev)}
-          className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl active:scale-95 transition-all ${
-            isSunlightMode
-              ? "bg-amber-500 border-amber-400 text-white animate-pulse"
-              : "bg-white/95 dark:bg-zinc-900/95 border-black/5 dark:border-white/10 text-foreground"
-          }`}
-          title={isSunlightMode ? "Desactivar Modo Sol (Contraste normal)" : "Activar Modo Sol (Alto Contraste para luz solar)"}
-        >
-          <Sun className="w-5.5 h-5.5" />
-        </button>
-
-        {/* 4. Botón de Mi Ubicación (GPS) */}
-        <button
-          onClick={triggerCenter}
-          className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl active:scale-95 transition-all ${
-            isFollowingUser
-              ? "bg-cyan-500 border-cyan-400 text-white animate-pulse"
-              : "bg-white/95 dark:bg-zinc-900/95 border-black/5 dark:border-white/10 text-foreground"
-          }`}
-          title="Centrar en mi ubicación"
-        >
-          <Crosshair className="w-5 h-5" />
-        </button>
+        {/* 3. Botón de Mi Ubicación (GPS) */}
+        <div className="relative flex items-center justify-end">
+          {activeTooltip === "gps" && (
+            <div className="absolute right-14 bg-black/90 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-xl border border-white/10 shadow-xl whitespace-nowrap z-[1020] animate-in fade-in slide-in-from-right-2 duration-200">
+              Mi Ubicación: Seguir posición GPS
+            </div>
+          )}
+          <button
+            onClick={triggerCenter}
+            onMouseEnter={() => setActiveTooltip("gps")}
+            onMouseLeave={() => setActiveTooltip(null)}
+            onTouchStart={() => setActiveTooltip("gps")}
+            onTouchEnd={() => setTimeout(() => setActiveTooltip(null), 1500)}
+            className={`w-12 h-12 rounded-2xl flex items-center justify-center border shadow-2xl active:scale-95 transition-all ${
+              isFollowingUser
+                ? "bg-cyan-500 border-cyan-400 text-white"
+                : "bg-white/95 dark:bg-zinc-900/95 border-black/5 dark:border-white/10 text-foreground"
+            }`}
+          >
+            <Crosshair className="w-5 h-5" />
+          </button>
+        </div>
 
         {activeDestination && (
-          <button
-            onClick={clearWaypoint}
-            className="w-12 h-12 rounded-2xl bg-rose-500 border border-rose-400 text-white flex items-center justify-center shadow-2xl active:scale-90 transition-all font-black text-xs uppercase"
-            title="Cancelar Ruta"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="relative flex items-center justify-end">
+            {activeTooltip === "cancel" && (
+              <div className="absolute right-14 bg-black/90 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-xl border border-white/10 shadow-xl whitespace-nowrap z-[1020] animate-in fade-in slide-in-from-right-2 duration-200">
+                Cancelar: Borrar rumbo trazado
+              </div>
+            )}
+            <button
+              onClick={clearWaypoint}
+              onMouseEnter={() => setActiveTooltip("cancel")}
+              onMouseLeave={() => setActiveTooltip(null)}
+              onTouchStart={() => setActiveTooltip("cancel")}
+              onTouchEnd={() => setTimeout(() => setActiveTooltip(null), 1500)}
+              className="w-12 h-12 rounded-2xl bg-rose-500 border border-rose-400 text-white flex items-center justify-center shadow-2xl active:scale-95 transition-all font-black text-xs uppercase"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         )}
       </div>
 
       {/* 2. Visualización de Brújula con Alto Z-Index (z-[1010]+) */}
-      <div className="absolute top-12 left-[220px] z-[1010] pointer-events-auto cursor-pointer select-none" onClick={requestCompassPermission}>
-        <div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-black/5 dark:border-white/10 px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5">
+      <div 
+        className="absolute top-12 left-[220px] z-[1010] pointer-events-auto cursor-pointer select-none" 
+        onClick={requestCompassPermission}
+        onMouseEnter={() => setActiveTooltip("rumbo")}
+        onMouseLeave={() => setActiveTooltip(null)}
+        onTouchStart={() => setActiveTooltip("rumbo")}
+        onTouchEnd={() => setTimeout(() => setActiveTooltip(null), 1500)}
+      >
+        <div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-black/5 dark:border-white/10 px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5 relative">
           <Compass
              className="w-5 h-5 text-cyan-400 transition-transform duration-200"
              style={{ transform: `rotate(${-mapHeading}deg)` }}
@@ -1170,11 +1208,39 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
             </span>
           </div>
         </div>
+        {activeTooltip === "rumbo" && (
+          <div className="absolute top-[48px] left-1/2 -translate-x-1/2 bg-black/90 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-xl border border-white/10 shadow-xl whitespace-nowrap z-[1020] animate-in fade-in slide-in-from-top-2 duration-200">
+            Brújula: Toca para reorientar al Norte
+          </div>
+        )}
+      </div>
+
+      {/* Botón de Caminata simulada (Modo Demo) a un lado de Rumbo */}
+      <div className="absolute top-12 left-[340px] z-[1010] pointer-events-auto">
+        <button
+          onClick={toggleDemoMode}
+          onMouseEnter={() => setActiveTooltip("caminata")}
+          onMouseLeave={() => setActiveTooltip(null)}
+          onTouchStart={() => setActiveTooltip("caminata")}
+          onTouchEnd={() => setTimeout(() => setActiveTooltip(null), 1500)}
+          className={`w-12 h-10 rounded-2xl flex items-center justify-center border shadow-xl active:scale-95 transition-all ${
+            isDemoActive
+              ? "bg-purple-600 border-purple-500 text-white animate-pulse"
+              : "bg-white/95 dark:bg-zinc-900/95 border-black/5 dark:border-white/10 text-foreground"
+          }`}
+        >
+          <Gamepad2 className={`w-5 h-5 ${isDemoActive ? "text-white" : "text-purple-500"}`} />
+        </button>
+        {activeTooltip === "caminata" && (
+          <div className="absolute top-[48px] left-1/2 -translate-x-1/2 bg-black/90 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-xl border border-white/10 shadow-xl whitespace-nowrap z-[1020] animate-in fade-in slide-in-from-top-2 duration-200">
+            Demo: Inicia caminata simulada
+          </div>
+        )}
       </div>
 
       {/* HUD de Ruta de Destino activa */}
       {activeDestination && (
-        <div className="absolute top-48 left-6 right-6 z-[1010] pointer-events-none">
+        <div className="absolute top-[108px] left-6 right-6 z-[1010] pointer-events-none">
           <div className="bg-gradient-to-r from-cyan-600/95 to-blue-700/95 text-white p-4 rounded-3xl shadow-xl border border-cyan-400/20 backdrop-blur-xl flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-2xl bg-white/15 flex items-center justify-center shrink-0">

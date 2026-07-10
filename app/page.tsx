@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ChevronRight, ArrowDown, Landmark, Search, X, Compass, Palette, Camera } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useMemo } from "react";
 import { tourismData } from "@/data/tourism";
 import { fuzzyMatch } from "@/utils/search";
@@ -46,9 +47,19 @@ const cultureImages = [
     title: "Danza de los Voladores"
   },
   {
+    src: "/images/culture/volador.jpg",
+    fallback: "https://images.unsplash.com/photo-1626081498877-c93d8e57eeff?auto=format&fit=crop&q=80",
+    title: "Monumento al Volador"
+  },
+  {
     src: "/images/culture/tajin_piramide.jpg",
     fallback: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80",
     title: "Pirámide de los Nichos"
+  },
+  {
+    src: "/images/culture/tajin.jpg",
+    fallback: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80",
+    title: "Zona Arqueológica del Tajín"
   },
   {
     src: "/images/culture/papantla.jpg",
@@ -79,18 +90,22 @@ const cultureImages = [
     src: "/images/culture/rancho_playa.jpg",
     fallback: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&q=80",
     title: "Rancho Playa"
-  },
-  {
-    src: "/images/culture/tajin2.jpg",
-    fallback: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&q=80",
-    title: "El Tajín Vista Alterna"
   }
 ];
 
 export default function Home() {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const imgBPath = "/hero-b-background.jpg";
+
+  const goRandomDestino = () => {
+    const destinos = tourismData.filter(item => item.category === "destinos");
+    if (destinos.length > 0) {
+      const randomItem = destinos[Math.floor(Math.random() * destinos.length)];
+      router.push(`/destinos/${randomItem.id}`);
+    }
+  };
 
   const searchResults = useMemo(() => {
     if (!searchQuery) return [];
@@ -305,11 +320,12 @@ export default function Home() {
                 <p className="text-gray-600 dark:text-gray-400 text-lg font-medium leading-relaxed">
                    Papantla es un crisol de tradiciones milenarias Descubre el legado Totonaca y el arte que nace de la tierra
                 </p>
-                <Link href="/destinos/mural-de-la-cultura-totonaca">
-                  <button className="px-12 py-5 bg-black dark:bg-white text-white dark:text-black rounded-3xl font-black uppercase text-[11px] tracking-widest hover:bg-primary dark:hover:bg-primary hover:text-white transition-all shadow-2xl">
-                     Saber más de nuestra cultura
-                  </button>
-                </Link>
+                <button
+                  onClick={goRandomDestino}
+                  className="px-12 py-5 bg-black dark:bg-white text-white dark:text-black rounded-3xl font-black uppercase text-[11px] tracking-widest hover:bg-primary dark:hover:bg-primary hover:text-white transition-all shadow-2xl w-fit mx-auto"
+                >
+                  Saber más de nuestra cultura
+                </button>
              </div>
           </div>
       </section>

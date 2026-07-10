@@ -1,8 +1,9 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Briefcase, Phone, Map, Bus, Car, Users, ChevronRight, PhoneCall, Search, Smartphone, X, MapPin, Globe } from "lucide-react";
-import { useState, useMemo } from "react";
+import { Briefcase, Phone, Map, Bus, Car, Users, ChevronRight, PhoneCall, Search, Smartphone, X, MapPin, Globe, AlertTriangle } from "lucide-react";
+import { useState, useMemo, useEffect, useRef, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const touristGuides = [
   {
@@ -131,6 +132,27 @@ const taxiDirectoryList = [
   }
 ];
 
+const emergencyList = [
+  {
+    name: "Protección Civil Papantla",
+    phone: "7848420175",
+    whatsapp: "7841368797",
+    description: "Rescate, primeros auxilios, prevención de incendios y atención prioritaria en contingencias públicas."
+  },
+  {
+    name: "Policía Municipal",
+    phone: "7848420075",
+    whatsapp: "",
+    description: "Resguardo del orden, auxilio vecinal, prevención del delito e intervenciones de seguridad ciudadana."
+  },
+  {
+    name: "Tránsito Municipal",
+    phone: "7848420039",
+    whatsapp: "",
+    description: "Asistencia vial de tránsito terrestre, asesorías ante percances viales y ordenamiento de vialidades."
+  }
+];
+
 const services = [
   {
     category: "Guía Turística",
@@ -159,6 +181,17 @@ const services = [
         type: "bus_directory"
       }
     ]
+  },
+  {
+    category: "Asistencia y Emergencia",
+    items: [
+      {
+        name: "Líneas de Emergencia",
+        sub: "Ayuda y auxilio inmediato",
+        description: "Directorio telefónico y de mensajería con servicios públicos de auxilio como Protección Civil, Policía y Tránsito.",
+        type: "emergency_directory"
+      }
+    ]
   }
 ];
 
@@ -173,44 +206,51 @@ const WhatsAppIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
   </svg>
 );
 
-export default function ServiciosPage() {
+function ServiciosContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const modalParam = searchParams.get("modal");
+
   const [searchQuery, setSearchQuery] = useState("");
-  const [showGuidesModal, setShowGuidesModal] = useState(false);
-  const [showTaxiModal, setShowTaxiModal] = useState(false);
-  const [showBusModal, setShowBusModal] = useState(false);
-
-  // Sync state to prevent back navigation while directory modals are open
-  // Clicking native device back button will consume history popstate and close the directory
-  require("react").useEffect(() => {
-    const handlePopState = (e: PopStateEvent) => {
-      setShowGuidesModal(false);
-      setShowTaxiModal(false);
-      setShowBusModal(false);
-    };
-    window.addEventListener("popstate", handlePopState);
-    return () => {
-      window.removeEventListener("popstate", handlePopState);
-    };
-  }, []);
-
-  const openModal = (type: "guides" | "taxi" | "bus") => {
-    window.history.pushState({ modalId: "servicios-modal" }, "");
-    if (type === "guides") setShowGuidesModal(true);
-    else if (type === "taxi") setShowTaxiModal(true);
-    else if (type === "bus") setShowBusModal(true);
-  };
-
-  const closeModal = () => {
-    setShowGuidesModal(false);
-    setShowTaxiModal(false);
-    setShowBusModal(false);
-    if (window.history.state?.modalId === "servicios-modal") {
-      window.history.back();
-    }
-  };
   const [searchGuideQuery, setSearchGuideQuery] = useState("");
   const [searchTaxiQuery, setSearchTaxiQuery] = useState("");
   const [selectedLanguageFilter, setSelectedLanguageFilter] = useState("Todos");
+
+  // Dynamic Modals State synced with Query Param
+  const showGuidesModal = modalParam === "guides";
+  const showTaxiModal = modalParam === "taxi";
+  const showBusModal = modalParam === "bus";
+  const showEmergencyModal = modalParam === "emergency";
+
+  const openModal = (type: "guides" | "taxi" | "bus" | "emergency") => {
+    router.push(`/servicios?modal=${type}`);
+  };
+
+  const closeModal = () => {
+    router.push("/servicios");
+  };
+
+  // Touch Swipe Down Logic to close Directorio Bottom Sheets
+  const [dragStartY, setDragStartY] = useState<number | null>(null);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setDragStartY(e.touches[0].clientY);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (dragStartY === null) return;
+    const currentY = e.touches[0].clientY;
+    const diff = currentY - dragStartY;
+
+    if (diff > 80) { // Dragged down sufficiently
+      const scrollable = e.currentTarget.querySelector(".overflow-y-auto");
+      const isAtTop = !scrollable || scrollable.scrollTop <= 0;
+      if (isAtTop) {
+        closeModal();
+        setDragStartY(null);
+      }
+    }
+  };
 
   const openWhatsApp = (phone: string, message: string) => {
     const cleanPhone = phone.replace(/[^0-9]/g, "");
@@ -254,10 +294,10 @@ export default function ServiciosPage() {
     <div className="pb-32 flex flex-col bg-background min-h-screen font-outfit">
       <header className="px-6 pt-32 pb-10 flex flex-col gap-6">
         <div className="flex items-center gap-4">
-          <div className="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary shadow-lg shadow-secondary/5">
+          <div className="w-14 h-14 rounded-2xl bg-secondary/10 flex items-center justify-center text-secondary shadow-lg shadow-secondary/5 font-bold">
             <Briefcase className="w-7 h-7" />
           </div>
-          <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase">Servicios</h1>
+          <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase animate-fade-in">Servicios</h1>
         </div>
 
         <div className="relative group">
@@ -266,7 +306,7 @@ export default function ServiciosPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Buscar guías, transporte o atención..."
+            placeholder="Buscar guías, transporte o emergencias..."
             className="w-full bg-gray-100 dark:bg-white/5 border border-transparent dark:border-white/5 rounded-[30px] py-6 pl-16 pr-8 text-sm font-bold focus:ring-4 focus:ring-secondary/10 outline-none transition-all shadow-sm"
           />
         </div>
@@ -284,7 +324,7 @@ export default function ServiciosPage() {
               animate={{ opacity: 1, y: 0 }}
               className="flex flex-col gap-6"
             >
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between animate-fade-in">
                 <h2 className="text-xl font-black tracking-tight uppercase">{section.category}</h2>
                 <span className="text-[9px] text-secondary font-black uppercase tracking-widest bg-secondary/10 px-3 py-1 rounded-full border border-secondary/15">Verificados</span>
               </div>
@@ -294,8 +334,9 @@ export default function ServiciosPage() {
                   const isGuidesDirectory = item.type === "guides_directory";
                   const isTaxiDirectory = item.type === "taxi_directory";
                   const isBusDirectory = item.type === "bus_directory";
-                  const isDirectory = isGuidesDirectory || isTaxiDirectory || isBusDirectory;
-                  const IconComponent = 'icon' in item && item.icon ? item.icon as any : null;
+                  const isEmergencyDirectory = item.type === "emergency_directory";
+                  const isDirectory = isGuidesDirectory || isTaxiDirectory || isBusDirectory || isEmergencyDirectory;
+
                   return (
                     <motion.div
                       key={item.name}
@@ -303,6 +344,7 @@ export default function ServiciosPage() {
                         if (isGuidesDirectory) openModal("guides");
                         else if (isTaxiDirectory) openModal("taxi");
                         else if (isBusDirectory) openModal("bus");
+                        else if (isEmergencyDirectory) openModal("emergency");
                       }}
                       className={
                         isDirectory 
@@ -311,6 +353,8 @@ export default function ServiciosPage() {
                                 ? "bg-gradient-to-br from-primary to-[#721F2C] dark:from-primary/80 dark:to-zinc-950 border-primary/20"
                                 : isTaxiDirectory
                                 ? "bg-gradient-to-br from-secondary to-[#BD8C5C] dark:from-secondary/60 dark:to-zinc-950 border-secondary/20"
+                                : isEmergencyDirectory
+                                ? "bg-gradient-to-br from-rose-800 to-red-950 dark:from-red-900/60 dark:to-zinc-950 border-red-500/20"
                                 : "bg-gradient-to-br from-zinc-700 to-zinc-900 dark:from-zinc-800 dark:to-zinc-950 border-zinc-500/20"
                             }`
                           : "bg-white dark:bg-white/5 p-6 rounded-[32px] border border-black/5 dark:border-white/10 flex flex-col gap-6 shadow-xl"
@@ -332,6 +376,11 @@ export default function ServiciosPage() {
                           <Bus className="w-48 h-48 text-white" />
                         </div>
                       )}
+                      {isEmergencyDirectory && (
+                        <div className="absolute right-0 bottom-0 opacity-10 translate-y-6 translate-x-6 scale-150 rotate-[15deg] pointer-events-none group-hover:scale-[1.65] transition-transform duration-700">
+                          <AlertTriangle className="w-48 h-48 text-white" />
+                        </div>
+                      )}
 
                       <div className="flex items-center gap-4">
                         <div className={`w-16 h-16 rounded-2xl ${isDirectory ? 'bg-white/10 border border-white/20' : 'bg-gray-100 dark:bg-white/10'} overflow-hidden relative flex items-center justify-center`}>
@@ -341,11 +390,9 @@ export default function ServiciosPage() {
                             <Car className="w-8 h-8 text-secondary animate-pulse" />
                           ) : isBusDirectory ? (
                             <Bus className="w-8 h-8 text-secondary animate-pulse" />
-                          ) : (IconComponent ? (
-                            <div className="w-full h-full flex items-center justify-center text-secondary">
-                              <IconComponent className="w-8 h-8" />
-                            </div>
-                          ) : null)}
+                          ) : isEmergencyDirectory ? (
+                            <AlertTriangle className="w-8 h-8 text-white animate-bounce" />
+                          ) : null}
                         </div>
                         <div className="flex flex-col">
                           <span className={`font-black text-lg tracking-tight ${isDirectory ? 'text-white' : 'text-foreground'}`}>{item.name}</span>
@@ -363,12 +410,15 @@ export default function ServiciosPage() {
                           if (isGuidesDirectory) openModal("guides");
                           else if (isTaxiDirectory) openModal("taxi");
                           else if (isBusDirectory) openModal("bus");
+                          else if (isEmergencyDirectory) openModal("emergency");
                         }}
                         className={`w-full py-4.5 rounded-2xl font-black uppercase text-[10px] tracking-widest shadow-xl flex items-center justify-center gap-2 transition-all ${
                           isGuidesDirectory 
                             ? "bg-secondary text-white shadow-secondary/15 hover:bg-secondary/90 border border-secondary/10"
                             : isTaxiDirectory
                             ? "bg-primary text-white shadow-primary/20 hover:bg-primary/95 border border-primary/10"
+                            : isEmergencyDirectory
+                            ? "bg-white text-red-700 hover:bg-white/95 border border-white/20"
                             : "bg-secondary text-white shadow-secondary/25 hover:bg-secondary/90 border border-secondary/10"
                         }`}
                       >
@@ -381,6 +431,11 @@ export default function ServiciosPage() {
                           <>
                             <Car className="w-4 h-4" />
                             Ver Directorio de Taxis
+                          </>
+                        ) : isEmergencyDirectory ? (
+                          <>
+                            <AlertTriangle className="w-4 h-4 text-red-650" />
+                            Ver Números de Emergencia
                           </>
                         ) : (
                           <>
@@ -407,20 +462,19 @@ export default function ServiciosPage() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xl flex flex-col justify-end"
           >
-            {/* Backdrop Dismiss click */}
             <div className="absolute inset-0 -z-10" onClick={closeModal} />
             
             <motion.div
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="bg-white dark:bg-zinc-950 w-full max-h-[85vh] rounded-t-[40px] flex flex-col border-t border-black/5 dark:border-white/10 shadow-2xl relative overflow-hidden"
             >
-              {/* Decorative handle bar */}
               <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full mx-auto my-4 flex-shrink-0" />
               
-              {/* Header */}
               <div className="px-6 pb-4 flex justify-between items-start flex-shrink-0">
                 <div>
                   <h2 className="text-2xl font-black tracking-tight text-foreground uppercase">Directorio de Guías</h2>
@@ -434,7 +488,6 @@ export default function ServiciosPage() {
                 </button>
               </div>
 
-              {/* Sub-search & Filters */}
               <div className="px-6 pb-4 flex flex-col gap-4 flex-shrink-0 border-b border-black/5 dark:border-white/5">
                 <div className="relative group">
                   <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-primary transition-colors" />
@@ -469,12 +522,10 @@ export default function ServiciosPage() {
                 </div>
               </div>
 
-              {/* Guides List (Scrollable) */}
               <div className="flex-1 overflow-y-auto px-6 py-6 space-y-5 no-scrollbar pb-10">
                 {filteredGuides.length > 0 ? (
                   filteredGuides.map((guide, i) => {
                     const initials = guide.name.split(" ").filter(n => !n.includes("Lic.") && !n.includes("Arqueólo")).slice(0, 2).map(n => n.charAt(0)).join("");
-                    // Let's create key gradients for each guide
                     const gradients = [
                       "from-rose-500 to-orange-500",
                       "from-blue-500 to-indigo-650",
@@ -496,7 +547,6 @@ export default function ServiciosPage() {
                         transition={{ delay: i * 0.05 }}
                         className="bg-gray-50 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-[32px] p-5 flex flex-col gap-4 shadow-sm hover:border-primary/25 transition-all"
                       >
-                        {/* Profile Header */}
                         <div className="flex items-start gap-4">
                           <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${grad} flex items-center justify-center text-white font-black text-lg shadow-md flex-shrink-0`}>
                             {initials || "GT"}
@@ -514,7 +564,6 @@ export default function ServiciosPage() {
                           </div>
                         </div>
 
-                        {/* Languages */}
                         <div className="flex flex-wrap gap-1.5">
                           {guide.languages.map(lang => {
                             const badgeColors: Record<string, string> = {
@@ -531,7 +580,6 @@ export default function ServiciosPage() {
                           })}
                         </div>
 
-                        {/* Services / Routes */}
                         <div className="space-y-1.5">
                           <span className="text-[8px] font-black uppercase text-gray-400 dark:text-zinc-500 tracking-wider">Recorridos & Especialidades</span>
                           <ul className="grid grid-cols-1 gap-1.5">
@@ -544,7 +592,6 @@ export default function ServiciosPage() {
                           </ul>
                         </div>
 
-                        {/* Direct Dialer Button */}
                         <motion.a
                           href={`tel:${guide.phone.replace(/[\s\(\)\+-]/g, "")}`}
                           whileTap={{ scale: 0.97 }}
@@ -586,6 +633,8 @@ export default function ServiciosPage() {
             <div className="absolute inset-0 -z-10" onClick={closeModal} />
             
             <motion.div
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
@@ -607,7 +656,6 @@ export default function ServiciosPage() {
                 </button>
               </div>
 
-              {/* Sub-search */}
               <div className="px-6 pb-4 flex flex-col gap-4 flex-shrink-0 border-b border-black/5 dark:border-white/5">
                 <div className="relative group">
                   <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 group-focus-within:text-primary transition-colors" />
@@ -626,7 +674,6 @@ export default function ServiciosPage() {
                 </div>
               </div>
 
-              {/* Taxi List */}
               <div className="flex-1 overflow-y-auto px-6 py-6 space-y-5 no-scrollbar pb-10">
                 {filteredTaxis.length > 0 ? (
                   filteredTaxis.map((taxi, i) => {
@@ -667,7 +714,6 @@ export default function ServiciosPage() {
                           {taxi.description}
                         </p>
 
-                        {/* Action Buttons: Call & WhatsApp */}
                         <div className="grid grid-cols-2 gap-3">
                           <motion.a
                             href={`tel:${taxi.phone}`}
@@ -720,6 +766,8 @@ export default function ServiciosPage() {
             <div className="absolute inset-0 -z-10" onClick={closeModal} />
             
             <motion.div
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
@@ -741,14 +789,12 @@ export default function ServiciosPage() {
                 </button>
               </div>
 
-              {/* Bus Terminals List */}
               <div className="flex-1 overflow-y-auto px-6 py-6 space-y-6 no-scrollbar pb-10">
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="bg-gray-50 dark:bg-white/5 border border-black/5 dark:border-white/10 rounded-[32px] p-6 flex flex-col gap-5 shadow-sm hover:border-zinc-500/20 transition-all"
                 >
-                  {/* Header */}
                   <div className="flex items-start gap-4">
                     <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#E30613] to-[#A30009] flex items-center justify-center text-white font-black text-sm shadow-md flex-shrink-0">
                       ADO
@@ -766,7 +812,6 @@ export default function ServiciosPage() {
                     </div>
                   </div>
 
-                  {/* Info lines (Address, Phone) */}
                   <div className="space-y-3.5 my-1">
                     <div className="flex items-start gap-3 text-xs font-semibold text-gray-600 dark:text-gray-400">
                       <MapPin className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
@@ -778,9 +823,7 @@ export default function ServiciosPage() {
                     </div>
                   </div>
 
-                  {/* Buttons group */}
                   <div className="flex flex-col gap-3">
-                    {/* Call Button */}
                     <motion.a
                       href="tel:7841013501"
                       whileTap={{ scale: 0.97 }}
@@ -791,7 +834,6 @@ export default function ServiciosPage() {
                     </motion.a>
 
                     <div className="grid grid-cols-2 gap-3">
-                      {/* Address/Map Button */}
                       <motion.a
                         href="https://maps.app.goo.gl/2U8u4UNKvNV7MZiX7"
                         target="_blank"
@@ -803,7 +845,6 @@ export default function ServiciosPage() {
                         Ver Mapa
                       </motion.a>
 
-                      {/* Web Link Button */}
                       <motion.a
                         href="https://www.ado.com.mx/"
                         target="_blank"
@@ -822,6 +863,112 @@ export default function ServiciosPage() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* EMERGENCY DIRECTORY MODAL */}
+      <AnimatePresence>
+        {showEmergencyModal && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xl flex flex-col justify-end"
+          >
+            <div className="absolute inset-0 -z-10" onClick={closeModal} />
+            
+            <motion.div
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              initial={{ y: "100%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="bg-white dark:bg-zinc-950 w-full max-h-[85vh] rounded-t-[40px] flex flex-col border-t border-red-550/20 dark:border-red-550/30 shadow-2xl relative overflow-hidden"
+            >
+              <div className="w-12 h-1.5 bg-gray-300 dark:bg-zinc-800 rounded-full mx-auto my-4 flex-shrink-0" />
+              
+              <div className="px-6 pb-4 flex justify-between items-start flex-shrink-0">
+                <div>
+                  <h2 className="text-2xl font-black tracking-tight text-red-600 dark:text-red-550 uppercase flex items-center gap-2">
+                    <AlertTriangle className="w-6 h-6 text-red-600 animate-pulse" /> Emergencias
+                  </h2>
+                  <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider mt-0.5">Asistencia y auxilio inmediato en Papantla 24h</p>
+                </div>
+                <button 
+                  onClick={closeModal}
+                  className="w-10 h-10 rounded-full bg-red-50 dark:bg-red-950/25 flex items-center justify-center text-red-600 hover:bg-red-100 dark:hover:bg-red-950/50 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-6 py-6 space-y-5 no-scrollbar pb-10 border-t border-black/5 dark:border-white/5">
+                {emergencyList.map((item, i) => {
+                  const gradient = "from-red-500 to-rose-600";
+                  return (
+                    <motion.div
+                      key={item.name}
+                      initial={{ opacity: 0, y: 15 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      className="bg-red-50/20 dark:bg-red-950/5 border border-red-100/50 dark:border-red-950/20 rounded-[32px] p-5 flex flex-col gap-4 shadow-sm hover:border-red-500/30 transition-all"
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-black text-xs shadow-md flex-shrink-0`}>
+                          SOS
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-[7.5px] bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400 px-2.5 py-0.5 rounded-full font-black tracking-widest uppercase border border-red-200/50 dark:border-red-950/40">
+                            Línea Directa
+                          </span>
+                          <h3 className="font-black text-base tracking-tight text-foreground leading-tight mt-1">{item.name}</h3>
+                        </div>
+                      </div>
+
+                      <p className="text-xs text-gray-500 dark:text-gray-400 font-semibold leading-relaxed">
+                        {item.description}
+                      </p>
+
+                      <div className={`grid ${item.whatsapp ? 'grid-cols-2' : 'grid-cols-1'} gap-3`}>
+                        <motion.a
+                          href={`tel:${item.phone}`}
+                          whileTap={{ scale: 0.97 }}
+                          className="py-4 bg-red-600 hover:bg-red-700 text-white rounded-2xl font-black uppercase text-[9px] tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-red-500/15 transition-all text-center border border-red-700/30"
+                        >
+                          <Phone className="w-3.5 h-3.5" />
+                          Llamar PC
+                        </motion.a>
+                        
+                        {item.whatsapp && (
+                          <motion.button
+                            onClick={() => openWhatsApp(item.whatsapp, "Emergencia: Necesito asistencia urgente de Protección Civil, por favor.")}
+                            whileTap={{ scale: 0.97 }}
+                            className="py-4 bg-green-500 hover:bg-green-600 text-white rounded-2xl font-black uppercase text-[9px] tracking-widest flex items-center justify-center gap-2 shadow-lg shadow-green-500/15 transition-all border border-green-600/30"
+                          >
+                            <WhatsAppIcon className="w-3.5 h-3.5" />
+                            WhatsApp
+                          </motion.button>
+                        )}
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
+  );
+}
+
+export default function ServiciosPage() {
+  return (
+    <Suspense fallback={
+      <div className="pb-32 flex flex-col bg-background min-h-screen items-center justify-center">
+        <div className="text-xs font-black uppercase tracking-widest text-gray-400 animate-pulse">Cargando directorio de servicios...</div>
+      </div>
+    }>
+      <ServiciosContent />
+    </Suspense>
   );
 }

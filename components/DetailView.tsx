@@ -116,6 +116,26 @@ export default function DetailView({
   const router = useRouter();
   const [activeImage, setActiveImage] = useState<number | null>(null);
   const [currentHeaderIndex, setCurrentHeaderIndex] = useState(0);
+  const [toastOpen, setToastOpen] = useState(false);
+
+  const handleShare = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const shareData = {
+      title: `${title} - PapantlaGo`,
+      text: `${subtitle || "Descubre Papantla"}\n\n${description ? cleanText(description).slice(0, 120) + "..." : ""}`,
+      url: window.location.href,
+    };
+
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+      navigator.share(shareData).catch((err) => {
+        console.error("Error sharing page:", err);
+      });
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      setToastOpen(true);
+      setTimeout(() => setToastOpen(false), 2500);
+    }
+  };
 
   const parsedDesc = parseDescriptionContent(description);
 
@@ -219,8 +239,9 @@ export default function DetailView({
             <ArrowLeft className="w-5 h-5" />
           </button>
           <button 
-            onClick={(e) => e.stopPropagation()}
-            className="w-12 h-12 rounded-full bg-black/20 backdrop-blur-3xl border border-white/20 flex items-center justify-center text-white active:scale-90 transition-all shadow-xl"
+            onClick={handleShare}
+            className="w-12 h-12 rounded-full bg-black/20 backdrop-blur-3xl border border-white/20 flex items-center justify-center text-white active:scale-95 transition-all shadow-xl"
+            title="Compartir página"
           >
             <Share2 className="w-5 h-5" />
           </button>
@@ -583,6 +604,22 @@ export default function DetailView({
           </div>
         )}
       </div>
+
+      {/* Toast feedback fallback */}
+      <AnimatePresence>
+        {toastOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="fixed bottom-24 left-6 right-6 z-[10005] bg-black/90 dark:bg-zinc-900/95 border border-white/10 p-4.5 rounded-2xl shadow-2xl backdrop-blur-xl flex items-center justify-center gap-3 text-center max-w-sm mx-auto"
+          >
+            <span className="text-[11px] font-black uppercase tracking-wider text-white">
+              ¡Enlace copiado al portapapeles! 📋
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

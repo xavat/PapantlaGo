@@ -1,9 +1,6 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { ChevronLeft, Info } from "lucide-react";
-import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 
 const InteractiveMap = dynamic(() => import("@/components/InteractiveMap"), {
@@ -22,7 +19,6 @@ const InteractiveMap = dynamic(() => import("@/components/InteractiveMap"), {
 
 export default function MapaPage() {
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
-  const [showInfo, setShowInfo] = useState<boolean>(false);
 
   const categories = [
     { label: "Todos", value: null },
@@ -34,72 +30,6 @@ export default function MapaPage() {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden bg-background">
-      {/* Header - Transparent & Integrated */}
-      <header className="fixed top-0 left-0 right-0 z-[1001] px-6 pt-12 pb-6 pointer-events-none">
-        <div className="flex items-center justify-between">
-          <Link href="/" className="pointer-events-auto">
-            <motion.div
-              whileTap={{ scale: 0.9 }}
-              className="w-12 h-12 rounded-2xl bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-black/5 dark:border-white/10 shadow-2xl flex items-center justify-center text-foreground"
-            >
-              <ChevronLeft className="w-6 h-6" />
-            </motion.div>
-          </Link>
-
-          <div className="flex-1 px-4 pointer-events-none">
-            <div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-black/5 dark:border-white/10 rounded-2xl px-6 py-3 shadow-2xl inline-flex items-center gap-3 ml-2 pointer-events-auto">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-ping" />
-              <h1 className="text-sm font-black tracking-tighter uppercase">
-                Mapa <span className="text-primary font-black">Live</span>
-              </h1>
-            </div>
-          </div>
-
-          <motion.button
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setShowInfo((prev) => !prev)}
-            className={`w-12 h-12 rounded-2xl backdrop-blur-xl border shadow-2xl flex items-center justify-center pointer-events-auto transition-all ${
-              showInfo
-                ? "bg-primary border-primary text-white"
-                : "bg-white/95 dark:bg-zinc-900/95 border-black/5 dark:border-white/10 text-primary"
-            }`}
-          >
-            <Info className="w-6 h-6" />
-          </motion.button>
-        </div>
-      </header>
-
-      {/* Info Modal Dialog */}
-      <AnimatePresence>
-        {showInfo && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="fixed top-28 left-6 right-6 z-[1002] bg-white/95 dark:bg-zinc-900/95 border border-black/5 dark:border-white/10 p-6 rounded-[30px] shadow-2xl backdrop-blur-xl flex flex-col gap-3"
-          >
-            <h2 className="text-md font-black uppercase text-foreground leading-tight tracking-tight">
-              MODO AVENTURERO
-            </h2>
-            <div className="text-xs text-gray-500 dark:text-zinc-400 font-semibold leading-relaxed flex flex-col gap-2">
-              <p>
-                Siente la magia de Papantla con un mapa en tiempo real que se mueve contigo. Gracias al giro del compás y la orientación de la cámara alineados a tu dispositivo, vivirás una aventura inmersiva única por las calles y tradiciones de nuestra tierra. ¡Explorara!
-              </p>
-              <p className="font-bold text-[#F16B24]">
-                ¿Quieres probarlo ya? Activa el botón de "Caminata simulada" (🕹️ Modo Demo) de la barra lateral derecha para simular un recorrido en vivo por el centro de Papantla.
-              </p>
-            </div>
-            <button
-              onClick={() => setShowInfo(false)}
-              className="mt-2 py-3 bg-primary hover:bg-[#721F2C] text-white rounded-xl font-bold uppercase text-[9px] tracking-widest text-center"
-            >
-              Entendido
-            </button>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Main Map View */}
       <main className="flex-1 w-full h-full relative">
         <InteractiveMap categoryFilter={categoryFilter} />
       </main>

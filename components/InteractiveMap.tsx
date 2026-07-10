@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import mapboxgl from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import "leaflet/dist/leaflet.css";
-import { Navigation, Compass, MapPin, Star, Info, Crosshair, X, Gamepad2, AlertTriangle, RefreshCw, Sun, Landmark } from "lucide-react";
+import { Navigation, Compass, MapPin, Star, Info, Crosshair, X, Gamepad2, AlertTriangle, RefreshCw, Sun, Landmark, ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -159,6 +159,44 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
   const [isSunlightMode, setIsSunlightMode] = useState<boolean>(false);
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
   const demoIntervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Unified top navigation Info Dialog state
+  const [showInfo, setShowInfo] = useState<boolean>(false);
+
+  // Swipe gesture variables for selectedPlace bottom sheet
+  const [translateY, setTranslateY] = useState(0);
+  const [dragStartY, setDragStartY] = useState<number | null>(null);
+  const [isDragging, setIsDragging] = useState(false);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setDragStartY(e.touches[0].clientY);
+    setIsDragging(true);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (dragStartY === null || !isDragging) return;
+    const currentY = e.touches[0].clientY;
+    const diff = currentY - dragStartY;
+    if (diff > 0) {
+      setTranslateY(diff);
+    } else {
+      setTranslateY(0);
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (dragStartY === null) return;
+    const currentY = e.changedTouches[0].clientY;
+    const diff = currentY - dragStartY;
+    setIsDragging(false);
+    setDragStartY(null);
+    if (diff > 120) {
+      setSelectedPlace(null);
+      setTranslateY(0);
+    } else {
+      setTranslateY(0);
+    }
+  };
 
   // Synchronize active classes on DOM markers for both Mapbox and Leaflet fallback
   useEffect(() => {
@@ -1166,77 +1204,131 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
         )}
       </div>
 
-      {/* 2. Visualización de Brújula con Alto Z-Index (z-[1010]+) */}
-      <div 
-        className="absolute top-12 left-[220px] z-[1010] pointer-events-auto cursor-pointer select-none" 
-        onClick={requestCompassPermission}
-        onMouseEnter={() => setActiveTooltip("rumbo")}
-        onMouseLeave={() => setActiveTooltip(null)}
-        onTouchStart={() => setActiveTooltip("rumbo")}
-        onTouchEnd={() => setTimeout(() => setActiveTooltip(null), 1500)}
-      >
-        <div className="bg-white/95 dark:bg-zinc-900/95 backdrop-blur-xl border border-black/5 dark:border-white/10 px-4 py-2.5 rounded-2xl shadow-xl flex items-center gap-2.5 relative">
-          <Compass
-             className="w-5 h-5 text-cyan-400 transition-transform duration-200"
-             style={{ transform: `rotate(${-mapHeading}deg)` }}
-          />
-          <div className="flex flex-col">
-            <span className="text-[7.5px] font-black uppercase text-gray-400 dark:text-zinc-500 tracking-wider leading-none">
-              Rumbo
-            </span>
-            <span className="text-xs font-black text-foreground mt-0.5 flex items-center justify-center">
-              {isCompassAuthorized === false ? "🔒 Activar" : `${mapHeading}°`}
-              {isCompassAuthorized !== false && (
-                <span className="ml-1 font-black">
-                  {mapHeading > 337 || mapHeading <= 22
-                    ? "N"
-                    : mapHeading > 22 && mapHeading <= 67
-                    ? "NE"
-                    : mapHeading > 67 && mapHeading <= 112
-                    ? "E"
-                    : mapHeading > 112 && mapHeading <= 157
-                    ? "SE"
-                    : mapHeading > 157 && mapHeading <= 202
-                    ? "S"
-                    : mapHeading > 202 && mapHeading <= 247
-                    ? "SO"
-                    : mapHeading > 247 && mapHeading <= 292
-                    ? "O"
-                    : "NO"}
-                </span>
-                )}
+      {/* Unified Top Navigation Header (ChevronLeft, Mapa Live, Rumbo, Gamepad, Info) */}
+      <header className="absolute top-12 left-6 right-6 z-[1010] flex items-center justify-between gap-3 pointer-events-none">
+        {/* Left: Back Link & Mapa Live Title */}
+        <div className="flex items-center gap-2 pointer-events-auto">
+          <Link href="/">
+            <button className="w-12 h-10 rounded-2xl bg-white/95 dark:bg-zinc-900/95 border border-black/5 dark:border-white/10 text-foreground flex items-center justify-center shadow-xl active:scale-95 transition-all">
+              <ChevronLeft className="w-5.5 h-5.5" />
+            </button>
+          </Link>
+
+          <div className="bg-white/95 dark:bg-zinc-900/95 border border-black/5 dark:border-white/10 rounded-2xl px-3.5 py-2.5 shadow-xl flex items-center gap-2">
+            <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-ping" />
+            <span className="text-[10px] font-black tracking-tight uppercase whitespace-nowrap">
+              Mapa <span className="text-primary">Live</span>
             </span>
           </div>
         </div>
-        {activeTooltip === "rumbo" && (
-          <div className="absolute top-[48px] left-1/2 -translate-x-1/2 bg-black/90 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-xl border border-white/10 shadow-xl whitespace-nowrap z-[1020] animate-in fade-in slide-in-from-top-2 duration-200">
-            Brújula: Toca para reorientar al Norte
-          </div>
-        )}
-      </div>
 
-      {/* Botón de Caminata simulada (Modo Demo) a un lado de Rumbo */}
-      <div className="absolute top-12 left-[340px] z-[1010] pointer-events-auto">
-        <button
-          onClick={toggleDemoMode}
-          onMouseEnter={() => setActiveTooltip("caminata")}
-          onMouseLeave={() => setActiveTooltip(null)}
-          onTouchStart={() => setActiveTooltip("caminata")}
-          onTouchEnd={() => setTimeout(() => setActiveTooltip(null), 1500)}
-          className={`w-12 h-10 rounded-2xl flex items-center justify-center border shadow-xl active:scale-95 transition-all ${
-            isDemoActive
-              ? "bg-purple-600 border-purple-500 text-white animate-pulse"
-              : "bg-white/95 dark:bg-zinc-900/95 border-black/5 dark:border-white/10 text-foreground"
-          }`}
-        >
-          <Gamepad2 className={`w-5 h-5 ${isDemoActive ? "text-white" : "text-purple-500"}`} />
-        </button>
-        {activeTooltip === "caminata" && (
-          <div className="absolute top-[48px] left-1/2 -translate-x-1/2 bg-black/90 text-white text-[9px] font-black uppercase tracking-wider px-2.5 py-1.5 rounded-xl border border-white/10 shadow-xl whitespace-nowrap z-[1020] animate-in fade-in slide-in-from-top-2 duration-200">
-            Demo: Inicia caminata simulada
+        {/* Right: Compass, Demo, Information Controls */}
+        <div className="flex items-center gap-2 pointer-events-auto">
+          {/* Compass / Rumbo */}
+          <div 
+            onClick={requestCompassPermission}
+            onMouseEnter={() => setActiveTooltip("rumbo")}
+            onMouseLeave={() => setActiveTooltip(null)}
+            onTouchStart={() => setActiveTooltip("rumbo")}
+            onTouchEnd={() => setTimeout(() => setActiveTooltip(null), 1500)}
+            className="bg-white/95 dark:bg-zinc-900/95 border border-black/5 dark:border-white/10 px-2.5 py-1.5 rounded-2xl shadow-xl flex items-center gap-1.5 cursor-pointer relative"
+          >
+            <Compass
+               className="w-4 h-4 text-cyan-500 transition-transform duration-200"
+               style={{ transform: `rotate(${-mapHeading}deg)` }}
+            />
+            <div className="flex flex-col">
+              <span className="text-[6px] font-black uppercase text-zinc-500 tracking-wider leading-none">
+                Rumbo
+              </span>
+              <span className="text-[9px] font-black text-foreground mt-0.5 whitespace-nowrap">
+                {isCompassAuthorized === false ? "🔒 Activar" : `${mapHeading}° ${getDirectionLetter(mapHeading)}`}
+              </span>
+            </div>
+            {activeTooltip === "rumbo" && (
+              <div className="absolute top-[48px] left-1/2 -translate-x-1/2 bg-black/90 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1 rounded-xl shadow-xl whitespace-nowrap z-[1020] animate-in fade-in duration-200">
+                Toca: Reorientar al Norte
+              </div>
+            )}
           </div>
+
+          {/* Device Demo Simulation Button */}
+          <div className="relative">
+            <button
+              onClick={toggleDemoMode}
+              onMouseEnter={() => setActiveTooltip("caminata")}
+              onMouseLeave={() => setActiveTooltip(null)}
+              onTouchStart={() => setActiveTooltip("caminata")}
+              onTouchEnd={() => setTimeout(() => setActiveTooltip(null), 1500)}
+              className={`w-12 h-10 rounded-2xl flex items-center justify-center border shadow-xl active:scale-95 transition-all ${
+                isDemoActive
+                  ? "bg-purple-600 border-purple-500 text-white animate-pulse"
+                  : "bg-white/95 dark:bg-zinc-900/95 border-black/5 dark:border-white/10 text-foreground"
+              }`}
+            >
+              <Gamepad2 className={`w-5 h-5 ${isDemoActive ? "text-white" : "text-purple-500"}`} />
+            </button>
+            {activeTooltip === "caminata" && (
+              <div className="absolute top-[48px] left-1/2 -translate-x-1/2 bg-black/90 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1 rounded-xl shadow-xl whitespace-nowrap z-[1020] animate-in fade-in duration-200">
+                Demo: Caminata simulada
+              </div>
+            )}
+          </div>
+
+          {/* Info Modal Trigger Button */}
+          <div className="relative">
+            <button
+              onClick={() => setShowInfo((prev) => !prev)}
+              onMouseEnter={() => setActiveTooltip("infoModal")}
+              onMouseLeave={() => setActiveTooltip(null)}
+              onTouchStart={() => setActiveTooltip("infoModal")}
+              onTouchEnd={() => setTimeout(() => setActiveTooltip(null), 1500)}
+              className={`w-12 h-10 rounded-2xl flex items-center justify-center border shadow-xl active:scale-95 transition-all ${
+                showInfo
+                  ? "bg-primary border-primary text-white"
+                  : "bg-white/95 dark:bg-zinc-900/95 border-black/5 dark:border-white/10 text-primary"
+              }`}
+            >
+              <Info className="w-5 h-5" />
+            </button>
+            {activeTooltip === "infoModal" && (
+              <div className="absolute top-[48px] left-1/2 -translate-x-1/2 bg-black/90 text-white text-[8px] font-black uppercase tracking-wider px-2 py-1 rounded-xl shadow-xl whitespace-nowrap z-[1020] animate-in fade-in duration-200">
+                Ayuda del Mapa
+              </div>
+            )}
+          </div>
+        </div>
+      </header>
+
+      {/* Info Dialog Panel */}
+      <AnimatePresence>
+        {showInfo && (
+          <motion.div
+            initial={{ opacity: 0, y: -15 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -15 }}
+            className="absolute top-28 left-6 right-6 z-[1020] bg-white/95 dark:bg-zinc-900/95 border border-black/5 dark:border-white/10 p-6 rounded-[30px] shadow-2xl backdrop-blur-xl flex flex-col gap-3"
+          >
+            <h2 className="text-sm font-black uppercase text-foreground leading-tight tracking-tight">
+              MODO AVENTURERO
+            </h2>
+            <div className="text-xs text-gray-500 dark:text-zinc-400 font-semibold leading-relaxed flex flex-col gap-2">
+              <p>
+                Siente la magia de Papantla con un mapa en tiempo real que se mueve contigo. Gracias al giro del compás y la orientación de la cámara alineados a tu dispositivo, vivirás una aventura inmersiva única por las calles y tradiciones de nuestra tierra. ¡Explora!
+              </p>
+              <p className="font-bold text-[#F16B24] dark:text-[#FFA040]">
+                ¿Quieres probarlo ya? Activa el botón de "Caminata simulada" (🕹️ Modo Demo) en la esquina superior derecha para simular un recorrido en vivo por el centro de Papantla.
+              </p>
+            </div>
+            <button
+              onClick={() => setShowInfo(false)}
+              className="mt-2 py-3 bg-primary hover:bg-[#721F2C] text-white rounded-xl font-bold uppercase text-[9px] tracking-widest text-center transition-colors shadow-lg shadow-primary/10"
+            >
+              Entendido
+            </button>
+          </motion.div>
         )}
-      </div>
+      </AnimatePresence>
 
       {/* HUD de Ruta de Destino activa */}
       {activeDestination && (
@@ -1276,6 +1368,13 @@ export default function InteractiveMap({ categoryFilter }: InteractiveMapProps) 
             animate={{ y: 0 }}
             exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 24, stiffness: 220 }}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            style={{
+              transform: `translateY(${translateY}px)`,
+              transition: isDragging ? "none" : "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)"
+            }}
             className="fixed bottom-0 left-0 right-0 z-[1030] bg-[#12111a]/95 backdrop-blur-2xl border-t border-white/10 rounded-t-[35px] shadow-2xl p-6 pb-9 flex flex-col gap-4 pointer-events-auto max-w-md mx-auto"
           >
             {/* Drag Handle superior */}

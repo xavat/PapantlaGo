@@ -230,25 +230,42 @@ function ServiciosContent() {
     router.push("/servicios");
   };
 
-  // Touch Swipe Down Logic to close Directorio Bottom Sheets
+  // Touch Swipe Down Logic to close Directorio Bottom Sheets (Smooth translation offset)
   const [dragStartY, setDragStartY] = useState<number | null>(null);
+  const [translateY, setTranslateY] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
 
   const handleTouchStart = (e: React.TouchEvent) => {
-    setDragStartY(e.touches[0].clientY);
+    const scrollable = e.currentTarget.querySelector(".overflow-y-auto");
+    const isAtTop = !scrollable || scrollable.scrollTop <= 0;
+    if (isAtTop) {
+      setDragStartY(e.touches[0].clientY);
+      setIsDragging(true);
+    }
   };
 
   const handleTouchMove = (e: React.TouchEvent) => {
-    if (dragStartY === null) return;
+    if (dragStartY === null || !isDragging) return;
     const currentY = e.touches[0].clientY;
     const diff = currentY - dragStartY;
+    if (diff > 0) {
+      setTranslateY(diff);
+    } else {
+      setTranslateY(0);
+    }
+  };
 
-    if (diff > 80) { // Dragged down sufficiently
-      const scrollable = e.currentTarget.querySelector(".overflow-y-auto");
-      const isAtTop = !scrollable || scrollable.scrollTop <= 0;
-      if (isAtTop) {
-        closeModal();
-        setDragStartY(null);
-      }
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (dragStartY === null) return;
+    const currentY = e.changedTouches[0].clientY;
+    const diff = currentY - dragStartY;
+    setIsDragging(false);
+    setDragStartY(null);
+    if (diff > 120) {
+      closeModal();
+      setTranslateY(0);
+    } else {
+      setTranslateY(0);
     }
   };
 
@@ -467,6 +484,11 @@ function ServiciosContent() {
             <motion.div
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              style={{
+                transform: `translateY(${translateY}px)`,
+                transition: isDragging ? "none" : "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)"
+              }}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
@@ -635,6 +657,11 @@ function ServiciosContent() {
             <motion.div
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              style={{
+                transform: `translateY(${translateY}px)`,
+                transition: isDragging ? "none" : "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)"
+              }}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
@@ -768,6 +795,11 @@ function ServiciosContent() {
             <motion.div
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              style={{
+                transform: `translateY(${translateY}px)`,
+                transition: isDragging ? "none" : "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)"
+              }}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
@@ -878,6 +910,11 @@ function ServiciosContent() {
             <motion.div
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              style={{
+                transform: `translateY(${translateY}px)`,
+                transition: isDragging ? "none" : "transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)"
+              }}
               initial={{ y: "100%" }}
               animate={{ y: 0 }}
               exit={{ y: "100%" }}
